@@ -1,3 +1,4 @@
 from django.contrib import admin
+from pythondocwebsite.models import DocumentationUnit
 
-# Register your models here.
+admin.site.register(DocumentationUnit) 

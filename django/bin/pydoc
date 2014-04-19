@@ -1,5 +1,0 @@
-#!/home/sven/Bachelorarbeit/python-doc-extractor-for-cado/django/bin/python3.3
-if __name__ == '__main__':
-    import sys, pydoc
-    sys.exit(pydoc.cli())
-

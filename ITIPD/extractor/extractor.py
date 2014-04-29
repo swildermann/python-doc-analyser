@@ -1,12 +1,6 @@
 from bs4 import BeautifulSoup, Tag
 import re
 import psycopg2
-#TODO import into a django application
-#TODO check how to read all files in a directory to run this script (os.walk)
-#TODO use functions (def) only and delete spagetti code
-#TODO create a report to check if everything works as expected
-#TODO split the find-function into every kind of "class" (for storing purposes)
- 
 
 def bs_preprocess(html):
     """remove distracting whitespaces and newline characters
@@ -49,7 +43,7 @@ def offset(elements):
     length = 0
     for elem in elements:
         AllPrevious = elem.findAllPrevious()
-        for previous in AllPrevious:  #TODO  findPreviousSiblings  
+        for previous in AllPrevious: 
             if any(previous in p.findAllPrevious() for p in AllPrevious):
                 continue
             length = length+len(str(previous))
@@ -65,22 +59,29 @@ def file_to_soup(path):
     soup = BeautifulSoup(bs_preprocess(data))
     return soup
 
-soup=file_to_soup("/home/sven/Bachelorarbeit/python-doc-extractor-for-cado/extractor-application/index.html")
+soup=file_to_soup("/home/sven/Bachelorarbeit/python-doc-extractor-for-cado/ITIPD/extractor/index.html")
 
 def grab_elements(soup,elem,attr1,attr2):
     """grabs the different elemens with the given attributes out of a soup"""
     return soup.find_all([elem], attrs={attr1 : [ attr2 ]})
 
+methods = grab_elements(soup,"dl","class","method")
+functions = grab_elements(soup,"dl","class","function")
+describtions = grab_elements(soup,"dl","class","describe")
+classmethods = grab_elements(soup,"dl","class","classmethod")
+staticmethods = grab_elements(soup,"dl","class","staticmethod")
+sections = grab_elements(soup,"div","class","sections")
+
 ###grab different elements 
-dl_elems = soup.find_all(['dl'], attrs={'class': ['class', 'method','function','describe', 'classmethod', 'staticmethod']}) 
-sections = soup.find_all(['div'], attrs = {'class':'section'}) 
+#dl_elems = soup.find_all(['dl'], attrs={'class': ['class', 'method','function','describe', 'classmethod', 'staticmethod']}) 
+#sections = soup.find_all(['div'], attrs = {'class':'section'}) 
 
 ###define placeholders
 method_string = '[method(s)-removed-here]'
 class_string = '[class(es) removed here]'
 section_string = '[section removed here]'
 attribute_string = '[attribute / data ignored here]'
-for parent in dl_elems + sections:
+for parent in methods + functions + describtions + classmethods + staticmethods + sections:
     ### set placeholders to duplicated elements ###
     for elem in parent.find_all('dl', attrs={'class': ['method','function','describe', 'classmethod', 'staticmethod']}):
         tag = Tag(name='p')
@@ -90,11 +91,11 @@ for parent in dl_elems + sections:
         tag = Tag(name='p')
         tag.string  = class_string
         elem.replace_with(tag)
-    for elem in parent.find_all('div', {'class':'section'}):  #TODO:  is a section a documentation unit? 
+    for elem in parent.find_all('div', {'class':'section'}):  
         tag=Tag(name='p')
         tag.string = section_string
         elem.replace_with(tag)
-    for elem in parent.find_all('dl', attrs={'class' : ['attribute', 'data']}):  #TODO: delete attributes and data? 
+    for elem in parent.find_all('dl', attrs={'class' : ['attribute', 'data']}): 
         tag=Tag(name='p')
         tag.string= attribute_string
         elem.replace_with(tag)
@@ -104,27 +105,26 @@ for parent in dl_elems + sections:
     summarize_placeholders(parent,section_string)
     summarize_placeholders(parent,attribute_string)   
 
-#results = get_documenation_units("/home/sven/Bachelorarbeit/python-doc-extractor-for-cado/extractor-application/index.html") 
-results = dl_elems + sections
+results = methods + functions + describtions + classmethods + staticmethods + sections
 ###output file
 f = open('test.html','w')    #needs to exist
 f.truncate
 ###create the output
 print(results,file=f)
 f.close()
-
+    
 
 #########STORE SOMETHING INTO THE DATABASE#############
-# TODO: do not create pk manually!
-#conn = psycopg2.connect("dbname=mydb user=sven")
-#cur = conn.cursor()
-#i=2
-#for elem in dl_elems + sections:
-#    i=i+1
-#    if isinstance(elem, Tag): 
-#         str = elem.prettify()
-#         fname = "None"
-#         cur.execute("""INSERT INTO polls_documentationunit  VALUES (%s, %s, %s, %s, %s, %s);""", (i,str,0,fname,0,0))
-#conn.commit()
-#cur.close()
-#conn.close()
+i = 1
+conn = psycopg2.connect("dbname=mydb user=sven")
+cur = conn.cursor()
+parents = find_parents(results)
+for elem in results:
+    i=i+1
+    fname = "None"
+    if isinstance(elem, Tag): 
+         strng = elem.prettify()
+         cur.execute("""INSERT INTO extractor_documentationunit  VALUES (%s, %s, %s, %s, %s, %s);""", (i,strng,0,fname,0,0))
+conn.commit()
+cur.close()
+conn.close()

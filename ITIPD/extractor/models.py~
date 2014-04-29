@@ -1,0 +1,38 @@
+from django.db import models
+import datetime
+from django.utils import timezone
+
+class Poll(models.Model):
+	question = models.CharField(max_length=200)
+	pub_date = models.DateTimeField('date_published')
+
+	def __unicode__(self):
+	    return self.question
+
+	def was_published_recently(self):
+	    now = timezone.now()
+            return now - datetime.timedelta(days=1) <= self.pub_date <= now
+	was_published_recently.admin_order_field = 'pub_date'
+	was_published_recently.boolean=True 
+	was_published_recently.description = 'Published recently?'
+
+class Choice(models.Model):
+	poll = models.ForeignKey(Poll) # a relation
+	choice_text = models.CharField(max_length=200)
+	votes = models.IntegerField(default=0)
+	
+	def __unicode__(self):
+	    return self.choice_text
+
+class DocumentationUnit(models.Model):
+    html_text = models.TextField(max_length=None)
+    parentElement = models.IntegerField(default=0)
+    filename = models.CharField(max_length=500, default=None)
+    start_offset = models.IntegerField(default=0)
+    end_offset = models.IntegerField(default=0)
+
+
+class KnowledgeType(models.Model):
+    name = models.CharField(max_length=200)
+    desription = models.TextField(max_length=None, default="")
+# Create your models here.

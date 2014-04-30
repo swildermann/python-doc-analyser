@@ -4,6 +4,7 @@ import psycopg2
 from os import listdir
 from os.path import isfile, join
 
+
 def get_list_of_filepath(mypath):
     pathlist = []
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
@@ -81,113 +82,65 @@ def grab_elements(soup, elem, attr1, attr2):
     return soup.find_all([elem], attrs={attr1: [attr2]})
 
 
-def grab_all(soup):
-    methods = grab_elements(soup, "dl", "class", "method")
-    functions = grab_elements(soup, "dl", "class", "function")
-    describtions = grab_elements(soup, "dl", "class", "describe")
-    classmethods = grab_elements(soup, "dl", "class", "classmethod")
-    staticmethods = grab_elements(soup, "dl", "class", "staticmethod")
-    sections = grab_elements(soup, "div", "class", "sections")
-    classes = grab_elements(soup, "dl", "class", "class")
-    attributes = grab_elements(soup, "dl", "class", "attribute")
-    datas = grab_elements(soup, "dl", "class", "data")
-
-    #    return methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas
-
-    #def placeholding(allunits):
-    ###define placeholders
-    method_string = '[method(s) removed here]'
-    function_string = '[function(s) removed here]'
-    describe_string = '[descriptions removed here]'
-    classmethod_string = '[classmethod removed here]'
-    staticmethod_string = '[staticmethod removed here]'
-    class_string = '[class(es) removed here]'
-    section_string = '[section removed here]'
-    attribute_string = '[attribute removed here]'
-    datas_string = '[data removed here]'
-
-    for parent in methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas:
-        ### set placeholders to duplicated elements ###
-        for elem in parent.find_all('dl', {'class': 'method'}):
-            tag = Tag(name='p')
-            tag.string = method_string
-            elem.replace_with(tag)
-        for elem in parent.find_all('dl', {'class': 'function'}):
-            tag = Tag(name='p')
-            tag.string = function_string
-            elem.replace_with(tag)
-        for elem in parent.find_all('dl', {'class': 'describe'}):
-            tag = Tag(name='p')
-            tag.string = describe_string
-            elem.replace_with(tag)
-        for elem in parent.find_all('dl', {'class': 'classmethod'}):
-            tag = Tag(name='p')
-            tag.string = classmethod_string
-            elem.replace_with(tag)
-        for elem in parent.find_all('dl', {'class': 'staticmethod'}):
-            tag = Tag(name='p')
-            tag.string = staticmethod_string
-            elem.replace_with(tag)
-        for elem in parent.find_all('dl', {'class': 'class'}):
-            tag = Tag(name='p')
-            tag.string = class_string
-            elem.replace_with(tag)
-        for elem in parent.find_all('div', {'class': 'section'}):
-            tag = Tag(name='p')
-            tag.string = section_string
-            elem.replace_with(tag)
-        for elem in parent.find_all('dl', attrs={'class': 'attribute'}):
-            tag = Tag(name='p')
-            tag.string = attribute_string
-            elem.replace_with(tag)
-        for elem in parent.find_all('dl', attrs={'class': 'data'}):
-            tag = Tag(name='p')
-            tag.string = datas_string
-            elem.replace_with(tag)
-
-        ### summarize placeholders ###
-        summarize_placeholders(parent, method_string)
-        summarize_placeholders(parent, function_string)
-        summarize_placeholders(parent, describe_string)
-        summarize_placeholders(parent, classmethod_string)
-        summarize_placeholders(parent, staticmethod_string)
-        summarize_placeholders(parent, class_string)
-        summarize_placeholders(parent, section_string)
-        summarize_placeholders(parent, attribute_string)
-        summarize_placeholders(parent, datas_string)
-        return methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas
-
-
 if __name__ == "__main__":
-    mypath = "/home/sven/Bachelorarbeit/python-doc-extractor-for-cado/ITIPD/extractor/python-3.4.0-docs-html/"
+    mypath = "/home/sven/Bachelorarbeit/python-doc-extractor-for-cado/ITIPD/extractor/python-3.4.0-docs-html/library/"
     files = get_list_of_filepath(mypath)
+    #f = open('test.html', 'w')  # needs to exist
+    for file in files:
+        soup = file_to_soup(file)
 
-    soup = file_to_soup("/home/sven/Bachelorarbeit/python-doc-extractor-for-cado/ITIPD/extractor/index.html")
-    units = grab_all(soup)
-    #    parents = find_parents(units)
-    #    new_units = placeholding(units)
+        methods = grab_elements(soup, "dl", "class", "method")
+        functions = grab_elements(soup, "dl", "class", "function")
+        describtions = grab_elements(soup, "dl", "class", "describe")
+        classmethods = grab_elements(soup, "dl", "class", "classmethod")
+        staticmethods = grab_elements(soup, "dl", "class", "staticmethod")
+        sections = grab_elements(soup, "div", "class", "section")
+        classes = grab_elements(soup, "dl", "class", "class")
+        attributes = grab_elements(soup, "dl", "class", "attribute")
+        datas = grab_elements(soup, "dl", "class", "data")
 
-    ###output file
-    f = open('test.html', 'w')  # needs to exist
-    ###create the output
-    print(units, file=f)
-    print("**********", file=f)
-    #    print(parents, file=f)
-    f.close()
+        all_parents = find_parents(
+            methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas)
 
+        ###define placeholder
+        placeholder = '[something removed here]'
 
-#########STORE SOMETHING INTO THE DATABASE#############
-# conn = psycopg2.connect("dbname=mydb user=sven")
-# cur = conn.cursor()
-# parents = find_parents(results)
-# i = 1
-# for elem in results:
-#     i = i + 1
-#     fname = "None"
-#     if isinstance(elem, Tag):
-#         strng = elem.prettify()
-#         cur.execute('INSERT INTO extractor_documentationunit  VALUES (%s,  %s,  %s,  %s,  %s, %s);',
-#                     (i, strng, 0, fname, 0, 0))
-# conn.commit()
-# cur.close()
-# conn.close()
+        for parent in methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas:
+            ### set placeholders to duplicated elements ###
+            for elem in parent.find_all('dl', {
+            'class': ['method', 'function', 'describe', 'classmethod', 'staticmethod', 'section', 'class', 'attribute',
+                      'data']}):
+                tag = Tag(name='p')
+                tag.string = placeholder
+                elem.replace_with(tag)
+
+            ### summarize placeholders ###
+            summarize_placeholders(parent, placeholder)
+
+        results = methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas
+
+        ###output file
+
+        ###create the output
+        #print(results, file=f)
+        #print("**********", file=f)
+        #    print(parents, file=f)
+        #
+
+        # #########STORE SOMETHING INTO THE DATABASE#############
+        conn = psycopg2.connect("dbname=mydb user=sven")
+        cur = conn.cursor()
+        cur.execute(
+            'SELECT id FROM extractor_documentationunit WHERE id=(SELECT max(id) FROM extractor_documentationunit)')
+        i = cur.fetchone()[0]
+        for elem in results:
+            i = i + 1
+            fname = file
+            if isinstance(elem, Tag):
+                strng = elem.prettify()
+                cur.execute('INSERT INTO extractor_documentationunit  VALUES (%s,  %s,  %s,  %s,  %s, %s);',
+                            (i, strng, 0, fname, 0, 0))
+        conn.commit()
+        cur.close()
+        conn.close()
+        #f.close()

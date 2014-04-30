@@ -119,11 +119,11 @@ for parent in methods + functions + describtions + classmethods + staticmethods 
         tag = Tag(name='p')
         tag.string = attribute_string
         elem.replace_with(tag)
-    ### summarize placeholders ###
-    summarize_placeholders(parent, method_string)
-    summarize_placeholders(parent, class_string)
-    summarize_placeholders(parent, section_string)
-    summarize_placeholders(parent, attribute_string)
+        ### summarize placeholders ###
+summarize_placeholders(parent, method_string)
+summarize_placeholders(parent, class_string)
+summarize_placeholders(parent, section_string)
+summarize_placeholders(parent, attribute_string)
 
 results = methods + functions + describtions + classmethods + staticmethods + sections
 ###output file

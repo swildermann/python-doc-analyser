@@ -3,7 +3,7 @@ import re
 import psycopg2
 from os import listdir
 from os.path import isfile, join
-
+import copy
 
 def get_list_of_filepath(mypath):
     pathlist = []
@@ -39,21 +39,25 @@ def find_parents(childs):
     in case of multiple childs having the same parent, the index of the parent 
     will be returned for each element after the first"""
     parents = []
+    # for child in childs:
+    #     b_found = False
+    #     for parent in parents:
+    #         foundParent = child.findParent()
+    #         if foundParent == parent:
+    #             parents.append(parents.index(parent))
+    #             b_found = True
+    #             break
+    #     if not b_found:
+    #         parents.append(child.findParent())
+    # return parents
     for child in childs:
-        b_found = False
-        for parent in parents:
-            foundParent = child.findParent()
-            if foundParent == parent:
-                parents.append(parents.index(parent))
-                b_found = True
-                break
-        if not b_found:
-            parents.append(child.findParent())
+        parents.append(child.findParent())
     return parents
 
 
-def offset(elements):
+def offset(soup, elements):
     """get the offsets of the given element"""
+    ## TODO needs to be fixed
     startoffset = []
     endoffset = []
     length = 0
@@ -66,7 +70,7 @@ def offset(elements):
         startoffset.append(length)
         endoffset.append(length + len(str(elem)))
         length = 0
-    return (startoffset, endoffset)
+    return startoffset, endoffset
 
 
 def file_to_soup(path):
@@ -101,7 +105,7 @@ if __name__ == "__main__":
 
         all_parents = find_parents(
             methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas)
-
+        all_parents_copy = copy.copy(all_parents)
         ###define placeholder
         placeholder = '[something removed here]'
 
@@ -119,27 +123,29 @@ if __name__ == "__main__":
 
         results = methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas
 
-        ###output file
-
-        ###create the output
-        #print(results, file=f)
-        #print("**********", file=f)
-        #    print(parents, file=f)
-        #
-
         # #########STORE SOMETHING INTO THE DATABASE#############
         conn = psycopg2.connect("dbname=mydb user=sven")
         cur = conn.cursor()
         cur.execute(
             'SELECT id FROM extractor_documentationunit WHERE id=(SELECT max(id) FROM extractor_documentationunit)')
-        i = cur.fetchone()[0]
+        i = cur.fetchone()[0]+1
+        j = i
+        for elem in all_parents_copy:
+            if isinstance(elem, Tag):
+                parent = elem.prettify()
+                cur.execute('INSERT INTO extractor_parentelement VALUES (%s, %s);',
+                            (j, parent))
+            j += 1
+
+        ##store documenation units##
         for elem in results:
-            i = i + 1
             fname = file
             if isinstance(elem, Tag):
                 strng = elem.prettify()
-                cur.execute('INSERT INTO extractor_documentationunit  VALUES (%s,  %s,  %s,  %s,  %s, %s);',
-                            (i, strng, 0, fname, 0, 0))
+                cur.execute('INSERT INTO extractor_documentationunit  VALUES (%s,  %s,  %s,  %s,  %s);',
+                            (i, strng, fname, len(strng), 0))
+            i += 1
+
         conn.commit()
         cur.close()
         conn.close()

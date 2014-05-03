@@ -3,99 +3,96 @@
     "model": "extractor.KnowledgeType",
     "pk": 1,
     "fields": {
-      "first_name": "Functionality and Behavior",
-      "last_name" : " ",
-      "username"  : "newpass",
-      "__comment" : "the hashed password is newpass",
-      "password"  : "pbkdf2_sha256$12000$Hz2f8s0Sawvz$iqJO4QeAvTj0ccbVMNiinBd7WwTo7w4+AQofuAfAcQ8=" 
+      "name": "Functionality and Behavior",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 2,
     "fields":{
-      "first_name": "Concepts",
-      "last_name" : " "
+      "name": "Concepts",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 3,
     "fields":{
-      "first_name": "Directives",
-      "last_name" : " "
+      "name": "Directives",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 4,
     "fields":{
-      "first_name": "Purpose and Rationale",
-      "last_name" : " "
+      "name": "Purpose and Rationale",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 5,
     "fields":{
-      "first_name": "Quality Attributes and Internal Aspects",
-      "last_name" : " "
+      "name": "Quality Attributes and Internal Aspects",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 6,
     "fields":{
-      "first_name": "Control-Flow",
-      "last_name" : " "
+      "name": "Control-Flow",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 7,
     "fields":{
-      "first_name": "Structure and Relationships",
-      "last_name" : " "
+      "name": "Structure and Relationships",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 8,
     "fields":{
-      "first_name": "Patterns",
-      "last_name" : " "
+      "name": "Patterns",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 9,
     "fields":{
-      "first_name": "Code Examples",
-      "last_name" : " "
+      "name": "Code Examples",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 10,
     "fields":{
-      "first_name": "Environment",
-      "last_name" : " "
+      "name": "Environment",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 11,
     "fields":{
-      "first_name": "External References",
-      "last_name" : " "
+      "name": "External References",
+      "description" : " "
     }
   },
   { 
     "model": "extractor.KnowledgeType",
     "pk": 12,
     "fields":{
-      "first_name": "Non-Information",
-      "last_name" : " "
+      "name": "Non-Information",
+      "description" : " "
     }
   }
 ]

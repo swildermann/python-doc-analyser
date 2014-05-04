@@ -87,6 +87,7 @@ def grab_elements(soup, elem, attr1, attr2):
 
 
 if __name__ == "__main__":
+    ####be ware: this is spaghetti code###
     mypath = "python-3.4.0-docs-html/library/"
     files = get_list_of_filepath(mypath)
     #f = open('test.html', 'w')  # needs to exist
@@ -133,7 +134,10 @@ if __name__ == "__main__":
         cur = conn.cursor()
         cur.execute(
             'SELECT id FROM extractor_documentationunit WHERE id=(SELECT max(id) FROM extractor_documentationunit)')
-        i = cur.fetchone()[0]+1
+        try:
+            i = cur.fetchone()[0]+1
+        except:
+            i = 0    # if table is empty
         j = i
         ## store parents of each documenation_unit
         for elem in all_parents_copy:

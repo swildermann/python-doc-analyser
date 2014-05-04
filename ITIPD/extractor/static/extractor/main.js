@@ -94,6 +94,12 @@ function show_typemenu(x, y) {
 }
 
 function color_selection() {
+    try {
+        rangy.serializeRange(rangy.getSelection().getRangeAt(0), false, document.getElementById("objecttext"));
+    } catch(err) {
+        return;
+    }
+    
     //dirty js function name hack
     var s = $(this).attr("class");
     var appliername = s.substring(0, s.indexOf(' '));
@@ -107,7 +113,6 @@ function color_selection() {
     var htmlString = html.html();
 
     resetColors();
-
     var serializedRange = rangy.serializeRange(rangy.getSelection().getRangeAt(0), false, document.getElementById("objecttext"));
     markedRanges.push({
         type: functioname,
@@ -115,6 +120,9 @@ function color_selection() {
     });
 
     $( "#objecttext" ).replaceWith( html );
+
+
+
 
     rangy.getSelection().removeAllRanges();
 

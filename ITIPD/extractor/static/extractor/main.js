@@ -29,14 +29,16 @@ $(function() {
     });
 
     $('#submitbutton').click(function () {
-    /*
+        var html = $('#objecttext').clone();
+        var htmlString = html.html();
         var data = JSON.stringify(markedRanges);
         $.ajax({
             url: '/extractor/vote/',
             type: 'post',
             data: {
-                data: data,
-                unit: 10
+                range: data,
+                html_text: htmlString,
+                unit: $("#documentationunitid").attr("class")
             },
             success: function () {
                 console.log('Success');
@@ -47,7 +49,6 @@ $(function() {
                 console.log(arguments);
             }
         });
-        */
     });
 
     $('body').mouseup(function(e) {

@@ -5,6 +5,7 @@ from os import listdir
 from os.path import isfile, join
 import copy
 
+
 def get_list_of_filepath(mypath):
     pathlist = []
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
@@ -55,24 +56,6 @@ def find_parents(childs):
     return parents
 
 
-def offset(soup, elements):
-    """get the offsets of the given element"""
-    ## TODO needs to be fixed
-    startoffset = []
-    endoffset = []
-    length = 0
-    for elem in elements:
-        AllPrevious = elem.findAllPrevious()
-        for previous in AllPrevious:
-            if any(previous in p.findAllPrevious() for p in AllPrevious):
-                continue
-            length += len(str(previous))
-        startoffset.append(length)
-        endoffset.append(length + len(str(elem)))
-        length = 0
-    return startoffset, endoffset
-
-
 def file_to_soup(path):
     """open a file and make a soup out of that"""
     g = open(path, "r")
@@ -87,6 +70,7 @@ def grab_elements(soup, elem, attr1, attr2):
 
 
 if __name__ == "__main__":
+    ####be aware: this is spaghetti code###
     mypath = "python-3.4.0-docs-html/library/"
     files = get_list_of_filepath(mypath)
     #f = open('test.html', 'w')  # needs to exist
@@ -107,6 +91,7 @@ if __name__ == "__main__":
         all_parents = find_parents(
             methods + functions + describtions + classmethods + staticmethods + sections + classes)
         all_parents_copy = copy.copy(all_parents)
+
         ###define placeholder
         placeholder = '[something removed here]'
 
@@ -133,7 +118,10 @@ if __name__ == "__main__":
         cur = conn.cursor()
         cur.execute(
             'SELECT id FROM extractor_documentationunit WHERE id=(SELECT max(id) FROM extractor_documentationunit)')
-        i = cur.fetchone()[0]+1
+        try:
+            i = cur.fetchone()[0]+1
+        except:
+            i = 0    # if table is empty
         j = i
         ## store parents of each documenation_unit
         for elem in all_parents_copy:
@@ -151,6 +139,10 @@ if __name__ == "__main__":
                 cur.execute('INSERT INTO extractor_documentationunit  VALUES (%s,  %s,  %s,  %s);',
                             (i, strng, fname, len(strng)))
             i += 1
+
+            ### progress bar ###
+            if i % 100 == 0:
+                print("Just finished import for documentation unit "+str(i))
 
         conn.commit()
         cur.close()

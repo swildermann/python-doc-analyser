@@ -1,5 +1,5 @@
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if error_message %}<p xmlns="http://www.w3.org/1999/html"><strong>{{ error_message }}</strong></p>{% endif %}
 
 
 <head>
@@ -41,4 +41,9 @@
     <hr />
      <button id="submitbutton">Save</button>
      <button id="deletebutton">Delete All</button>
+     <button id="thebutton"> Done </button>
+
+     <form action="{% url 'documentationunit:parent' documentationunit.id %}">
+        <input type="submit" value="Show Parent">
+     </form>
 </body>

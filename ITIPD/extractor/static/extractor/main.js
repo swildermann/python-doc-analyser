@@ -29,9 +29,8 @@ $(function() {
     });
 
     $('#submitbutton').click(function () {
-    bla();
     /*
-        var data = JSON.stringify(data_to_send);
+        var data = JSON.stringify(markedRanges);
         $.ajax({
             url: '/extractor/vote/',
             type: 'post',

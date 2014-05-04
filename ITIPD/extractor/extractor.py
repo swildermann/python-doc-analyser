@@ -87,7 +87,7 @@ def grab_elements(soup, elem, attr1, attr2):
 
 
 if __name__ == "__main__":
-    mypath = "/home/sven/Bachelorarbeit/python-doc-extractor-for-cado/ITIPD/extractor/python-3.4.0-docs-html/library/"
+    mypath = "python-3.4.0-docs-html/library/"
     files = get_list_of_filepath(mypath)
     #f = open('test.html', 'w')  # needs to exist
     for file in files:
@@ -100,20 +100,25 @@ if __name__ == "__main__":
         staticmethods = grab_elements(soup, "dl", "class", "staticmethod")
         sections = grab_elements(soup, "div", "class", "section")
         classes = grab_elements(soup, "dl", "class", "class")
-        attributes = grab_elements(soup, "dl", "class", "attribute")
-        datas = grab_elements(soup, "dl", "class", "data")
+        ### attributes, data and exceptions will not be filtered ##
+        #attributes = grab_elements(soup, "dl", "class", "attribute")
+        #datas = grab_elements(soup, "dl", "class", "data")
 
         all_parents = find_parents(
-            methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas)
+            methods + functions + describtions + classmethods + staticmethods + sections + classes)
         all_parents_copy = copy.copy(all_parents)
         ###define placeholder
         placeholder = '[something removed here]'
 
-        for parent in methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas:
+        for parent in methods + functions + describtions + classmethods + staticmethods + sections + classes:
             ### set placeholders to duplicated elements ###
             for elem in parent.find_all('dl', {
-            'class': ['method', 'function', 'describe', 'classmethod', 'staticmethod', 'section', 'class', 'attribute',
-                      'data']}):
+            'class': ['method', 'function', 'describe', 'classmethod', 'staticmethod', 'section', 'class']}):
+                tag = Tag(name='p')
+                tag.string = placeholder
+                elem.replace_with(tag)
+            ### same thing with sections##
+            for elem in parent.find_all('div', {'class': 'section'}):
                 tag = Tag(name='p')
                 tag.string = placeholder
                 elem.replace_with(tag)
@@ -121,15 +126,16 @@ if __name__ == "__main__":
             ### summarize placeholders ###
             summarize_placeholders(parent, placeholder)
 
-        results = methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas
+        results = methods + functions + describtions + classmethods + staticmethods + sections + classes
 
         # #########STORE SOMETHING INTO THE DATABASE#############
-        conn = psycopg2.connect("host=127.0.0.1 dbname=mydb user=sven")
+        conn = psycopg2.connect("host=127.0.0.1 dbname=mydb user=sven password=Schwen91")
         cur = conn.cursor()
         cur.execute(
             'SELECT id FROM extractor_documentationunit WHERE id=(SELECT max(id) FROM extractor_documentationunit)')
         i = cur.fetchone()[0]+1
         j = i
+        ## store parents of each documenation_unit
         for elem in all_parents_copy:
             if isinstance(elem, Tag):
                 parent = elem.prettify()
@@ -142,8 +148,8 @@ if __name__ == "__main__":
             fname = file
             if isinstance(elem, Tag):
                 strng = elem.prettify()
-                cur.execute('INSERT INTO extractor_documentationunit  VALUES (%s,  %s,  %s,  %s,  %s);',
-                            (i, strng, fname, len(strng), 0))
+                cur.execute('INSERT INTO extractor_documentationunit  VALUES (%s,  %s,  %s,  %s);',
+                            (i, strng, fname, len(strng)))
             i += 1
 
         conn.commit()

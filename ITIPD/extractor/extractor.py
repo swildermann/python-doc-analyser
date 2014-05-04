@@ -91,7 +91,7 @@ if __name__ == "__main__":
         all_parents = find_parents(
             methods + functions + describtions + classmethods + staticmethods + sections + classes)
         all_parents_copy = copy.copy(all_parents)
-        
+
         ###define placeholder
         placeholder = '[something removed here]'
 

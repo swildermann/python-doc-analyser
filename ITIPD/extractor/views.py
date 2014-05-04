@@ -4,8 +4,7 @@ from django.views import generic
 from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, ParentElement
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.utils import simplejson
-
+from django.contrib.auth import authenticate, login
 
 
 def testing(request, *number):
@@ -60,5 +59,19 @@ def vote(request):
         content_type='application/json'
     )
 
-
-
+@csrf_exempt
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            return HttpResponseRedirect('extractor/documentationunit_list.html')
+            # TODO Redirect to a success page.
+        else:
+            print("disabled account")
+            # TODO Return a 'disabled account' error message
+    else:
+        print("invalid login")
+         # TODO Return an 'invalid login' error message.

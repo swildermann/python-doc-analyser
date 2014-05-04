@@ -6,9 +6,11 @@ from extractor import views
 
 urlpatterns = patterns('',
       (r'^list/$', ListView.as_view(model=DocumentationUnit)),
+      url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
       url(r'^(?P<pk>\d+)/$', views.DetailView.as_view(), name='detail'),
       url(r'^vote/$', views.vote, name='vote'),
       url(r'^parent/(?P<pk>\d+)/$', views.ParentView.as_view(), name='parent')
+
 
 )
 

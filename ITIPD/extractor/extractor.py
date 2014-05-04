@@ -124,7 +124,7 @@ if __name__ == "__main__":
         results = methods + functions + describtions + classmethods + staticmethods + sections + classes + attributes + datas
 
         # #########STORE SOMETHING INTO THE DATABASE#############
-        conn = psycopg2.connect("dbname=mydb user=sven")
+        conn = psycopg2.connect("host=127.0.0.1 dbname=mydb user=sven")
         cur = conn.cursor()
         cur.execute(
             'SELECT id FROM extractor_documentationunit WHERE id=(SELECT max(id) FROM extractor_documentationunit)')

@@ -54,25 +54,6 @@ def find_parents(childs):
         parents.append(child.findParent())
     return parents
 
-
-def offset(soup, elements):
-    """get the offsets of the given element"""
-    ## TODO needs to be fixed
-    startoffset = []
-    endoffset = []
-    length = 0
-    for elem in elements:
-        AllPrevious = elem.findAllPrevious()
-        for previous in AllPrevious:
-            if any(previous in p.findAllPrevious() for p in AllPrevious):
-                continue
-            length += len(str(previous))
-        startoffset.append(length)
-        endoffset.append(length + len(str(elem)))
-        length = 0
-    return startoffset, endoffset
-
-
 def file_to_soup(path):
     """open a file and make a soup out of that"""
     g = open(path, "r")

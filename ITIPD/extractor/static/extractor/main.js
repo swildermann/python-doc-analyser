@@ -99,7 +99,7 @@ function color_selection() {
     } catch(err) {
         return;
     }
-    
+
     //dirty js function name hack
     var s = $(this).attr("class");
     var appliername = s.substring(0, s.indexOf(' '));
@@ -120,9 +120,6 @@ function color_selection() {
     });
 
     $( "#objecttext" ).replaceWith( html );
-
-
-
 
     rangy.getSelection().removeAllRanges();
 

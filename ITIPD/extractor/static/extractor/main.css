@@ -1,8 +1,17 @@
 #typemenu {
     position: absolute;
-    padding: 3px;
+    padding: 7px;
     top: 0px;
     left: 0px;
+    font-size: 10pt;
+}
+
+#typemenu lh {
+    margin: 5px;
+}
+
+#typemenu li {
+    margin: 2px;
 }
 
 #objecttext {

@@ -70,7 +70,7 @@ def grab_elements(soup, elem, attr1, attr2):
 
 
 if __name__ == "__main__":
-    ####be ware: this is spaghetti code###
+    ####be aware: this is spaghetti code###
     mypath = "python-3.4.0-docs-html/library/"
     files = get_list_of_filepath(mypath)
     #f = open('test.html', 'w')  # needs to exist
@@ -91,6 +91,7 @@ if __name__ == "__main__":
         all_parents = find_parents(
             methods + functions + describtions + classmethods + staticmethods + sections + classes)
         all_parents_copy = copy.copy(all_parents)
+        
         ###define placeholder
         placeholder = '[something removed here]'
 

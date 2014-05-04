@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseBadRequest
 import datetime
 from django.views import generic
-from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit
+from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, ParentElement
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import simplejson
@@ -26,6 +26,13 @@ class DetailView(generic.DetailView):
 # data: { data: JSON.stringify(data_to_send)}
 
 
+class ParentView(generic.DeleteView):
+    model = ParentElement
+    template_name = 'extractor/parents.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ParentView, self).get_context_data(**kwargs)
+        return context
 
 @csrf_exempt
 #@login_required

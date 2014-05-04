@@ -1,0 +1,7 @@
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% autoescape off %}
+    <h2>This is the parent of documentation unit {{object.id}}</h2>
+    <div id="objecttext">{{object.html_text}}</div>
+{% endautoescape %}
+

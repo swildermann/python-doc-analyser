@@ -156,6 +156,10 @@ if __name__ == "__main__":
                             (i, strng, fname, len(strng)))
             i += 1
 
+            ### progress bar ###
+            if i % 100 == 0:
+                print("Just finished import for documentation unit "+str(i))
+
         conn.commit()
         cur.close()
         conn.close()

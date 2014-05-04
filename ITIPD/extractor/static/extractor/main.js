@@ -1,3 +1,5 @@
+var markedRanges = [];
+
 $(function() {
     $("#typemenu").hide();
     $("#typemenu").menu();
@@ -21,8 +23,13 @@ $(function() {
 
     $("#typemenu li").click(color_selection);
 
-    $('#thebutton').click(function () {
+    $('#deletebutton').click(function () {
+        markedRanges.length = 0;
+        resetColors();
+    });
 
+    $('#submitbutton').click(function () {
+    bla();
     /*
         var data = JSON.stringify(data_to_send);
         $.ajax({
@@ -56,6 +63,22 @@ $(function() {
     });
 });
 
+function resetColors()
+{
+    $("#objecttext").find('span.functionalityandbehavior').contents().unwrap();
+    $("#objecttext").find('span.concepts').contents().unwrap();
+    $("#objecttext").find('span.directives').contents().unwrap();
+    $("#objecttext").find('span.purposes').contents().unwrap();
+    $("#objecttext").find('span.qualityattributes').contents().unwrap();
+    $("#objecttext").find('span.controlflow').contents().unwrap();
+    $("#objecttext").find('span.structure').contents().unwrap();
+    $("#objecttext").find('span.patterns').contents().unwrap();
+    $("#objecttext").find('span.codeexamples').contents().unwrap();
+    $("#objecttext").find('span.environment').contents().unwrap();
+    $("#objecttext").find('span.external').contents().unwrap();
+    $("#objecttext").find('span.noninformation').contents().unwrap();
+}
+
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }
@@ -70,8 +93,6 @@ function show_typemenu(x, y) {
     $("#typemenu").show();
 }
 
-var data_to_send = [];
-
 function color_selection() {
     //dirty js function name hack
     var s = $(this).attr("class");
@@ -79,14 +100,25 @@ function color_selection() {
     var functioname = 'cssApplier' + appliername;
     var fn = window[functioname];
     fn.applyToSelection();
-    cssAppliermarkedtext.applyToSelection();
 
     $("#typemenu").hide();
+
+    var html = $('#objecttext').clone();
+    var htmlString = html.html();
+
+    resetColors();
+
+    var serializedRange = rangy.serializeRange(rangy.getSelection().getRangeAt(0), false, document.getElementById("objecttext"));
+    markedRanges.push({
+        type: functioname,
+        serializedRange: serializedRange
+    });
+
+    $( "#objecttext" ).replaceWith( html );
 
     rangy.getSelection().removeAllRanges();
 
  /*  var sel = rangy.getSelection();
-   sel.detach();
 
    var selected_text = sel.toString();
    var selected_html = sel.toHtml();

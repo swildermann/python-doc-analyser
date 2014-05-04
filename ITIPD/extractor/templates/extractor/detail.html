@@ -10,18 +10,20 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"/>
     <script type="text/javascript" src="http://rangy.googlecode.com/svn/trunk/dev/rangy-core.js"></script>
     <script type="text/javascript" src="http://rangy.googlecode.com/svn/trunk/dev/rangy-cssclassapplier.js"></script>
+    <script type="text/javascript" src="http://rangy.googlecode.com/svn/trunk/dev/rangy-serializer.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script type="text/javascript" src="{% static 'extractor/main.js' %}"></script>
   </head>
 <body>
 {% autoescape off %}
-    <h1>{{object.id}}</h1>
+    <h1>Documentation Unit: {{object.id}}</h1>
+    <hr />
     <div id="objecttext">{{object.html_text}}</div>
 {% endautoescape %}
 
  <ul id="typemenu">
-     <lh>typen</lh>
+     <lh>Types</lh>
      <li id="1" class="functionalityandbehavior"><a href="#">Functionality and Behavior</a></li>
      <li id="2" class="concepts"><a href="#">Concepts</a></li>
      <li id="3" class="directives"><a href="#">Directives</a></li>
@@ -36,13 +38,7 @@
      <li id="12" class="noninformation"><a href="#">Non-Information</a></li>
   </ul>
 
-
-     <button id="thebutton"> Submit </button>
-        <hr />
-  <ol id="result">
-
-  </ol>
-  <hr />
-
-
+    <hr />
+     <button id="submitbutton">Save</button>
+     <button id="deletebutton">Delete All</button>
 </body>

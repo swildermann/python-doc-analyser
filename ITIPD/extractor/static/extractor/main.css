@@ -10,8 +10,14 @@
 }
 
 .markedtext {
-
 }
+
+#markedunits li {
+    list-style: none;
+    padding: 0 0 0 5px;
+}
+
+#markedunits li .ui-icon { float :left; }
 
 .functionalityandbehavior {
     background-color: red;

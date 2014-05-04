@@ -4,3 +4,59 @@
     top: 0px;
     left: 0px;
 }
+
+#objecttext {
+
+}
+
+.markedtext {
+
+}
+
+.functionalityandbehavior {
+    background-color: red;
+}
+
+.concepts {
+    background-color: orange;
+}
+
+.directives {
+    background-color: blue;
+}
+
+.purposes {
+    background-color: green;
+}
+
+.qualityattributes {
+    background-color: black;
+}
+
+.controlflow {
+    background-color: grey;
+}
+
+.structure {
+    background-color: purple;
+}
+
+.patterns {
+    background-color: purple;
+}
+
+.codeexamples {
+    background-color: YellowGreen;
+}
+
+.environment {
+    background-color: Tomato;
+}
+
+.external {
+    background-color: Navy;
+}
+
+.noninformation {
+    background-color: PaleGoldenRod;
+}

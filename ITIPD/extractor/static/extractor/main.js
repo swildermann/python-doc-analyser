@@ -2,16 +2,34 @@ $(function() {
     $("#typemenu").hide();
     $("#typemenu").menu();
     $("#typemenu").draggable();
+
     rangy.init();
-    $("#typemenu li").mousedown(classify_selection);
+    cssAppliermarkedtext = rangy.createCssClassApplier("markedtext", {normalize: true});
+    cssApplierfunctionalityandbehavior = rangy.createCssClassApplier("functionalityandbehavior", {normalize: true});
+    cssApplierconcepts = rangy.createCssClassApplier("concepts", {normalize: true});
+    cssApplierdirectives = rangy.createCssClassApplier("directives", {normalize: true});
+    cssApplierpurposes = rangy.createCssClassApplier("purposes", {normalize: true});
+    cssApplierqualityattributes = rangy.createCssClassApplier("qualityattributes", {normalize: true});
+    cssAppliercontrolflow = rangy.createCssClassApplier("controlflow", {normalize: true});
+    cssApplierstructure = rangy.createCssClassApplier("structure", {normalize: true});
+    cssApplierpatterns = rangy.createCssClassApplier("patterns", {normalize: true});
+    cssAppliercodeexamples = rangy.createCssClassApplier("codeexamples", {normalize: true});
+    cssApplierenvironment = rangy.createCssClassApplier("environment", {normalize: true});
+    cssApplierexternal = rangy.createCssClassApplier("external", {normalize: true});
+    cssAppliernoninformation = rangy.createCssClassApplier("noninformation", {normalize: true});
+
+
+    $("#typemenu li").click(color_selection);
 
     $('#thebutton').click(function () {
+
+    /*
         var data = JSON.stringify(data_to_send);
         $.ajax({
             url: '/extractor/vote/',
             type: 'post',
             data: {
-                data:data,
+                data: data,
                 unit: 10
             },
             success: function () {
@@ -23,6 +41,7 @@ $(function() {
                 console.log(arguments);
             }
         });
+        */
     });
 
     $('body').mouseup(function(e) {
@@ -53,8 +72,22 @@ function show_typemenu(x, y) {
 
 var data_to_send = [];
 
-function classify_selection() {
-   var sel = rangy.getSelection();
+function color_selection() {
+    //dirty js function name hack
+    var s = $(this).attr("class");
+    var appliername = s.substring(0, s.indexOf(' '));
+    var functioname = 'cssApplier' + appliername;
+    var fn = window[functioname];
+    fn.applyToSelection();
+    cssAppliermarkedtext.applyToSelection();
+
+    $("#typemenu").hide();
+
+    rangy.getSelection().removeAllRanges();
+
+ /*  var sel = rangy.getSelection();
+   sel.detach();
+
    var selected_text = sel.toString();
    var selected_html = sel.toHtml();
    var type_id = $(this).attr("id");
@@ -67,5 +100,5 @@ function classify_selection() {
     data_to_send.push({
         type_id: type_id,
         selected_text: selected_text
-    });
+    });*/
 };

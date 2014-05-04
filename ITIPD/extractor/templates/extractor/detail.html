@@ -9,34 +9,31 @@
     <link rel="stylesheet" type="text/css" href="{% static 'extractor/main.css' %}" />
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"/>
     <script type="text/javascript" src="http://rangy.googlecode.com/svn/trunk/dev/rangy-core.js"></script>
+    <script type="text/javascript" src="http://rangy.googlecode.com/svn/trunk/dev/rangy-cssclassapplier.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script type="text/javascript" src="{% static 'extractor/main.js' %}"></script>
-
-     <script>
-
-     </script>
   </head>
 <body>
 {% autoescape off %}
     <h1>{{object.id}}</h1>
-    <h1>{{object.html_text}}</h1>
+    <div id="objecttext">{{object.html_text}}</div>
 {% endautoescape %}
 
  <ul id="typemenu">
      <lh>typen</lh>
-     <li id="1"><a href="#">Functionality and Behavior</a></li>
-     <li id="2"><a href="#">Concepts</a></li>
-     <li id="3"><a href="#">Directives</a></li>
-     <li id="4"><a href="#">Purpose and Rationale</a></li>
-     <li id="5"><a href="#">Quality Attributes and Internal Aspects</a></li>
-     <li id="6"><a href="#">Control-Flow</a></li>
-     <li id="7"><a href="#">Structure and Relationships</a></li>
-     <li id="8"><a href="#">Patterns</a></li>
-     <li id="9"><a href="#">Code Examples</a></li>
-     <li id="10"><a href="#">Environment</a></li>
-     <li id="11"><a href="#">External References</a></li>
-     <li id="12"><a href="#">Non-Information</a></li>
+     <li id="1" class="functionalityandbehavior"><a href="#">Functionality and Behavior</a></li>
+     <li id="2" class="concepts"><a href="#">Concepts</a></li>
+     <li id="3" class="directives"><a href="#">Directives</a></li>
+     <li id="4" class="purposes"><a href="#">Purpose and Rationale</a></li>
+     <li id="5" class="qualityattributes"><a href="#">Quality Attributes and Internal Aspects</a></li>
+     <li id="6" class="controlflow"><a href="#">Control-Flow</a></li>
+     <li id="7" class="structure"><a href="#">Structure and Relationships</a></li>
+     <li id="8" class="patterns"><a href="#">Patterns</a></li>
+     <li id="9" class="codeexamples"><a href="#">Code Examples</a></li>
+     <li id="10" class="environment"><a href="#">Environment</a></li>
+     <li id="11" class="external"><a href="#">External References</a></li>
+     <li id="12" class="noninformation"><a href="#">Non-Information</a></li>
   </ul>
 
 

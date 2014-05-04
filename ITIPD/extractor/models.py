@@ -22,6 +22,7 @@ class MarkedUnit(models.Model):
     #documentation_unit = models.IntegerField(default=0)
     knowledge_type = models.IntegerField(default=0)
     html_text = models.TextField()
+    range = models.TextField(max_length=500)
 
 
 class MappingUnitToUser(models.Model):

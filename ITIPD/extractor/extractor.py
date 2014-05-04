@@ -5,6 +5,7 @@ from os import listdir
 from os.path import isfile, join
 import copy
 
+
 def get_list_of_filepath(mypath):
     pathlist = []
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
@@ -53,6 +54,7 @@ def find_parents(childs):
     for child in childs:
         parents.append(child.findParent())
     return parents
+
 
 def file_to_soup(path):
     """open a file and make a soup out of that"""

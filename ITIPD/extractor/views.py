@@ -42,20 +42,23 @@ def vote(request):
             json.dumps(data), content_type='application/json'
         )
 
-    data = json.loads(request.POST['data'])
+    #data = json.loads(request.POST['data'])
     documentation_id = json.loads(request.POST['unit'])
-    documentation_unit1=DocumentationUnit.objects.get(pk=documentation_id)
+    documentation_unit1 = DocumentationUnit.objects.get(pk=documentation_id)
+    getrange = json.loads(request.POST['range'])
+    html = request.POST['html_text']
 
-    for entry in data:
+    for entry in getrange:
         marked_unit = MarkedUnit.objects.create(
             user=request.user,
             documentation_unit=documentation_unit1,
-            knowledge_type=entry['type_id'],
-            html_text=entry['selected_text']
+            knowledge_type=entry['type'],
+            html_text=html,
+            range=entry['serializedRange']
         )
 
     return HttpResponse(
-        json.dumps({'success': request.POST['data']}),
+        json.dumps({'success': request.POST['range']}),
         content_type='application/json'
     )
 

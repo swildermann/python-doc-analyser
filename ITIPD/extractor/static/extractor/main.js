@@ -49,6 +49,8 @@ $(function() {
                 console.log(arguments);
             }
         });
+        window.location='/extractor/list';
+        //TODO : set this to personal list
     });
 
     $('body').mouseup(function(e) {
@@ -102,6 +104,7 @@ function color_selection() {
 
     //dirty js function name hack
     var s = $(this).attr("class");
+    var type_id = $(this).attr("id");
     var appliername = s.substring(0, s.indexOf(' '));
     var functioname = 'cssApplier' + appliername;
     var fn = window[functioname];
@@ -113,9 +116,10 @@ function color_selection() {
     var htmlString = html.html();
 
     resetColors();
+    resetColors();
     var serializedRange = rangy.serializeRange(rangy.getSelection().getRangeAt(0), false, document.getElementById("objecttext"));
     markedRanges.push({
-        type: functioname,
+        type: type_id,
         serializedRange: serializedRange
     });
 

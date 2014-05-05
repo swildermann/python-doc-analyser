@@ -43,14 +43,14 @@ $(function() {
             success: function () {
                 console.log('Success');
                 console.log(arguments);
+                window.location.href='/extractor/myunits';
             },
             error: function () {
                 console.log('Error!');
                 console.log(arguments);
             }
         });
-        window.location='/extractor/list';
-        //TODO : set this to personal list
+//        window.location='/extractor/myunits';
     });
 
     $('body').mouseup(function(e) {

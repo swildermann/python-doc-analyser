@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseBadRequest
 import datetime
 from django.views import generic
-from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, ParentElement
+from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, ParentElement, MappingUnitToUser
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
@@ -25,6 +25,15 @@ class DetailView(generic.DetailView):
 # data: { data: JSON.stringify(data_to_send)}
 
 
+class UsersView(generic.DetailView):
+    model = MappingUnitToUser
+    template_name = 'extractor/mappingunittouser_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
+        return context
+
+
 class ParentView(generic.DeleteView):
     model = ParentElement
     template_name = 'extractor/parents.html'
@@ -42,20 +51,23 @@ def vote(request):
             json.dumps(data), content_type='application/json'
         )
 
-    #data = json.loads(request.POST['data'])
     documentation_id = json.loads(request.POST['unit'])
     documentation_unit1 = DocumentationUnit.objects.get(pk=documentation_id)
     getrange = json.loads(request.POST['range'])
     html = request.POST['html_text']
-
+    current_user = request.user
     for entry in getrange:
         marked_unit = MarkedUnit.objects.create(
-            user=request.user,
+            user=current_user,
             documentation_unit=documentation_unit1,
             knowledge_type=entry['type'],
             html_text=html,
             range=entry['serializedRange']
         )
+    mappedunit = MappingUnitToUser.objects.get(documentation_unit=documentation_id, user=current_user)
+    mappedunit.already_marked = True
+    mappedunit.save()
+
 
     return HttpResponse(
         json.dumps({'success': request.POST['range']}),

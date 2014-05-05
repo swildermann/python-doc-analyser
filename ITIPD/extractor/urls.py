@@ -12,6 +12,5 @@ urlpatterns = patterns('',
       url(r'^parent/(?P<pk>\d+)/$', views.ParentView.as_view(), name='parent'),
       url(r'^myunits/$', ListView.as_view(model=MappingUnitToUser))
 
-
 )
 

@@ -93,4 +93,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-LOGIN_REDIRECT_URL ="/extractor/myunits.html"
+LOGIN_REDIRECT_URL ="/extractor/myunits/"

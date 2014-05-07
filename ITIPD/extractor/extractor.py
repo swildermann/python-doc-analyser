@@ -4,6 +4,7 @@ import psycopg2
 from os import listdir
 from os.path import isfile, join
 import copy
+from django.db import transaction
 
 
 def get_list_of_filepath(mypath):
@@ -25,6 +26,17 @@ def bs_preprocess(html):
     html = re.sub('[\s]+<', '<', html)  # remove whitespaces before opening tags
     html = re.sub('>[\s]+', '>', html)  # remove whitespaces after closing tags
     return html
+
+
+def get_offsets(soup_str, elems):
+    """soup_str is a soup element converted to a string
+     elems is a array of soup-elements
+    """
+    offsets=[]
+    for each in elems:
+        find_index = soup_str.find(str(each))
+        offsets.append(find_index)
+    return offsets
 
 
 def summarize_placeholders(parent, string):
@@ -73,10 +85,12 @@ if __name__ == "__main__":
     ####be aware: this is spaghetti code###
     mypath = "python-3.4.0-docs-html/library/"
     files = get_list_of_filepath(mypath)
-    #f = open('test.html', 'w')  # needs to exist
+
     for file in files:
         soup = file_to_soup(file)
+        soup_as_string = str(soup)  # store for later purposes
 
+        ### grab each kind of element ###
         methods = grab_elements(soup, "dl", "class", "method")
         functions = grab_elements(soup, "dl", "class", "function")
         describtions = grab_elements(soup, "dl", "class", "describe")
@@ -88,15 +102,30 @@ if __name__ == "__main__":
         #attributes = grab_elements(soup, "dl", "class", "attribute")
         #datas = grab_elements(soup, "dl", "class", "data")
 
+        ### store offsets for each element of each kind in a array ###
+        method_offsets = get_offsets(soup_as_string, methods)
+        functions_offsets = get_offsets(soup_as_string, functions)
+        describtions_offset = get_offsets(soup_as_string, describtions)
+        classmethods_offset = get_offsets(soup_as_string, classmethods)
+        staticmethods_offset = get_offsets(soup_as_string, staticmethods)
+        sections_offset = get_offsets(soup_as_string, sections)
+        classes_offset = get_offsets(soup_as_string, classes)
+
+        all_offsets = method_offsets + functions_offsets + describtions_offset + \
+                      classmethods_offset + staticmethods_offset + \
+                      sections_offset + classes_offset
+
+        ### store all parents together in one big array
+        ### the id of the parents is identical to the documentation_units
+        # TODO: this is a dirty way and needs to be improved
         all_parents = find_parents(
             methods + functions + describtions + classmethods + staticmethods + sections + classes)
         all_parents_copy = copy.copy(all_parents)
 
-        ###define placeholder
+        ###define placeholder and replace nested elements to avoid double rating
         placeholder = '[something removed here]'
-
         for parent in methods + functions + describtions + classmethods + staticmethods + sections + classes:
-            ### set placeholders to duplicated elements ###
+            ### set placeholders to duplicated dl-elements ###
             for elem in parent.find_all('dl', {
             'class': ['method', 'function', 'describe', 'classmethod', 'staticmethod', 'section', 'class']}):
                 tag = Tag(name='p')
@@ -113,7 +142,7 @@ if __name__ == "__main__":
 
         results = methods + functions + describtions + classmethods + staticmethods + sections + classes
 
-        # #########STORE SOMETHING INTO THE DATABASE#############
+        # # #########STORE SOMETHING INTO THE DATABASE#############
         conn = psycopg2.connect("host=127.0.0.1 dbname=mydb user=sven password=Schwen91")
         cur = conn.cursor()
         cur.execute(
@@ -122,23 +151,27 @@ if __name__ == "__main__":
             i = cur.fetchone()[0]+1
         except:
             i = 0    # if table is empty
-        j = i
-        ## store parents of each documenation_unit
-        for elem in all_parents_copy:
-            if isinstance(elem, Tag):
-                parent = elem.prettify()
-                cur.execute('INSERT INTO extractor_parentelement VALUES (%s, %s);',
-                            (j, parent))
-            j += 1
+
+        # j = i
+        # ## store parents of each documenation_unit
+        # for elem in all_parents_copy:
+        #     if isinstance(elem, Tag):
+        #         parent = str(elem)
+        #         cur.execute('INSERT INTO extractor_parentelement VALUES (%s, %s);',
+        #                     (j, parent))
+        #     j += 1
+        #
 
         ##store documenation units##
-        for elem in results:
+        for idx, elem in enumerate(results):
             fname = file
             if isinstance(elem, Tag):
-                strng = elem.prettify()
-                cur.execute('INSERT INTO extractor_documentationunit  VALUES (%s,  %s,  %s,  %s);',
-                            (i, strng, fname, len(strng)))
+                strng = str(elem)
+                cur.execute('INSERT INTO extractor_documentationunit VALUES (%s,  %s,  %s,  %s, %s, %s, %s);',
+                            (i, strng, fname, len(strng), all_offsets[idx], str(all_parents_copy[idx]), soup_as_string))
             i += 1
+
+
 
             ### progress bar ###
             if i % 100 == 0:
@@ -147,4 +180,3 @@ if __name__ == "__main__":
         conn.commit()
         cur.close()
         conn.close()
-        #f.close()

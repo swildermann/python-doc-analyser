@@ -1,5 +1,5 @@
 from django.contrib import admin
-from extractor.models import DocumentationUnit, KnowledgeType, ParentElement, MarkedUnit, MappingUnitToUser
+from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser
 
 
 class KnowledgeTypesAdmin(admin.ModelAdmin):
@@ -8,10 +8,6 @@ class KnowledgeTypesAdmin(admin.ModelAdmin):
 
 class DocumentationUnitAdmin(admin.ModelAdmin):
     list_display = ['id', 'filename']
-
-
-class ParentElementAdmin(admin.ModelAdmin):
-    list_display = ['id']
 
 
 class MarkedUnitAdmin(admin.ModelAdmin):
@@ -24,6 +20,5 @@ class MappingUnitToUserAdmin(admin.ModelAdmin):
 
 admin.site.register(DocumentationUnit, DocumentationUnitAdmin)
 admin.site.register(KnowledgeType, KnowledgeTypesAdmin)
-admin.site.register(ParentElement, ParentElementAdmin)
 admin.site.register(MarkedUnit, MarkedUnitAdmin)
 admin.site.register(MappingUnitToUser,MappingUnitToUserAdmin)

@@ -4,9 +4,11 @@
 
 {% autoescape off %}
     <h2>This is the parent of documentation unit {{object.id}}</h2>
-    <div id="objecttext">{{object.html_text}}</div>
+        <a href="{% url 'documentationunit:detail' object.id %}">Show Child</a>
+        <hr />
+            <div id="objecttext">{{object.parent_text}}</div>
 {% endautoescape %}
 
-<form action="{% url 'documentationunit:detail' parentelement.id %}">
-   <input type="submit" value="Back to Child">
-</form>
+ <hr />
+ <a href="{% url 'documentationunit:detail' object.id %}">Show Child</a>
+

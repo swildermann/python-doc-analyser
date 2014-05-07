@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseBadRequest
 import datetime
 from django.views import generic
-from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, ParentElement, MappingUnitToUser
+from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
@@ -35,12 +35,22 @@ class UsersView(generic.DetailView):
 
 
 class ParentView(generic.DeleteView):
-    model = ParentElement
+    model = DocumentationUnit
     template_name = 'extractor/parents.html'
 
     def get_context_data(self, **kwargs):
         context = super(ParentView, self).get_context_data(**kwargs)
         return context
+
+
+class FileView(generic.DeleteView):
+    model = DocumentationUnit
+    template_name = 'extractor/display_file.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(FileView, self).get_context_data(**kwargs)
+        return context
+
 
 @csrf_exempt
 #@login_required

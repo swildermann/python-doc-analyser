@@ -10,7 +10,7 @@ urlpatterns = patterns('',
       url(r'^(?P<pk>\d+)/$', views.DetailView.as_view(), name='detail'),
       url(r'^vote/$', views.vote, name='vote'),
       url(r'^parent/(?P<pk>\d+)/$', views.ParentView.as_view(), name='parent'),
+      url(r'^file/(?P<pk>\d+)/$', views.FileView.as_view(), name='file'),
       url(r'^myunits/$', ListView.as_view(model=MappingUnitToUser))
 
 )
-

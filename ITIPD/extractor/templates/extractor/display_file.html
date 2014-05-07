@@ -1,0 +1,17 @@
+
+{% csrf_token %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'extractor/pydoctheme.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'extractor/pygments.css' %}" />
+
+{% autoescape off %}
+    <h2>This is the file where unit {{object.id}} is stored in </h2>
+        <h4>filename: {{object.filename}}</h4>
+         <a href="{% url 'documentationunit:detail' object.id %}">Show Child-Element</a>
+        <hr />
+            <div id="filetext">{{object.file_text}}</div>
+{% endautoescape %}
+
+ <hr />
+ <a href="{% url 'documentationunit:detail' object.id %}">Show Child-Element</a>

@@ -4,7 +4,6 @@
 {% block content %}
     <h2>Documenation Units of {{user.first_name}} {{user.last_name}}</h2>
     <ul>
-
     {% for unit in object_list %}
         {% if user == unit.user %}
         <li>unit number: {{unit.documentation_unit.id}}

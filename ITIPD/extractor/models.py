@@ -23,6 +23,7 @@ class MarkedUnit(models.Model):
     knowledge_type = models.IntegerField(default=0)  # should be ForeignKey
     html_text = models.TextField()
     range = models.TextField(max_length=500, default='')
+    timestamp = models.TimeField(default=0)
 
 
 class MappingUnitToUser(models.Model):

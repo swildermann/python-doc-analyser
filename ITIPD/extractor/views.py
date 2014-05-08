@@ -61,6 +61,7 @@ def vote(request):
             json.dumps(data), content_type='application/json'
         )
 
+    now = datetime.datetime.now()
     documentation_id = json.loads(request.POST['unit'])
     documentation_unit1 = DocumentationUnit.objects.get(pk=documentation_id)
     getrange = json.loads(request.POST['range'])
@@ -72,7 +73,8 @@ def vote(request):
             documentation_unit=documentation_unit1,
             knowledge_type=entry['type'],
             html_text=html,
-            range=entry['serializedRange']
+            range=entry['serializedRange'],
+            timestamp=now
         )
     mappedunit = MappingUnitToUser.objects.get(documentation_unit=documentation_id, user=current_user)
     mappedunit.already_marked = True

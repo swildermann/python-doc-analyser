@@ -29,23 +29,23 @@
 #markedunits li .ui-icon { float :left; }
 
 .functionalityandbehavior {
-    background-color: red;
+    background-color: Khaki;
 }
 
 .concepts {
-    background-color: orange;
+    background-color: lightcoral;
 }
 
 .directives {
-    background-color: blue;
+    background-color: lightblue;
 }
 
 .purposes {
-    background-color: green;
+    background-color: lightgreen ;
 }
 
 .qualityattributes {
-    background-color: black;
+    background-color: silver;
 }
 
 .controlflow {
@@ -53,11 +53,11 @@
 }
 
 .structure {
-    background-color: purple;
+    background-color: mediumpurple;
 }
 
 .patterns {
-    background-color: purple;
+    background-color: mediumspringgreen;
 }
 
 .codeexamples {
@@ -69,9 +69,9 @@
 }
 
 .external {
-    background-color: Navy;
+    background-color: #5eaeff;
 }
 
 .noninformation {
-    background-color: PaleGoldenRod;
+    background-color: #4bff47;
 }

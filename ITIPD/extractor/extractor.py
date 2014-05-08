@@ -75,6 +75,13 @@ def file_to_soup(path):
     soup = BeautifulSoup(bs_preprocess(data))
     return soup
 
+def find_type(r):
+    strng = str(r)
+    a = re.findall("^<dl class=\"(.*?)\"", strng)
+    if len(a) == 0:
+        a = re.findall("^<div class=\"(.*?)\"", strng)
+    return a[0]
+
 
 def grab_elements(soup, elem, attr1, attr2):
     """grabs the different elemens with the given attributes out of a soup"""
@@ -142,6 +149,7 @@ if __name__ == "__main__":
 
         results = methods + functions + describtions + classmethods + staticmethods + sections + classes
 
+
         # # #########STORE SOMETHING INTO THE DATABASE#############
         conn = psycopg2.connect("host=127.0.0.1 dbname=mydb user=sven password=Schwen91")
         cur = conn.cursor()
@@ -167,11 +175,11 @@ if __name__ == "__main__":
             fname = file
             if isinstance(elem, Tag):
                 strng = str(elem)
-                cur.execute('INSERT INTO extractor_documentationunit VALUES (%s,  %s,  %s,  %s, %s, %s, %s);',
-                            (i, strng, fname, len(strng), all_offsets[idx], str(all_parents_copy[idx]), soup_as_string))
+                type = find_type(elem)
+                cur.execute('INSERT INTO extractor_documentationunit VALUES (%s,  %s,  %s,  %s, %s, %s, %s, %s);',
+                            (i, strng, fname, len(strng), all_offsets[idx], str(all_parents_copy[idx]), soup_as_string,
+                             type))
             i += 1
-
-
 
             ### progress bar ###
             if i % 100 == 0:

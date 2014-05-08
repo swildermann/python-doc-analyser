@@ -8,6 +8,7 @@ class DocumentationUnit(models.Model):
     offset = models.IntegerField(default=-1)
     parent_text = models.TextField(max_length=None, default="")
     file_text = models.TextField(max_length=None, default="")
+    type = models.CharField(max_length=100, default="")
 
 
 class KnowledgeType(models.Model):

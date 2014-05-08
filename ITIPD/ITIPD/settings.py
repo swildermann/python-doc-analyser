@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'extractor',
     'frontend',
     'south',
+    'static_precompiler',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,6 +49,21 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+# Static file settings
+
+STATIC_ROOT = 'static/compiled'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'static_precompiler.finders.StaticPrecompilerFinder',
+)
+
+STATIC_PRECOMPILER_COMPILERS = (
+    'static_precompiler.compilers.CoffeeScript',
 )
 
 ROOT_URLCONF = 'ITIPD.urls'

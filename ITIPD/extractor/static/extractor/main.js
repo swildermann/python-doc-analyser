@@ -1,9 +1,9 @@
 var markedRanges = [];
 
 $(function() {
-    $("#typemenu").hide();
-    $("#typemenu").menu();
-    $("#typemenu").draggable();
+  $("#typemenu").hide();
+  $("#typemenu").menu();
+  $("#typemenu").draggable();
 
     rangy.init();
     cssAppliermarkedtext = rangy.createCssClassApplier("markedtext", {normalize: true});
@@ -23,10 +23,10 @@ $(function() {
 
     $("#typemenu li").click(color_selection);
 
-    $('#deletebutton').click(function () {
+    /*$('#deletebutton').click(function () {
         markedRanges.length = 0;
         resetColors();
-    });
+    });*/
 
     $('#submitbutton').click(function () {
         var html = $('#objecttext').clone();
@@ -115,7 +115,6 @@ function color_selection() {
     var html = $('#objecttext').clone();
     var htmlString = html.html();
 
-    resetColors();
     resetColors();
     var serializedRange = rangy.serializeRange(rangy.getSelection().getRangeAt(0), false, document.getElementById("objecttext"));
     markedRanges.push({

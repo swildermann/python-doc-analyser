@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
      <title>pydoctype concept prototype</title>
+    {% load coffeescript %}
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'extractor/pydoctheme.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'extractor/pygments.css' %}" />
@@ -15,7 +16,7 @@
     <script type="text/javascript" src="http://rangy.googlecode.com/svn/trunk/dev/rangy-serializer.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <script type="text/javascript" src="{% static 'extractor/main.js' %}"></script>
+    <script type="text/javascript" src="{{ STATIC_URL}}{% coffeescript 'extractor/main.coffee' %}"></script>
   </head>
 <body>
 {% autoescape off %}

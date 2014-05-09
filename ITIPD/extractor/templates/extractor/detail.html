@@ -11,12 +11,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'extractor/pygments.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'extractor/main.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'extractor/themes/ui-lightness/jquery-ui-1.10.4.css' %}" />
-    <script type="text/javascript" src="{% static 'extractor/rangy-1.2.3/rangy-core.js' %}"></script>
-    <script type="text/javascript" src="{% static 'extractor/rangy-1.2.3/rangy-cssclassapplier.js' %}"></script>
-    <script type="text/javascript" src="{% static 'extractor/rangy-1.2.3/rangy-serializer.js' %}"></script>
+    <script type="text/javascript" src="{% static 'extractor/rangy/rangy-core.js' %}"></script>
+    <script type="text/javascript" src="{% static 'extractor/rangy/rangy-cssclassapplier.js' %}"></script>
+    <script type="text/javascript" src="{% static 'extractor/rangy/rangy-textrange.js' %}"></script>
+    <script type="text/javascript" src="{% static 'extractor/rangy/rangy-serializer.js' %}"></script>
     <script type="text/javascript" src="{% static 'extractor/jquery-2.1.1.js' %}"></script>
     <script type="text/javascript" src="{% static 'extractor/jquery-ui-1.10.4.js' %}"></script>
-    <!--<script type="text/javascript" src="{% static 'extractor/main.js' %}"></script>-->
     <script type="text/javascript" src="{{ STATIC_URL}}{% coffeescript 'extractor/main.coffee' %}"></script>
   </head>
 <body>

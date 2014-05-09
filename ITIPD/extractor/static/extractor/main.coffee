@@ -20,6 +20,7 @@ root.submitbutton = '#submitbutton'
 root.typemenu = '#typemenu'
 root.objecttext = '#objecttext'
 root.markedRanges = []
+root.coloredRanges = []
 
 $ ->
   ($ root.typemenu).hide()
@@ -30,6 +31,7 @@ $ ->
   root.types = initializeCssAppliers()
 
   ($ root.deletebutton).click ->
+    root.markedRanges.length = 0
     resetColors()
 
   ($ root.typemenu + " li").click color_selection
@@ -40,8 +42,9 @@ $ ->
     ($ root.typemenu).hide() if isBlank currentSelection
 
   ($ root.submitbutton).click ->
+    console.log root.markedRanges
     htmlString = ($ root.objecttext).clone().html()
-    data = JSON.stringify markedRanges
+    data = JSON.stringify root.markedRanges
     $.post '/extractor/vote/',
       range: data
       html_text: htmlString
@@ -82,16 +85,22 @@ color_selection = (event) ->
     return
 
   typeid = $(@).attr "id"
+  currentCharacterRange = rangy.getSelection().saveCharacterRanges ($ root.objecttext)[0]
   type.cssApplier.applyToSelection() for type in root.types when type.id is parseInt typeid, 10
 
   ($ root.typemenu).hide()
 
-  html = ($ root.objecttext).clone()
-  resetColors
+  resetColors()
 
   currentRange = rangy.serializeRange rangy.getSelection().getRangeAt(0), false, ($ root.objecttext)[0]
-  root.markedRanges.push { type: typeid, serializedRange: currentRange }
-
-  ($ root.objecttext).replaceWith html
+  root.markedRanges.push { type: typeid, serializedRange: currentRange, characterRange: currentCharacterRange }
 
   rangy.getSelection().removeAllRanges()
+  redrawColors()
+
+redrawColors = ->
+  root.markedRanges.map (elem) ->
+    range = rangy.createRange ($ root.objecttext)[0]
+    range.selectCharacters ($ root.objecttext)[0], elem.characterRange[0].characterRange.start, elem.characterRange[0].characterRange.end
+    type.cssApplier.applyToRange range for type in root.types when type.id is parseInt elem.type, 10
+

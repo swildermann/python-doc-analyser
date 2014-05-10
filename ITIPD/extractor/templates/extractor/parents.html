@@ -4,11 +4,11 @@
 
 {% autoescape off %}
     <h2>This is the parent of documentation unit {{object.id}}</h2>
-        <a href="{% url 'documentationunit:detail' object.id %}">Show Child</a>
+        <a href="{% url 'documentationunit:detail' object.id %}">Show Unit</a>
         <hr />
             <div id="objecttext">{{object.parent_text}}</div>
 {% endautoescape %}
 
  <hr />
- <a href="{% url 'documentationunit:detail' object.id %}">Show Child</a>
+ <a href="{% url 'documentationunit:detail' object.id %}">Show Unit</a>
 

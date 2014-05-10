@@ -45,7 +45,7 @@
      <button id="submitbutton">Save</button>
      <button id="deletebutton">Delete All</button>
 
-     <a href="{% url 'documentationunit:parent' documentationunit.id %}">Show Parent</a>
-     <a href="{% url 'documentationunit:file' documentationunit.id %}">Show File</a>
+     <a href="{% url 'documentationunit:parent' object.id %}">Show Parent</a>
+     <a href="{% url 'documentationunit:file' object.id %}">Show File</a>
 
 </body>

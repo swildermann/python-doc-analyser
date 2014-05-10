@@ -1,33 +1,17 @@
-from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 import datetime
 from django.views import generic
 from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser
 import json
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login
-
-
-def testing(request, *number):
-    now = datetime.datetime.now()
-    html = "<html><body>It is now %s.</body></html>" % now
-    return HttpResponse(html)
+from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 
 class DetailView(generic.DetailView):
     model = DocumentationUnit
-    template_name = 'extractor/detail.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(DetailView, self).get_context_data(**kwargs)
-        return context
-
-# data: JSON.stringify(data_to_send)
-# data: { data: JSON.stringify(data_to_send)}
-
-
-class UsersView(generic.DetailView):
-    model = MappingUnitToUser
-    template_name = 'extractor/mappingunittouser_list.html'
+    template_name = 'extractor/display_unit.html'
 
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
@@ -53,7 +37,7 @@ class FileView(generic.DeleteView):
 
 
 @csrf_exempt
-#@login_required
+@login_required
 def vote(request):
     if request.method != 'POST':
         data = {'error': 'Invalid method'}
@@ -80,11 +64,11 @@ def vote(request):
     mappedunit.already_marked = True
     mappedunit.save()
 
-
     return HttpResponse(
         json.dumps({'success': request.POST['range']}),
         content_type='application/json'
     )
+
 
 @csrf_exempt
 def login(request):
@@ -95,10 +79,18 @@ def login(request):
         if user.is_active:
             login(request, user)
             return HttpResponseRedirect('extractor/documentationunit_list.html')
-            # TODO Redirect to a success page.
         else:
             print("disabled account")
             # TODO Return a 'disabled account' error message
     else:
         print("invalid login")
-         # TODO Return an 'invalid login' error message.
+        # TODO Return an 'invalid login' error message.
+
+@csrf_exempt
+@login_required
+def show_next_unit(request):
+    unit_list = (MappingUnitToUser.objects.filter(user=request.user)).filter(already_marked=False).order_by('id')
+    if len(unit_list) == 0:
+        return render(request, 'extractor/no_units.html')
+    unit = unit_list[0]
+    return render(request, 'extractor/detail.html', {'object' : unit.documentation_unit})

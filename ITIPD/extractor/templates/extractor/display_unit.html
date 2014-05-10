@@ -1,9 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
 
-</body>
-</html>
+{% csrf_token %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% autoescape off %}
+    <h2>This is the documentation unit number {{object.id}}</h2>
+        <hr />
+            <div id="objecttext">{{object.html_text}}</div>
+{% endautoescape %}
+
+ <hr />
+     <a href="{% url 'documentationunit:parent' object.id %}">Show Parent</a>
+     <a href="{% url 'documentationunit:file' object.id %}">Show File</a>
+

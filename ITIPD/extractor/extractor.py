@@ -100,25 +100,25 @@ if __name__ == "__main__":
         ### grab each kind of element ###
         methods = grab_elements(soup, "dl", "class", "method")
         functions = grab_elements(soup, "dl", "class", "function")
-        describtions = grab_elements(soup, "dl", "class", "describe")
+        attributes = grab_elements(soup, "dl", "class", "attribute")
         classmethods = grab_elements(soup, "dl", "class", "classmethod")
         staticmethods = grab_elements(soup, "dl", "class", "staticmethod")
         sections = grab_elements(soup, "div", "class", "section")
         classes = grab_elements(soup, "dl", "class", "class")
-        ### attributes, data and exceptions will not be filtered ##
-        #attributes = grab_elements(soup, "dl", "class", "attribute")
+        ### data, describtions and exceptions will not be filtered ##
         #datas = grab_elements(soup, "dl", "class", "data")
+        #describtions = grab_elements(soup, "dl", "class", "describe")
 
         ### store offsets for each element of each kind in a array ###
         method_offsets = get_offsets(soup_as_string, methods)
         functions_offsets = get_offsets(soup_as_string, functions)
-        describtions_offset = get_offsets(soup_as_string, describtions)
+        attributes_offset = get_offsets(soup_as_string, attributes)
         classmethods_offset = get_offsets(soup_as_string, classmethods)
         staticmethods_offset = get_offsets(soup_as_string, staticmethods)
         sections_offset = get_offsets(soup_as_string, sections)
         classes_offset = get_offsets(soup_as_string, classes)
 
-        all_offsets = method_offsets + functions_offsets + describtions_offset + \
+        all_offsets = method_offsets + functions_offsets + attributes_offset + \
                       classmethods_offset + staticmethods_offset + \
                       sections_offset + classes_offset
 
@@ -126,15 +126,15 @@ if __name__ == "__main__":
         ### the id of the parents is identical to the documentation_units
         # TODO: this is a dirty way and needs to be improved
         all_parents = find_parents(
-            methods + functions + describtions + classmethods + staticmethods + sections + classes)
+            methods + functions + attributes + classmethods + staticmethods + sections + classes)
         all_parents_copy = copy.copy(all_parents)
 
         ###define placeholder and replace nested elements to avoid double rating
         placeholder = '[something removed here]'
-        for parent in methods + functions + describtions + classmethods + staticmethods + sections + classes:
+        for parent in methods + functions + attributes + classmethods + staticmethods + sections + classes:
             ### set placeholders to duplicated dl-elements ###
             for elem in parent.find_all('dl', {
-            'class': ['method', 'function', 'describe', 'classmethod', 'staticmethod', 'section', 'class']}):
+            'class': ['method', 'function', 'attribute', 'classmethod', 'staticmethod', 'section', 'class']}):
                 tag = Tag(name='p')
                 tag.string = placeholder
                 elem.replace_with(tag)
@@ -147,8 +147,7 @@ if __name__ == "__main__":
             ### summarize placeholders ###
             summarize_placeholders(parent, placeholder)
 
-        results = methods + functions + describtions + classmethods + staticmethods + sections + classes
-
+        results = methods + functions + attributes + classmethods + staticmethods + sections + classes
 
         # # #########STORE SOMETHING INTO THE DATABASE#############
         conn = psycopg2.connect("host=127.0.0.1 dbname=mydb user=sven password=Schwen91")

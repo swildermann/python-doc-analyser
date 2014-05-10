@@ -98,9 +98,36 @@ color_selection = (event) ->
   rangy.getSelection().removeAllRanges()
   redrawColors()
 
+###
+   This function draws all saved ranges in their respective colors to the objecttext.
+   It also creates mouseover handlers for all those ranges.
+###
 redrawColors = ->
   root.markedRanges.map (elem) ->
+
+    #recreate range with start and end from markedRanges
     range = rangy.createRange ($ root.objecttext)[0]
     range.selectCharacters ($ root.objecttext)[0], elem.characterRange[0].characterRange.start, elem.characterRange[0].characterRange.end
-    type.cssApplier.applyToRange range for type in root.types when type.id is parseInt elem.type, 10
 
+    #find correct color for this range in types array and mark it
+    root.types.map (type) ->
+      if type.id is parseInt elem.type, 10
+        type.cssApplier.applyToRange range
+
+        #get all nodes created by the cssClassApplier (the <span> elements)
+        nodes = range.getNodes [1], (el) ->
+          rangy.CssClassApplier.util.hasClass el, type.cssApplier.cssClass
+        nodes.push range.startContainer.parentNode if nodes.length is 0
+        addDeleteHandler nodes, elem.serializedRange
+
+addDeleteHandler = (nodes, serializedRange) ->
+  nodes.map (node) ->
+    ($ node).on 'click', {serializedRange: serializedRange}, (event) =>
+      index = i for range, i in root.markedRanges when event.data.serializedRange is range.serializedRange
+      deleteMarkedRange index
+
+
+deleteMarkedRange = (index = root.markedRanges.length-1) ->
+  resetColors()
+  root.markedRanges.splice index, 1
+  redrawColors()

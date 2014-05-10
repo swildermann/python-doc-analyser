@@ -1,0 +1,22 @@
+
+{% if error_message %}<p xmlns="http://www.w3.org/1999/html"><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% block content %}
+    <h2>Documenation Units of {{user.first_name}} {{user.last_name}}</h2>
+    <ul>
+    {% for unit in unit_list %}
+        <li>unit number: {{unit.documentation_unit.id}}
+            <br/>
+            {%if unit.already_marked %}
+               thanks for voting me! :-)
+            {% else %}
+               <a href="{% url 'documentationunit:detail' unit.documentation_unit.id %}">Take me!</a>
+            </li>
+            <hr/>
+            {%endif%}
+    {% endfor %}
+
+    </ul>
+{% endblock %}
+
+

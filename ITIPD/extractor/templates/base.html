@@ -4,10 +4,13 @@
     <title>{% block title %}{% endblock %}</title>
     {% load coffeescript %}
     {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'extractor/pydoctheme.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'extractor/pygments.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'pydoc/pydoctheme.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'pydoc/pygments.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'pydoc/default.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'pydoc/basic.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'extractor/main.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'extractor/themes/ui-lightness/jquery-ui-1.10.4.css' %}" />
+
     <script type="text/javascript" src="{% static 'extractor/rangy/rangy-core.js' %}"></script>
     <script type="text/javascript" src="{% static 'extractor/rangy/rangy-cssclassapplier.js' %}"></script>
     <script type="text/javascript" src="{% static 'extractor/rangy/rangy-textrange.js' %}"></script>

@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 {% block title %}File: {{object.filename}}{% endblock %}
 
-{% csrf_token %}
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-{% block head %}{% endblock %}
+{% block head %}
+    {% load staticfiles %}
+    <script type="text/javascript" src="{% static 'pydoc/underscore.js' %}"></script>
+    <script type="text/javascript" src="{% static 'pydoc/doctools.js' %}"></script>
+    <script type="text/javascript" src="{% static 'pydoc/sidebar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'pydoc/copybutton.js' %}"></script>
+    <script type="text/javascript" src="{% static 'pydoc/searchtools.js' %}"></script>
+    <script type="text/javascript" src="{% static 'pydoc/version_switch.js' %}"></script>
+{% endblock %}
 
 {% block content %}
+
+{% csrf_token %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% autoescape off %}
     <h2>This is the file where unit {{object.id}} is stored in </h2>

@@ -11,7 +11,7 @@ root.types = [ { name: "functionalityandbehavior", nicename: "Functionality and 
                { name: "patterns", nicename: "Patterns", id: 8, cssApplier: null },
                { name: "codeexamples", nicename: "Code Examples", id: 9, cssApplier: null },
                { name: "environment", nicename: "Environment", id: 10, cssApplier: null },
-               { name: "external", nicename: "External References", id: 11, cssApplier: null },
+               { name: "externalreferences", nicename: "External References", id: 11, cssApplier: null },
                { name: "noninformation", nicename: "Non-Information", id: 12, cssApplier: null } ]
 
 root.deletebutton = '#deletebutton'

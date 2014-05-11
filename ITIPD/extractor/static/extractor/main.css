@@ -5,6 +5,30 @@
     left: 0px;
     font-size: 10pt;
 }
+#sortable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#sortable li {
+    margin: 3px 3px 3px 0;
+    padding: 1px;
+    float: left;
+    width: 150px;
+    height: 40px;
+    font-size: 1em;
+    font-weight: normal;
+    color: black;
+    background: none;
+    text-align: center;
+    cursor: pointer;
+}
+
+li.delete-list-entry {
+
+}
 
 #typemenu lh {
     margin: 5px;

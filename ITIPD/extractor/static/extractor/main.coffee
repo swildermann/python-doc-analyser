@@ -1,19 +1,18 @@
 root = exports ? this
 
 $ = jQuery
-root.types = [ { name: "markedtext", id: 13, cssApplier: null }
-               { name: "functionalityandbehavior", id: 1, cssApplier: null }
-               { name: "concepts", id: 2, cssApplier: null }
-               { name: "directives", id: 3, cssApplier: null }
-               { name: "purposes", id: 4, cssApplier: null }
-               { name: "qualityattributes", id: 5, cssApplier: null }
-               { name: "controlflow", id: 6, cssApplier: null }
-               { name: "structure", id: 7, cssApplier: null }
-               { name: "patterns", id: 8, cssApplier: null }
-               { name: "codeexamples", id: 9, cssApplier: null }
-               { name: "environment", id: 10, cssApplier: null }
-               { name: "external", id: 11, cssApplier: null }
-               { name: "noninformation", id: 12, cssApplier: null } ]
+root.types = [ { name: "functionalityandbehavior", nicename: "Functionality and Behavior", id: 1, cssApplier: null },
+               { name: "concepts", nicename: "Concepts", id: 2, cssApplier: null },
+               { name: "directives", nicename: "Directives", id: 3, cssApplier: null },
+               { name: "purposes", nicename: "Purpose and Rationale", id: 4, cssApplier: null },
+               { name: "qualityattributes", nicename: "Quality Attributes and Internal Aspects", id: 5, cssApplier: null },
+               { name: "controlflow", nicename: "Control-Flow", id: 6, cssApplier: null },
+               { name: "structure", nicename: "Structure and Relationships", id: 7, cssApplier: null },
+               { name: "patterns", nicename: "Patterns", id: 8, cssApplier: null },
+               { name: "codeexamples", nicename: "Code Examples", id: 9, cssApplier: null },
+               { name: "environment", nicename: "Environment", id: 10, cssApplier: null },
+               { name: "external", nicename: "External References", id: 11, cssApplier: null },
+               { name: "noninformation", nicename: "Non-Information", id: 12, cssApplier: null } ]
 
 root.deletebutton = '#deletebutton'
 root.submitbutton = '#submitbutton'
@@ -26,6 +25,8 @@ $ ->
   ($ root.typemenu).hide()
   ($ root.typemenu).menu()
   ($ root.typemenu).draggable()
+  ($ "#sortable").sortable()
+  ($ "#sortable").disableSelection()
 
   rangy.init()
   root.types = initializeCssAppliers()
@@ -57,6 +58,7 @@ initializeCssAppliers = ->
   root.types.map (type) ->
     {
       name: type.name,
+      nicename: type.nicename,
       id: type.id,
       cssApplier: rangy.createCssClassApplier type.name, {normalize: true}
     }
@@ -72,6 +74,7 @@ resetColors = ->
 
 resetColor = (type) ->
   ($ root.objecttext).find("span.#{type.name}").contents().unwrap()
+  ($ 'li.delete-list-entry').remove()
 
 showTypeMenu = (atPositionX, atPositionY) ->
   ($ root.typemenu).css 'left', atPositionX
@@ -82,6 +85,8 @@ color_selection = (event) ->
   try
     rangy.serializeRange rangy.getSelection().getRangeAt(0), false, ($ root.objecttext)[0]
   catch err
+    rangy.getSelection().removeAllRanges()
+    ($ root.typemenu).hide()
     return
 
   typeid = $(@).attr "id"
@@ -118,13 +123,40 @@ redrawColors = ->
         nodes = range.getNodes [1], (el) ->
           rangy.CssClassApplier.util.hasClass el, type.cssApplier.cssClass
         nodes.push range.startContainer.parentNode if nodes.length is 0
-        addDeleteHandler nodes, elem.serializedRange
+        addDeleteHandler nodes, elem.serializedRange, type.nicename
 
-addDeleteHandler = (nodes, serializedRange) ->
+addDeleteHandler = (nodes, serializedRange, name) ->
+  deleteButton123 = ($ "<li>#{name}</li>")
+  deleteButton123.addClass 'ui-state-default'
+  deleteButton123.addClass 'delete-list-entry'
+
+  deleteButton123.on 'click', {serializedRange: serializedRange}, (event) =>
+    index = i for range, i in root.markedRanges when event.data.serializedRange is range.serializedRange
+    deleteMarkedRange index
+    event.currentTarget.remove()
+
   nodes.map (node) ->
-    ($ node).on 'click', {serializedRange: serializedRange}, (event) =>
-      index = i for range, i in root.markedRanges when event.data.serializedRange is range.serializedRange
-      deleteMarkedRange index
+    ($ node).on 'mouseover', {deleteButton: deleteButton123}, (event) =>
+      event.data.deleteButton.css 'border', '3px dotted red'
+      ($ node).css 'border', '3px dotted red'
+      ($ node).css 'border-left', 'none'
+      ($ node).css 'border-right', 'none'
+
+    ($ node).on 'mouseout', {deleteButton: deleteButton123}, (event) =>
+      event.data.deleteButton.css 'border', '1px solid #cccccc'
+      ($ node).css 'border', 'none'
+
+    deleteButton123.on 'mouseover', {node: ($ node)}, (event) =>
+      event.data.node.css 'border', '3px dotted red'
+      event.data.node.css 'border-left', 'none'
+      event.data.node.css 'border-right', 'none'
+      deleteButton123.css 'border', '3px dotted red'
+
+    deleteButton123.on 'mouseout', {node: ($ node)}, (event) =>
+      event.data.node.css 'border', 'none'
+      deleteButton123.css 'border', '1px solid #cccccc'
+
+  ($ '#sortable').append deleteButton123
 
 
 deleteMarkedRange = (index = root.markedRanges.length-1) ->

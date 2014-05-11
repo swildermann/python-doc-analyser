@@ -9,6 +9,7 @@
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
 
+<div id="login-form" align="center" style="margin: 0px auto;">
 <form method="post" action="{% url 'documentationunit:login' %}">
 {% csrf_token %}
 <table>
@@ -25,5 +26,5 @@
 <input type="submit" value="login" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
-
+</div>
 {% endblock %}

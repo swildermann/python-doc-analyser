@@ -1,6 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, Http404
 import datetime
-from django.views import generic
 from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser, AccessLog
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -134,6 +133,5 @@ def show_next_unit(request):
 @login_required(login_url='/extractor/login/')
 def marked_units(request):
     unit_list = (MappingUnitToUser.objects.filter(user=request.user)).filter(already_marked=True).order_by('id')
-
-
-    return render(request, 'extractor/markedunits.html', {'unit_list': unit_list})
+    marked_units = (MarkedUnit.objects.filter(user=request.user))
+    return render(request, 'extractor/markedunits.html', {'unit_list': unit_list, 'marked_units': marked_units})

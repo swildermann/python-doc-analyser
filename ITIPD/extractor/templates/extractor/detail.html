@@ -3,7 +3,10 @@
 {% if error_message %}<p xmlns="http://www.w3.org/1999/html"><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% block title %}Code this Documentation-Unit{% endblock %}
-{% block head %}{% endblock %}
+{% block head %}
+    {% load coffeescript %}
+    <script type="text/javascript" src="{{ STATIC_URL }}{% coffeescript 'extractor/main.coffee' %}"></script>
+{% endblock %}
 
 {% block content %}
     {% autoescape off %}

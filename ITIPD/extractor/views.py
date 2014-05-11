@@ -37,7 +37,7 @@ class FileView(generic.DeleteView):
 
 
 @csrf_exempt
-@login_required(login_url='/login/')
+@login_required(login_url='/extractor/login/')
 def vote(request):
     if request.method != 'POST':
         data = {'error': 'Invalid method'}
@@ -87,7 +87,7 @@ def login(request):
         # TODO Return an 'invalid login' error message.
 
 @csrf_exempt
-@login_required(login_url='/login/')
+@login_required(login_url='/extractor/login/')
 def show_next_unit(request):
     unit_list = (MappingUnitToUser.objects.filter(user=request.user)).filter(already_marked=False).order_by('id')
     if len(unit_list) == 0:

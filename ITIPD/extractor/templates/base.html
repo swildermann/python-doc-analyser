@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
-    {% load coffeescript %}
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'pydoc/pydoctheme.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'pydoc/pygments.css' %}" />
@@ -17,10 +16,16 @@
     <script type="text/javascript" src="{% static 'extractor/rangy/rangy-serializer.js' %}"></script>
     <script type="text/javascript" src="{% static 'extractor/jquery-2.1.1.js' %}"></script>
     <script type="text/javascript" src="{% static 'extractor/jquery-ui-1.10.4.js' %}"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}{% coffeescript 'extractor/main.coffee' %}"></script>
     {% block head %}{% endblock %}
 </head>
 <body>
-  {% block content %}{% endblock %}
+  <ul id="fixed-menu">
+      <li><a href="/extractor/myunits">Next Documentation Unit</a></li>
+      <li><a href="/extractor/markedunits">Marked Units</a></li>
+      <li><a href="/extractor/logout">Logout</a></li>
+  </ul>
+  <div id="pagecontent">
+    {% block content %}{% endblock %}
+  </div>
 </body>
 </html>

@@ -127,10 +127,13 @@ def show_next_unit(request):
         user=current_user,
         documentation_unit=store_unit,
         timestamp=now,
-        filename = "rate_unit")
+        filename="rate_unit")
 
-    return render(request, 'extractor/detail.html', {'object' : unit.documentation_unit})
+    return render(request, 'extractor/detail.html', {'object': unit.documentation_unit})
 
-
+@login_required(login_url='/extractor/login/')
 def marked_units(request):
-   return HttpResponse("This is not implemented")
+    unit_list = (MappingUnitToUser.objects.filter(user=request.user)).filter(already_marked=True).order_by('id')
+
+
+    return render(request, 'extractor/markedunits.html', {'unit_list': unit_list})

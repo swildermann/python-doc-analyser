@@ -22,8 +22,8 @@ root.markedRanges = []
 root.coloredRanges = []
 
 $ ->
-  root.markedRanges = ranges_marked
-  console.log ranges_marked
+  root.markedRanges = window.ranges_marked
+
   ($ root.typemenu).hide()
   ($ root.typemenu).menu()
   ($ root.typemenu).draggable()
@@ -55,6 +55,8 @@ $ ->
       (data) ->
         console.log "ajax request successful"
         window.location = '/extractor/myunits'
+  redrawColors()
+
 
 initializeCssAppliers = ->
   root.types.map (type) ->

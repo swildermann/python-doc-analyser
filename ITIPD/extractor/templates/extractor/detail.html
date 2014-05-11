@@ -15,13 +15,20 @@
     <div id="objecttext">{{object.html_text}}</div>
     {% endautoescape %}
 <script type="text/javascript">
-    var ranges_marked = '{
+    window.ranges_marked = [];
+    var False = false;
+    var True = true;
+
     {% for range in marked_units %}
-        { "type": {{range.typeid}},
-          "serializedRange": {{range.typeid}},
-          "characterRange": {{range.char_range}} },
+        window.ranges_marked.push({
+          "type": {{range.knowledge_type }},
+          "serializedRange": "{{range.range }}",
+          {% autoescape off %}
+          "characterRange": {{range.char_range }}
+          {% endautoescape %}
+          });
     {% endfor %}
-    }'
+
 
 </script>
  <ul id="typemenu">

@@ -25,7 +25,7 @@ def view_unit(request, pk):
 
     marked_units = (MarkedUnit.objects.filter(user=request.user, documentation_unit=documentation_unit1))
 
-    return render(request, 'extractor/display_unit.html', {'object': documentation_unit1, 'marked_units': marked_units})
+    return render(request, 'extractor/detail.html', {'object': documentation_unit1, 'marked_units': marked_units})
 
 
 
@@ -88,6 +88,7 @@ def vote(request):
             knowledge_type=entry['type'],
             html_text=html,
             range=entry['serializedRange'],
+            char_range=entry['characterRange'],
             timestamp=now
         )
     mappedunit = MappingUnitToUser.objects.get(documentation_unit=documentation_id, user=current_user)

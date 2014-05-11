@@ -20,9 +20,13 @@
 </head>
 <body>
   <ul id="fixed-menu">
+      {% if user.is_authenticated %}
       <li><a href="/extractor/myunits">Next Documentation Unit</a></li>
       <li><a href="/extractor/markedunits">Marked Units</a></li>
       <li><a href="/extractor/logout">Logout</a></li>
+      {% else %}
+      <li><a href="/extractor/login">Login</a></li>
+      {% endif %}
   </ul>
   <div id="pagecontent">
     {% block content %}{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Marked units{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<div id="marked-unit-list">
+   <ul>
+    {% for marked_unit in unit_list %}
+        {% regroup marked_units by id as markings %}
+        {% for marking in markings %}
+          {% ifequal marking.grouper marked_unit.id %}
+            <li><a href="/extractor/{{ marked_unit.documentation_unit.id }}"><strong>{{ marked_unit.documentation_unit.filename }}</strong>Markings: {{ marking.list.count }}</a></li>
+          {% endifequal %}
+
+          <li><a href="#"><strong>{{ marked_unit.documentation_unit.filename }}</strong>2004</a></li>
+          <li><a href="#"><strong>{{ marked_unit.documentation_unit.filename }}</strong>2004</a></li>
+        {% endfor %}
+    {% endfor %}
+   </ul>
+</div>
+{% endblock %}

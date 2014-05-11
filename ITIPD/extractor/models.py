@@ -30,3 +30,9 @@ class MappingUnitToUser(models.Model):
     user = models.ForeignKey('auth.User', null=True, blank=True)
     documentation_unit = models.ForeignKey(DocumentationUnit)
     already_marked = models.BooleanField(default=False)
+
+
+class AccessLog(models.Model):
+    user = models.ForeignKey('auth.User', null=True, blank=True)
+    documentation_unit = models.ForeignKey(DocumentationUnit)
+    filename = models.CharField(max_length=100, default='')

@@ -77,6 +77,8 @@ def vote(request):
     getrange = json.loads(request.POST['range'])
     html = request.POST['html_text']
     current_user = request.user
+    ## delete old units if they exist ##
+    DeleteOldUnits = MarkedUnit.objects.filter(user=current_user, documentation_unit=documentation_unit1).delete()
     for entry in getrange:
         marked_unit = MarkedUnit.objects.create(
             user=current_user,

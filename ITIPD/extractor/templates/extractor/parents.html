@@ -1,4 +1,9 @@
+{% extends "base.html" %}
 
+{% block title %}Parent of documentation unit{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
 {% csrf_token %}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -11,4 +16,4 @@
 
  <hr />
  <a href="{% url 'documentationunit:detail' object.id %}">Show Unit</a>
-
+{% endblock %}

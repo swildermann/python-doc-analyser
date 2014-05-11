@@ -30,6 +30,34 @@ li.delete-list-entry {
 
 }
 
+#fixed-menu {
+  margin: 0;
+  padding: 5px;
+  padding-left: 20px;
+  width: 100%;
+  z-index: 9999;
+  position: fixed;
+  top: 0px;
+  left: 0;
+  list-style: none;
+  border-bottom: 2px solid black;
+  background-color: #ADD8E6;
+}
+
+#fixed-menu li {
+  padding: 4px 4px 4px 0;
+  margin-right: 10px;
+  float: left;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: #cccccc;
+  font-weight: bold;
+}
+
+#pagecontent {
+  margin-top: 50px;
+}
+
 #typemenu lh {
     margin: 5px;
 }

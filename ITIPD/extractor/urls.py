@@ -6,10 +6,11 @@ from extractor import views
 
 urlpatterns = patterns('',
       url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
-      url(r'^(?P<pk>\d+)/$', views.DetailView.as_view(), name='detail'),
+      url(r'^(?P<pk>\d+)/$', views.view_unit, name='detail'),
       url(r'^vote/$', views.vote, name='vote'),
-      url(r'^parent/(?P<pk>\d+)/$', views.ParentView.as_view(), name='parent'),
-      url(r'^file/(?P<pk>\d+)/$', views.FileView.as_view(), name='file'),
-      url(r'^myunits/$', views.show_next_unit, name='show_next')
+      url(r'^parent/(?P<pk>\d+)/$', views.show_parent, name='parent'),
+      url(r'^file/(?P<pk>\d+)/$', views.show_file, name='file'),
+      url(r'^myunits/$', views.show_next_unit, name='show_next'),
+      url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/extractor/login'}),
 
 )

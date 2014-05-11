@@ -35,4 +35,5 @@ class MappingUnitToUser(models.Model):
 class AccessLog(models.Model):
     user = models.ForeignKey('auth.User', null=True, blank=True)
     documentation_unit = models.ForeignKey(DocumentationUnit)
+    timestamp = models.TimeField(default=0)
     filename = models.CharField(max_length=100, default='')

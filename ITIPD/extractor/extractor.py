@@ -4,7 +4,6 @@ import psycopg2
 from os import listdir
 from os.path import isfile, join
 import copy
-from django.db import transaction
 
 
 def get_list_of_filepath(mypath):
@@ -21,10 +20,11 @@ def bs_preprocess(html):
     (c) mail-group of beautifulsoup4"""
     pat = re.compile('(^[\s]+)|([\s]+$)', re.MULTILINE)
     html = re.sub(pat, '', html)  # remove leading and trailing whitespaces
-    html = re.sub('\n', ' ', html)  # convert newlines to spaces
+    #html = re.sub('\n', ' ', html)  # convert newlines to spaces
     # this preserves newline delimiters
-    html = re.sub('[\s]+<', '<', html)  # remove whitespaces before opening tags
-    html = re.sub('>[\s]+', '>', html)  # remove whitespaces after closing tags
+    # TODO : Remove the following 2 lines and test again!
+    #html = re.sub('[\s]+<', '<', html)  # remove whitespaces before opening tags
+    #html = re.sub('>[\s]+', '>', html)  # remove whitespaces after closing tags
     return html
 
 
@@ -74,6 +74,7 @@ def file_to_soup(path):
     data = g.read()
     soup = BeautifulSoup(bs_preprocess(data))
     return soup
+
 
 def find_type(r):
     strng = str(r)

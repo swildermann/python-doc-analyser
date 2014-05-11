@@ -11,6 +11,7 @@ urlpatterns = patterns('',
       url(r'^parent/(?P<pk>\d+)/$', views.show_parent, name='parent'),
       url(r'^file/(?P<pk>\d+)/$', views.show_file, name='file'),
       url(r'^myunits/$', views.show_next_unit, name='show_next'),
+      url(r'^markedunits/$', views.marked_units, name='marked_units'),
       url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/extractor/login'}),
 
 )

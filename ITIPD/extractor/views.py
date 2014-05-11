@@ -122,11 +122,15 @@ def show_next_unit(request):
         return render(request, 'extractor/no_units.html')
     unit = unit_list[0]
     now = datetime.datetime.now()
-    store_unit = DocumentationUnit.objects.get(unit.id)
+    store_unit = DocumentationUnit.objects.get(pk=unit.id)
     access_log = AccessLog.objects.create(
         user=current_user,
-        documentation_unit=unit.id,
+        documentation_unit=store_unit,
         timestamp=now,
         filename = "rate_unit")
 
     return render(request, 'extractor/detail.html', {'object' : unit.documentation_unit})
+
+
+def marked_units(request):
+   return HttpResponse("This is not implemented")

@@ -14,7 +14,16 @@
     <hr />
     <div id="objecttext">{{object.html_text}}</div>
     {% endautoescape %}
+<script type="text/javascript">
+    var ranges_marked = '{
+    {% for range in marked_units %}
+        { "type": {{range.typeid}},
+          "serializedRange": {{range.typeid}},
+          "characterRange": {{range.char_range}} },
+    {% endfor %}
+    }'
 
+</script>
  <ul id="typemenu">
      <lh>Types</lh>
      <li id="1" class="functionalityandbehavior"><a href="#">Functionality and Behavior</a></li>

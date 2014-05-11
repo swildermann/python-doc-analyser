@@ -23,7 +23,9 @@ def view_unit(request, pk):
             timestamp=now,
             filename = "view_unit")
 
-    return render(request, 'extractor/display_unit.html', {'object': documentation_unit1})
+    marked_units = (MarkedUnit.objects.filter(user=request.user, documentation_unit=documentation_unit1))
+
+    return render(request, 'extractor/display_unit.html', {'object': documentation_unit1, 'marked_units': marked_units})
 
 
 

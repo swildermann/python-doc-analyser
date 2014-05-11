@@ -30,7 +30,7 @@ li.delete-list-entry {
 
 }
 
-#marked-unit-list { width:100%; font-size:15px; }
+#marked-unit-list { width:95%; font-size:15px; }
 #marked-unit-list ul { list-style: none; }
 #marked-unit-list ul li { }
 #marked-unit-list ul li a {

@@ -9,14 +9,11 @@
 <div id="marked-unit-list">
    <ul>
     {% for marked_unit in unit_list %}
-        {% regroup marked_units by id as markings %}
+        {% regroup marked_units by documentation_unit.id as markings %}
         {% for marking in markings %}
-          {% ifequal marking.grouper marked_unit.id %}
-            <li><a href="/extractor/{{ marked_unit.documentation_unit.id }}"><strong>{{ marked_unit.documentation_unit.filename }}</strong>Markings: {{ marking.list.count }}</a></li>
+          {% ifequal marking.grouper marked_unit.documentation_unit.id %}
+            <li><a href="/extractor/{{ marked_unit.documentation_unit.id }}"><strong>{{ marked_unit.documentation_unit.filename }}</strong>Markings: {{ marking.list|length }}</a></li>
           {% endifequal %}
-
-          <li><a href="#"><strong>{{ marked_unit.documentation_unit.filename }}</strong>2004</a></li>
-          <li><a href="#"><strong>{{ marked_unit.documentation_unit.filename }}</strong>2004</a></li>
         {% endfor %}
     {% endfor %}
    </ul>

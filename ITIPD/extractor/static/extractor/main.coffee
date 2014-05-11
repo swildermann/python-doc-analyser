@@ -22,6 +22,8 @@ root.markedRanges = []
 root.coloredRanges = []
 
 $ ->
+  root.markedRanges = ranges_marked
+  console.log ranges_marked
   ($ root.typemenu).hide()
   ($ root.typemenu).menu()
   ($ root.typemenu).draggable()

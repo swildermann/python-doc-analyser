@@ -8,13 +8,8 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 <div id="marked-unit-list">
    <ul>
-    {% for marked_unit in unit_list %}
-        {% regroup marked_units by documentation_unit.id as markings %}
-        {% for marking in markings %}
-          {% ifequal marking.grouper marked_unit.documentation_unit.id %}
-            <li><a href="/extractor/{{ marked_unit.documentation_unit.id }}"><strong>{{ marked_unit.documentation_unit.filename }}</strong>Markings: {{ marking.list|length }}</a></li>
-          {% endifequal %}
-        {% endfor %}
+    {% for unit in units %}
+       <li><a href="/extractor/{{ unit.id }}"><strong>{{ unit.filename }}</strong>Markings: {{ unit.num_markings }}</a></li>
     {% endfor %}
    </ul>
 </div>

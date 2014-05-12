@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-
+from django.db.models import Count
 
 def view_unit(request, pk):
     documentation_id = pk
@@ -137,6 +137,7 @@ def show_next_unit(request):
 
 @login_required(login_url='/extractor/login/')
 def marked_units(request):
-    unit_list = (MappingUnitToUser.objects.filter(user=request.user)).filter(already_marked=True).order_by('id')
-    marked_units = (MarkedUnit.objects.filter(user=request.user))
-    return render(request, 'extractor/markedunits.html', {'unit_list': unit_list, 'marked_units': marked_units})
+    units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
+                                     .filter(mappingunittouser__already_marked__exact=True)\
+                                     .annotate(num_markings = Count('markedunit')).order_by('id')
+    return render(request, 'extractor/markedunits.html', {'units': units})

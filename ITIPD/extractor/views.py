@@ -145,7 +145,7 @@ def marked_units(request):
 
 @login_required(login_url='/extractor/login/')
 def random_mapping(request):
-    number = random.randint(1, 7600)
+    number = random.randint(1, 8300)
     current_user = request.user
     unit = DocumentationUnit.objects.get(pk=number)
     if current_user.is_superuser:

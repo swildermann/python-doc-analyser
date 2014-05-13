@@ -106,9 +106,12 @@ if __name__ == "__main__":
         staticmethods = grab_elements(soup, "dl", "class", "staticmethod")
         sections = grab_elements(soup, "div", "class", "section")
         classes = grab_elements(soup, "dl", "class", "class")
+        exceptions = grab_elements(soup, "dl", "class", "exception")
+        describtions = grab_elements(soup, "dl", "class", "describe")
         ### data, describtions and exceptions will not be filtered ##
         #datas = grab_elements(soup, "dl", "class", "data")
-        #describtions = grab_elements(soup, "dl", "class", "describe")
+
+
 
         ### store offsets for each element of each kind in a array ###
         method_offsets = get_offsets(soup_as_string, methods)
@@ -118,24 +121,28 @@ if __name__ == "__main__":
         staticmethods_offset = get_offsets(soup_as_string, staticmethods)
         sections_offset = get_offsets(soup_as_string, sections)
         classes_offset = get_offsets(soup_as_string, classes)
+        exceptions_offset = get_offsets(soup_as_string, exceptions)
+        describtions_offset = get_offsets(soup_as_string, describtions)
 
         all_offsets = method_offsets + functions_offsets + attributes_offset + \
                       classmethods_offset + staticmethods_offset + \
-                      sections_offset + classes_offset
+                      sections_offset + classes_offset + exceptions_offset + describtions_offset
 
         ### store all parents together in one big array
         ### the id of the parents is identical to the documentation_units
         # TODO: this is a dirty way and needs to be improved
         all_parents = find_parents(
-            methods + functions + attributes + classmethods + staticmethods + sections + classes)
+            methods + functions + attributes + classmethods + staticmethods + sections + classes +
+            exceptions + describtions)
         all_parents_copy = copy.copy(all_parents)
 
         ###define placeholder and replace nested elements to avoid double rating
         placeholder = '[something removed here]'
-        for parent in methods + functions + attributes + classmethods + staticmethods + sections + classes:
+        for parent in methods + functions + attributes + classmethods + staticmethods + sections + classes\
+                + exceptions + describtions:
             ### set placeholders to duplicated dl-elements ###
             for elem in parent.find_all('dl', {
-            'class': ['method', 'function', 'attribute', 'classmethod', 'staticmethod', 'section', 'class']}):
+            'class': ['method', 'function', 'attribute', 'classmethod', 'staticmethod', 'section', 'class', 'exception', 'describe']}):
                 tag = Tag(name='p')
                 tag.string = placeholder
                 elem.replace_with(tag)
@@ -148,7 +155,8 @@ if __name__ == "__main__":
             ### summarize placeholders ###
             summarize_placeholders(parent, placeholder)
 
-        results = methods + functions + attributes + classmethods + staticmethods + sections + classes
+        results = methods + functions + attributes + classmethods + staticmethods + sections + classes \
+                  + exceptions + describtions
 
         # # #########STORE SOMETHING INTO THE DATABASE#############
         conn = psycopg2.connect("host=127.0.0.1 dbname=mydb user=sven password=Schwen91")
@@ -160,25 +168,18 @@ if __name__ == "__main__":
         except:
             i = 0    # if table is empty
 
-        # j = i
-        # ## store parents of each documenation_unit
-        # for elem in all_parents_copy:
-        #     if isinstance(elem, Tag):
-        #         parent = str(elem)
-        #         cur.execute('INSERT INTO extractor_parentelement VALUES (%s, %s);',
-        #                     (j, parent))
-        #     j += 1
-        #
-
         ##store documenation units##
         for idx, elem in enumerate(results):
             fname = file
             if isinstance(elem, Tag):
-                strng = str(elem)
+                htmltext = str(elem)
+                #plaintext = str(elem.findAll(text=True))
+                plaintext = ''.join(elem.findAll(text=True))
+                plaintext_str = str(plaintext)
                 type = find_type(elem)
-                cur.execute('INSERT INTO extractor_documentationunit VALUES (%s,  %s,  %s,  %s, %s, %s, %s, %s);',
-                            (i, strng, fname, len(strng), all_offsets[idx], str(all_parents_copy[idx]), soup_as_string,
-                             type))
+                cur.execute('INSERT INTO extractor_documentationunit VALUES (%s,  %s,  %s,  %s, %s, %s, %s, %s, %s);',
+                            (i, htmltext, fname, len(htmltext), all_offsets[idx], str(all_parents_copy[idx]), soup_as_string,
+                             type, plaintext))
             i += 1
 
             ### progress bar ###

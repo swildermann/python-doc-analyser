@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, Http404
-import datetime
+import datetime, random
 from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser, AccessLog
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.db.models import Count
+
 
 def view_unit(request, pk):
     documentation_id = pk
@@ -26,7 +27,6 @@ def view_unit(request, pk):
     marked_units = (MarkedUnit.objects.filter(user=request.user, documentation_unit=documentation_unit1))
 
     return render(request, 'extractor/detail.html', {'object': documentation_unit1, 'marked_units': marked_units})
-
 
 
 def show_parent(request, pk):
@@ -141,3 +141,18 @@ def marked_units(request):
                                      .filter(mappingunittouser__already_marked__exact=True)\
                                      .annotate(num_markings = Count('markedunit')).order_by('id')
     return render(request, 'extractor/markedunits.html', {'units': units})
+
+
+@login_required(login_url='/extractor/login/')
+def random_mapping(request):
+    number = random.randint(1, 7600)
+    current_user = request.user
+    unit = DocumentationUnit.objects.get(pk=number)
+    if current_user.is_superuser:
+        mapUnitToUser = MappingUnitToUser.objects.create(
+            user=current_user,
+            documentation_unit=unit,
+            already_marked=False
+        )
+        return HttpResponse("Mapped a random Unit!")
+    return HttpResponse("you need to be superuser to do this")

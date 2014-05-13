@@ -108,8 +108,7 @@ if __name__ == "__main__":
         classes = grab_elements(soup, "dl", "class", "class")
         exceptions = grab_elements(soup, "dl", "class", "exception")
         describtions = grab_elements(soup, "dl", "class", "describe")
-        ### data, describtions and exceptions will not be filtered ##
-        #datas = grab_elements(soup, "dl", "class", "data")
+        datas = grab_elements(soup, "dl", "class", "data")
 
 
 
@@ -123,17 +122,19 @@ if __name__ == "__main__":
         classes_offset = get_offsets(soup_as_string, classes)
         exceptions_offset = get_offsets(soup_as_string, exceptions)
         describtions_offset = get_offsets(soup_as_string, describtions)
+        datas_offset = get_offsets(soup_as_string, datas)
 
         all_offsets = method_offsets + functions_offsets + attributes_offset + \
                       classmethods_offset + staticmethods_offset + \
-                      sections_offset + classes_offset + exceptions_offset + describtions_offset
+                      sections_offset + classes_offset + exceptions_offset + \
+                      describtions_offset + datas_offset
 
         ### store all parents together in one big array
         ### the id of the parents is identical to the documentation_units
         # TODO: this is a dirty way and needs to be improved
         all_parents = find_parents(
             methods + functions + attributes + classmethods + staticmethods + sections + classes +
-            exceptions + describtions)
+            exceptions + describtions + datas)
         all_parents_copy = copy.copy(all_parents)
 
         ###define placeholder and replace nested elements to avoid double rating
@@ -142,7 +143,7 @@ if __name__ == "__main__":
                 + exceptions + describtions:
             ### set placeholders to duplicated dl-elements ###
             for elem in parent.find_all('dl', {
-            'class': ['method', 'function', 'attribute', 'classmethod', 'staticmethod', 'section', 'class', 'exception', 'describe']}):
+            'class': ['method', 'function', 'attribute', 'classmethod', 'staticmethod', 'section', 'class', 'exception', 'describe', 'data']}):
                 tag = Tag(name='p')
                 tag.string = placeholder
                 elem.replace_with(tag)
@@ -156,7 +157,7 @@ if __name__ == "__main__":
             summarize_placeholders(parent, placeholder)
 
         results = methods + functions + attributes + classmethods + staticmethods + sections + classes \
-                  + exceptions + describtions
+                  + exceptions + describtions + datas
 
         # # #########STORE SOMETHING INTO THE DATABASE#############
         conn = psycopg2.connect("host=127.0.0.1 dbname=mydb user=sven password=Schwen91")

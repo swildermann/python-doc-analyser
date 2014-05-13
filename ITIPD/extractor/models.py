@@ -9,6 +9,7 @@ class DocumentationUnit(models.Model):
     parent_text = models.TextField(max_length=None, default="")
     file_text = models.TextField(max_length=None, default="")
     type = models.CharField(max_length=100, default="")
+    plaintext = models.TextField(max_length=None)
 
 
 class KnowledgeType(models.Model):

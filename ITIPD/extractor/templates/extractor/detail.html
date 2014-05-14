@@ -4,8 +4,8 @@
 
 {% block title %}Code this Documentation-Unit{% endblock %}
 {% block head %}
-    {% load coffeescript %}
-    <script type="text/javascript" src="{{ STATIC_URL }}{% coffeescript 'extractor/main.coffee' %}"></script>
+    {% load static %}
+    <script type="text/javascript" src="{% static 'extractor/main.js' %}"></script>
 {% endblock %}
 
 {% block content %}

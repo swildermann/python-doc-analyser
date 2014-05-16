@@ -108,13 +108,13 @@
       console.log(root.markedRanges);
       htmlString = ($(root.objecttext)).clone().html();
       data = JSON.stringify(root.markedRanges);
-      return $.post('/extractor/vote/', {
+      return $.post('/pydoc/vote/', {
         range: data,
         html_text: htmlString,
         unit: ($("#documentationunitid")).attr("class")
       }, function(data) {
         console.log("ajax request successful");
-        return window.location = '/extractor/myunits';
+        return window.location = '/pydoc/myunits';
       });
     });
     return redrawColors();

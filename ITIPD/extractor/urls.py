@@ -1,6 +1,5 @@
 __author__ = 'sven'
-from django.conf.urls import patterns, url, include
-from django.views.generic import ListView
+from django.conf.urls import patterns, url
 from extractor.models import DocumentationUnit, MappingUnitToUser
 from extractor import views
 
@@ -14,5 +13,4 @@ urlpatterns = patterns('',
       url(r'^markedunits/$', views.marked_units, name='marked_units'),
       url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/extractor/login'}),
       url(r'^randomunit/$', views.random_mapping, name = 'random_mapping'),
-
 )

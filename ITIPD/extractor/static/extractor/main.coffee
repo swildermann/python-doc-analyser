@@ -48,13 +48,13 @@ $ ->
     console.log root.markedRanges
     htmlString = ($ root.objecttext).clone().html()
     data = JSON.stringify root.markedRanges
-    $.post '/extractor/vote/',
+    $.post '/pydoc/vote/',
       range: data
       html_text: htmlString
       unit: ($ "#documentationunitid").attr "class"
       (data) ->
         console.log "ajax request successful"
-        window.location = '/extractor/myunits'
+        window.location = '/pydoc/myunits'
   redrawColors()
 
 

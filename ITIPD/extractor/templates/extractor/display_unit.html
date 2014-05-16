@@ -1,19 +1,57 @@
 {% extends "base.html" %}
 
-{% block title %}Documentation unit {{object.id}}{% endblock %}
-{% block head %}{% endblock %}
+{% if error_message %}<p xmlns="http://www.w3.org/1999/html"><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% block title %}Code this Documentation-Unit{% endblock %}
+{% block head %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'extractor/main.js' %}"></script>
+{% endblock %}
 
 {% block content %}
-{% csrf_token %}
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% autoescape off %}
+    <h1 id="documentationunitid" class="{{object.id}}">documentation unit: {{object.id}}</h1>
+    <hr />
+    <div id="objecttext">{{object.html_text}}</div>
+    {% endautoescape %}
+<script type="text/javascript">
+    window.ranges_marked = [];
+    var False = false;
+    var True = true;
 
-{% autoescape off %}
-    <h2>This is the documentation unit number {{object.id}}</h2>
-        <hr />
-            <div id="objecttext">{{object.html_text}}</div>
-{% endautoescape %}
+    {% for range in marked_units %}
+        window.ranges_marked.push({
+          "type": {{range.knowledge_type }},
+          "serializedRange": "{{range.range }}",
+          {% autoescape off %}
+          "characterRange": {{range.char_range }}
+          {% endautoescape %}
+          });
+    {% endfor %}
 
- <hr />
+
+</script>
+ <ul id="typemenu">
+     <lh>Types</lh>
+     <li id="1" class="functionalityandbehavior"><a href="#">Functionality and Behavior</a></li>
+     <li id="2" class="concepts"><a href="#">Concepts</a></li>
+     <li id="3" class="directives"><a href="#">Directives</a></li>
+     <li id="4" class="purposes"><a href="#">Purpose and Rationale</a></li>
+     <li id="5" class="qualityattributes"><a href="#">Quality Attributes and Internal Aspects</a></li>
+     <li id="6" class="controlflow"><a href="#">Control-Flow</a></li>
+     <li id="7" class="structure"><a href="#">Structure and Relationships</a></li>
+     <li id="8" class="patterns"><a href="#">Patterns</a></li>
+     <li id="9" class="codeexamples"><a href="#">Code Examples</a></li>
+     <li id="10" class="environment"><a href="#">Environment</a></li>
+     <li id="11" class="external"><a href="#">External References</a></li>
+     <li id="12" class="noninformation"><a href="#">Non-Information</a></li>
+  </ul>
+
+    <hr />
+     <h4> changes will not be saved! </h4>
      <a href="{% url 'documentationunit:parent' object.id %}">Show Parent</a>
      <a href="{% url 'documentationunit:file' object.id %}">Show File</a>
+
+<ul id="sortable">
+</ul>
 {% endblock %}

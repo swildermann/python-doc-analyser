@@ -25,10 +25,14 @@
       <li><a href="/pydoc/markedunits">Marked Units</a></li>
       <li><a href="http://www.inf.fu-berlin.de/w/SE/ThesisPythonDokuInfotypenCodingHandbook"
              target="_blank">Coding Handbook</a></li>
+      {% if user.is_superuser %}
+      <li><a href="pydoc/randomunit">Random-Unit</a></li>
+      {% endif %}
       <li><a href="/pydoc/logout">Logout</a></li>
       {% else %}
       <li><a href="/pydoc/login">Login</a></li>
       {% endif %}
+
   </ul>
   <div id="pagecontent">
     {% block content %}{% endblock %}

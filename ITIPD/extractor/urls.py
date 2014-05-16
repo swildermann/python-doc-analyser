@@ -14,6 +14,5 @@ urlpatterns = patterns('',
       url(r'^markedunits/$', views.marked_units, name='marked_units'),
       url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/extractor/login'}),
       url(r'^randomunit/$', views.random_mapping, name = 'random_mapping'),
-      url(r'^', views.show_next_unit, name='show_next')
 
 )

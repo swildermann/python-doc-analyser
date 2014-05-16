@@ -9,5 +9,5 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^pydocs/', include('extractor.urls', namespace="documentationunit")),
+    url(r'^pydoc/', include('extractor.urls', namespace="documentationunit")),
 )

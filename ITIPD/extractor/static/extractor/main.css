@@ -104,49 +104,49 @@ li.delete-list-entry {
 #markedunits li .ui-icon { float :left; }
 
 .functionalityandbehavior {
-    background-color: Khaki;
+    background-color: #FF8282;
 }
 
 .concepts {
-    background-color: lightcoral;
+    background-color: #FFC082;
 }
 
 .directives {
-    background-color: lightblue;
+    background-color: #FFFF82;
 }
 
 .purposes {
-    background-color: lightgreen ;
+    background-color: #C0FF82 ;
 }
 
 .qualityattributes {
-    background-color: silver;
+    background-color: #82FF82;
 }
 
 .controlflow {
-    background-color: grey;
+    background-color: #82FFC0;
 }
 
 .structure {
-    background-color: mediumpurple;
+    background-color: #82FFFF;
 }
 
 .patterns {
-    background-color: mediumspringgreen;
+    background-color: #82C0FF;
 }
 
 .codeexamples {
-    background-color: YellowGreen;
+    background-color: #8282FF;
 }
 
 .environment {
-    background-color: Tomato;
+    background-color: #C082FF;
 }
 
 .externalreferences {
-    background-color: #5eaeff;
+    background-color: #FF82FF;
 }
 
 .noninformation {
-    background-color: #4bff47;
+    background-color: #FF82C0;
 }

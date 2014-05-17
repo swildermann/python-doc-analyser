@@ -26,7 +26,7 @@ def view_unit(request, pk):
 
     marked_units = (MarkedUnit.objects.filter(user=request.user, documentation_unit=documentation_unit1))
 
-    return render(request, 'extractor/display_unit.html', {'object': documentation_unit1, 'marked_units': marked_units})
+    return render(request, 'pydoc/display_unit.html', {'object': documentation_unit1, 'marked_units': marked_units})
 
 
 def show_parent(request, pk):
@@ -43,7 +43,7 @@ def show_parent(request, pk):
             documentation_unit=documentation_unit1,
             timestamp=now,
             filename = "parent")
-    return render(request, 'extractor/parents.html', {'object': documentation_unit1})
+    return render(request, 'pydoc/parents.html', {'object': documentation_unit1})
 
 
 def show_file(request, pk):
@@ -61,11 +61,11 @@ def show_file(request, pk):
             timestamp=now,
             filename = "file")
 
-    return render(request, 'extractor/display_file.html', {'object': documentation_unit1})
+    return render(request, 'pydoc/display_file.html', {'object': documentation_unit1})
 
 
 @csrf_exempt
-@login_required(login_url='/extractor/login/')
+@login_required(login_url='/pydoc/login/')
 def vote(request):
     if request.method != 'POST':
         data = {'error': 'Invalid method'}
@@ -109,7 +109,7 @@ def login(request):
     if user is not None:
         if user.is_active:
             login(request, user)
-            return HttpResponseRedirect('extractor/documentationunit_list.html')
+            return HttpResponseRedirect('pydoc/documentationunit_list.html')
         else:
             print("disabled account")
             # TODO Return a 'disabled account' error message
@@ -118,12 +118,12 @@ def login(request):
         # TODO Return an 'invalid login' error message.
 
 @csrf_exempt
-@login_required(login_url='/extractor/login/')
+@login_required(login_url='/pydoc/login/')
 def show_next_unit(request):
     unit_list = (MappingUnitToUser.objects.filter(user=request.user)).filter(already_marked=False).order_by('id')
     current_user = request.user
     if len(unit_list) == 0:
-        return render(request, 'extractor/no_units.html')
+        return render(request, 'pydoc/no_units.html')
     unit = unit_list[0]
     now = datetime.datetime.now()
     store_unit = DocumentationUnit.objects.get(pk=unit.id)
@@ -133,17 +133,17 @@ def show_next_unit(request):
         timestamp=now,
         filename="rate_unit")
 
-    return render(request, 'extractor/detail.html', {'object': unit.documentation_unit})
+    return render(request, 'pydoc/detail.html', {'object': unit.documentation_unit})
 
-@login_required(login_url='/extractor/login/')
+@login_required(login_url='/pydoc/login/')
 def marked_units(request):
     units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=True)\
                                      .annotate(num_markings = Count('markedunit')).order_by('id')
-    return render(request, 'extractor/markedunits.html', {'units': units})
+    return render(request, 'pydoc/markedunits.html', {'units': units})
 
 
-@login_required(login_url='/extractor/login/')
+@login_required(login_url='/pydoc/login/')
 def random_mapping(request):
     number = random.randint(1, 8300)
     current_user = request.user

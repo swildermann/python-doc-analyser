@@ -154,5 +154,5 @@ def random_mapping(request):
             documentation_unit=unit,
             already_marked=False
         )
-        return HttpResponse("Mapped a random Unit!")
-    return HttpResponse("you need to be superuser to do this")
+        return HttpResponse('{% extends "base.html" %} Mapped a random Unit!')
+    return HttpResponse('{% extends "base.html" %} you need to be superuser to do this')

@@ -118,7 +118,7 @@ def login(request):
         # TODO Return an 'invalid login' error message.
 
 @csrf_exempt
-@login_required(login_url='/extractor/login/')
+@login_required(login_url='')
 def show_next_unit(request):
     unit_list = (MappingUnitToUser.objects.filter(user=request.user))\
                 .filter(already_marked=False).order_by('documentation_unit.id')
@@ -136,7 +136,7 @@ def show_next_unit(request):
 
     return render(request, 'extractor/detail.html', {'object': unit.documentation_unit})
 
-@login_required(login_url='/extractor/login/')
+@login_required(login_url='')
 def marked_units(request):
     units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=True)\
@@ -144,7 +144,7 @@ def marked_units(request):
     return render(request, 'extractor/markedunits.html', {'units': units})
 
 
-@login_required(login_url='/extractor/login/')
+@login_required(login_url='')
 def random_mapping(request):
     number = random.randint(1, 8300)
     current_user = request.user
@@ -155,5 +155,5 @@ def random_mapping(request):
             documentation_unit=unit,
             already_marked=False
         )
-        return HttpResponse("Mapped a random Unit!")
-    return HttpResponse("you need to be superuser to do this")
+        return render(request, 'extractor/randomunit.html')
+    return HttpResponse("You need to be superuser for that..!") 

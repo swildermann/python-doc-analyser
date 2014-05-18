@@ -21,16 +21,16 @@
 <body>
   <ul id="fixed-menu">
       {% if user.is_authenticated %}
-      <li><a href="/pydoc/myunits">Next Documentation Unit</a></li>
-      <li><a href="/pydoc/markedunits">Marked Units</a></li>
+      <li><a href="/pydoc/myunits/">Next Documentation Unit</a></li>
+      <li><a href="/pydoc/markedunits/">Marked Units</a></li>
       <li><a href="http://www.inf.fu-berlin.de/w/SE/ThesisPythonDokuInfotypenCodingHandbook"
              target="_blank">Coding Handbook</a></li>
       {% if user.is_superuser %}
       <li><a href="/pydoc/randomunit/">Random-Unit</a></li>
       {% endif %}
-      <li><a href="/pydoc/logout">Logout</a></li>
+      <li><a href="/pydoc/logout/">Logout</a></li>
       {% else %}
-      <li><a href="/pydoc/login">Login</a></li>
+      <li><a href="/pydoc/">Login</a></li>
       {% endif %}
 
   </ul>

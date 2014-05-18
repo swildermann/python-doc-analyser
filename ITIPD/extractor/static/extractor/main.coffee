@@ -54,7 +54,7 @@ $ ->
       unit: ($ "#documentationunitid").attr "class"
       (data) ->
         console.log "ajax request successful"
-        window.location = '/pydoc/myunits'
+        window.location = '/pydoc/myunits/'
   redrawColors()
 
 

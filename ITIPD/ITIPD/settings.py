@@ -37,7 +37,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'extractor',
-    'frontend',
     'south',
     'static_precompiler',
 )

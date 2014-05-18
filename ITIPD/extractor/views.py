@@ -120,7 +120,8 @@ def login(request):
 @csrf_exempt
 @login_required(login_url='/extractor/login/')
 def show_next_unit(request):
-    unit_list = (MappingUnitToUser.objects.filter(user=request.user)).filter(already_marked=False).order_by('id')
+    unit_list = (MappingUnitToUser.objects.filter(user=request.user))\
+                .filter(already_marked=False).order_by('documentation_unit.id')
     current_user = request.user
     if len(unit_list) == 0:
         return render(request, 'extractor/no_units.html')

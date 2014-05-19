@@ -9,7 +9,7 @@
 <div id="marked-unit-list">
    <ul>
     {% for unit in units %}
-       <li><a href="/extractor/{{ unit.id }}"><strong>{{ unit.filename }}</strong>Markings: {{ unit.num_markings }}</a></li>
+       <li><a href="/pydoc/{{ unit.id }}/"><strong>{{ unit.filename }}</strong>Markings: {{ unit.num_markings }}</a></li>
     {% endfor %}
    </ul>
 </div>

@@ -126,8 +126,9 @@ def show_next_unit(request):
     if len(unit_list) == 0:
         return render(request, 'extractor/no_units.html')
     unit = unit_list[0]
+    print(unit.id)
     now = datetime.datetime.now()
-    store_unit = DocumentationUnit.objects.get(pk=unit.id)
+    store_unit = DocumentationUnit.objects.get(pk = unit.documentation_unit.id)
     access_log = AccessLog.objects.create(
         user=current_user,
         documentation_unit=store_unit,

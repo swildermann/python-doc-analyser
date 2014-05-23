@@ -11,19 +11,25 @@ class DocumentationUnitAdmin(admin.ModelAdmin):
 
 
 class MarkedUnitAdmin(admin.ModelAdmin):
-    list_display = ['id', 'knowledge_type', 'user']
+    def unitid(self, obj):
+        return obj.documentation_unit.id
+
+    list_display = ['id', 'unitid', 'knowledge_type', 'user']
 
 
 class MappingUnitToUserAdmin(admin.ModelAdmin):
 
-    def get_unitid(self, obj):
+    def unitid(self, obj):
         return obj.documentation_unit.id
 
-    list_display = ['user', 'get_unitid', 'already_marked']
+    list_display = ['user', 'unitid', 'already_marked']
 
 
 class AccessLogAdmin(admin.ModelAdmin):
-    list_display =['user', 'timestamp', 'filename']
+    def unitid(self, obj):
+        return obj.documentation_unit.id
+
+    list_display =['user', 'unitid', 'timestamp', 'filename']
 
 
 admin.site.register(DocumentationUnit, DocumentationUnitAdmin)

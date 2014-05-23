@@ -1,6 +1,6 @@
 # README #
 
-[[under construction]]
+**under construction**
 
 This README is about the use, installation and configuratino of python-doc-application.
 

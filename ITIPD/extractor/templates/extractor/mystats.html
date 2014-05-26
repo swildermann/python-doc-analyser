@@ -8,9 +8,9 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-Hello {{user.first_name}} {{user.last_name}}, this page is all about you.
+<p> Hello {{user.first_name}} {{user.last_name}}, this page is all about you. </p>
 
-<table border="1" align="center">
+<table border="0" class="center-table">
   <tr>
     <th>Description</th>
     <th>Number of elements</th>
@@ -20,9 +20,13 @@ Hello {{user.first_name}} {{user.last_name}}, this page is all about you.
     <td>{{total_marked_units}}</td>
   </tr>
   <tr>
-    <td>Buletten</td>
-    <td>Frikadellen</td>
+    <td>elements left</td>
+    <td>{{total_unmarked_units}}</td>
   </tr>
+    <tr>
+        <td>elements total</td>
+        <td>{{total_units}}</td>
+    </tr>
 </table>
 
 {% endblock %}

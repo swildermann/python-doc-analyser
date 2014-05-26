@@ -1,9 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Statistic{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+Hello {{user.first_name}} {{user.last_name}}, this page is all about you.
+
+<table border="1" align="center">
+  <tr>
+    <th>Description</th>
+    <th>Number of elements</th>
+  </tr>
+  <tr>
+    <td>Already marked elements</td>
+    <td>{{total_marked_units}}</td>
+  </tr>
+  <tr>
+    <td>Buletten</td>
+    <td>Frikadellen</td>
+  </tr>
+</table>
+
+{% endblock %}

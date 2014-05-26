@@ -1,3 +1,10 @@
+body {
+    margin-left:5mm;
+    margin-right:5mm;
+    margin-top:5mm;
+    margin-bottom:5mm
+}
+
 #typemenu {
     position: absolute;
     padding: 7px;

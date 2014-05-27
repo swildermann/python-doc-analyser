@@ -25,7 +25,7 @@ class MarkedUnit(models.Model):
     html_text = models.TextField()
     range = models.TextField(max_length=500, default='')
     char_range = models.TextField(max_length=500, default='')
-    timestamp = models.TimeField(default=0)
+    timestamp = models.DateTimeField(default=0)
 
 
 class MappingUnitToUser(models.Model):
@@ -37,5 +37,5 @@ class MappingUnitToUser(models.Model):
 class AccessLog(models.Model):
     user = models.ForeignKey('auth.User', null=True, blank=True)
     documentation_unit = models.ForeignKey(DocumentationUnit)
-    timestamp = models.TimeField(default=0)
+    timestamp = models.DateTimeField(default=0)
     filename = models.CharField(max_length=100, default='')

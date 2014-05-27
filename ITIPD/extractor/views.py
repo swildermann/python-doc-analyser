@@ -41,7 +41,7 @@ def show_parent(request, pk):
     access_log = AccessLog.objects.create(
             user=current_user,
             documentation_unit=documentation_unit1,
-            timestamp=str(now),
+            timestamp=now,
             filename = "parent")
     return render(request, 'extractor/parents.html', {'object': documentation_unit1})
 

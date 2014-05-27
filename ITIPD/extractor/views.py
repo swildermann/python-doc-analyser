@@ -145,7 +145,7 @@ def marked_units(request):
     return render(request, 'extractor/markedunits.html', {'units': units})
 
 
-@login_required(login_url='')
+
 def random_mapping(request):
     number = random.randint(1, 8300)
     current_user = request.user
@@ -157,8 +157,9 @@ def random_mapping(request):
             already_marked=False
         )
         return render(request, 'extractor/randomunit.html')
-    return HttpResponse("You need to be superuser for that..!") 
+    return HttpResponse("You need to be superuser for that..!")
 
+@login_required(login_url='')
 def mystats(request):
     total_marked_units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=True)\
@@ -171,6 +172,8 @@ def mystats(request):
     return render (request, 'extractor/mystats.html', {'total_marked_units' : total_marked_units,
                                                        'total_unmarked_units' : total_unmarked_units,
                                                        'total_units' : total_units})
+
+@login_required(login_url='')
 def allstats(request):
     total_saved_units = DocumentationUnit.objects.filter(mappingunittouser__already_marked__exact=True)\
                                      .count()

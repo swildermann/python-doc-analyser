@@ -14,7 +14,7 @@ class MarkedUnitAdmin(admin.ModelAdmin):
     def unitid(self, obj):
         return obj.documentation_unit.id
 
-    list_display = ['id', 'unitid', 'knowledge_type', 'user']
+    list_display = ['id', 'unitid', 'timestamp', 'knowledge_type', 'user']
 
 
 class MappingUnitToUserAdmin(admin.ModelAdmin):

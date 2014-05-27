@@ -16,7 +16,7 @@ def view_unit(request, pk):
     except DocumentationUnit.DoesNotExist:
         raise Http404
     current_user = request.user
-    now = datetime.datetime.now()
+    now = str(datetime.datetime.now())
 
     access_log = AccessLog.objects.create(
             user=current_user,
@@ -36,12 +36,12 @@ def show_parent(request, pk):
     except DocumentationUnit.DoesNotExist:
         raise Http404
     current_user = request.user
-    now = datetime.datetime.now()
+    now = str(datetime.datetime.now())
 
     access_log = AccessLog.objects.create(
             user=current_user,
             documentation_unit=documentation_unit1,
-            timestamp=now,
+            timestamp=str(now),
             filename = "parent")
     return render(request, 'extractor/parents.html', {'object': documentation_unit1})
 
@@ -53,7 +53,7 @@ def show_file(request, pk):
     except DocumentationUnit.DoesNotExist:
         raise Http404
     current_user = request.user
-    now = datetime.datetime.now()
+    now = str(datetime.datetime.now())
 
     access_log = AccessLog.objects.create(
             user=current_user,
@@ -73,7 +73,7 @@ def vote(request):
             json.dumps(data), content_type='application/json'
         )
 
-    now = datetime.datetime.now()
+    now = str(datetime.datetime.now())
     documentation_id = json.loads(request.POST['unit'])
     documentation_unit1 = DocumentationUnit.objects.get(pk=documentation_id)
     getrange = json.loads(request.POST['range'])
@@ -127,7 +127,7 @@ def show_next_unit(request):
         return render(request, 'extractor/no_units.html')
     unit = unit_list[0]
     print(unit.id)
-    now = datetime.datetime.now()
+    now = str(datetime.datetime.now())
     store_unit = DocumentationUnit.objects.get(pk = unit.documentation_unit.id)
     access_log = AccessLog.objects.create(
         user=current_user,

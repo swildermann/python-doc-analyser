@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Gernal Statistics{% endblock %}
+{% block title %}General Statistics{% endblock %}
 {% block head %}{% endblock %}
 
 {% block content %}
@@ -15,15 +15,19 @@
     <th>Number of elements</th>
   </tr>
   <tr>
-    <td>Already marked elements</td>
+    <td>saved units (including units without markings)</td>
     <td>{{total_marked_units}}</td>
+  </tr>
+  <tr>
+    <td>marked units (only with at least 1 marking)</td>
+    <td>{{all_distinct}}</td>
   </tr>
   <tr>
     <td>elements left</td>
     <td>{{total_unmarked_units}}</td>
   </tr>
   <tr>
-    <td>elements total</td>
+    <td>in total</td>
     <td>{{total_units}}</td>
   </tr>
 </table>

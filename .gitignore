@@ -5,6 +5,9 @@ venv/
 **/__pycache__/
 *.py[cod]
 
+# Backups
+/backups/
+
 # Distribution / packaging
 bin/
 build/

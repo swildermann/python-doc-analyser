@@ -85,8 +85,11 @@ li.delete-list-entry {
   font-weight: bold;
 }
 
-#admin {
+a.admin {
   color: #ff836d;
+}
+a.external {
+    color: #5c5557
 }
 
 

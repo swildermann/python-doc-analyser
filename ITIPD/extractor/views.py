@@ -162,11 +162,9 @@ def random_mapping(request):
 def mystats(request):
     total_marked_units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=True)\
-                                     .annotate(num_markings = Count('markedunit')).order_by('id')\
                                      .count()
     total_unmarked_units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=False)\
-                                     .annotate(num_markings = Count('markedunit')).order_by('id')\
                                      .count()
     total_units = total_marked_units + total_unmarked_units
 

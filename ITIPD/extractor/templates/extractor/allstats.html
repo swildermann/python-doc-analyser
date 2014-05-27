@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Statistic{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<p> Hello {{user.first_name}} {{user.last_name}}, this page about progress at all.</p>
+
+<table border="0" class="center-table">
+  <tr>
+    <th>Description</th>
+    <th>Number of elements</th>
+  </tr>
+  <tr>
+    <td>Already marked elements</td>
+    <td>{{total_marked_units}}</td>
+  </tr>
+  <tr>
+    <td>elements left</td>
+    <td>{{total_unmarked_units}}</td>
+  </tr>
+  <tr>
+    <td>elements total</td>
+    <td>{{total_units}}</td>
+  </tr>
+</table>
+
+{% endblock %}

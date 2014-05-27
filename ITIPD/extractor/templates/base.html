@@ -29,7 +29,8 @@
       <li><a href="https://bitbucket.org/svenwildermann/python-doc-application/issues"
              target="_blank">Bugtracker</a></li>
       {% if user.is_superuser %}
-      <li><a href="/pydoc/randomunit/">Random-Unit</a></li>
+      <li><a href="/pydoc/allstats/" id="admin">General Stats</a></li>
+      <li><a href="/pydoc/randomunit/" id ="admin">Random-Unit</a></li>
       {% endif %}
       <li><a href="/pydoc/logout/">Logout</a></li>
       {% else %}

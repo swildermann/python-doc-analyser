@@ -173,3 +173,16 @@ def mystats(request):
     return render (request, 'extractor/mystats.html', {'total_marked_units' : total_marked_units,
                                                        'total_unmarked_units' : total_unmarked_units,
                                                        'total_units' : total_units})
+def allstats(request):
+    total_marked_units = DocumentationUnit.objects.filter(mappingunittouser__already_marked__exact=True)\
+                                     .count()
+    total_unmarked_units = DocumentationUnit.objects.filter(mappingunittouser__already_marked__exact=False)\
+                                     .count()
+    total_units = total_marked_units + total_unmarked_units
+
+    if request.user.is_superuser:
+        return render(request, 'extractor/allstats.html', {'total_marked_units' : total_marked_units,
+                                                           'total_unmarked_units' : total_unmarked_units,
+                                                           'total_units' : total_units})
+
+    return HttpResponse("You need to be superuser for that..!")

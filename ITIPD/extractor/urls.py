@@ -14,5 +14,6 @@ urlpatterns = patterns('',
       url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/pydoc/login'}),
       url(r'^randomunit/$', views.random_mapping, name = 'random_mapping'),
       url(r'^mystats/$', views.mystats, name='mystats'),
+      url(r'^allstats/$', views.allstats, name='allstats'),
       url(r'', 'django.contrib.auth.views.login', name='login')
 )

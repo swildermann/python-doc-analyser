@@ -135,7 +135,7 @@ def marked_units(request):
                                      .filter(mappingunittouser__already_marked=True)\
                                      .filter(markedunit__user=request.user)\
                                      .distinct('pk')\
-                                     .order_by('pk')
+                                     .order_by('-pk')
 
     return render(request, 'extractor/markedunits.html', {'units': units})
 

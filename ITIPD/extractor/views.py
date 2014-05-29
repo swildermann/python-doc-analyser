@@ -121,8 +121,7 @@ def login(request):
 @login_required(login_url='')
 def show_next_unit(request):
 
-    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user)\
-                                     .filter(mappingunittouser__already_marked=False)\
+    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user, mappingunittouser__already_marked=False)\
                                      .order_by('pk')
     if len(units) == 0:
         return render(request, 'extractor/no_units.html')

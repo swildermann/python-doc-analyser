@@ -177,18 +177,18 @@ def mystats(request):
 
 @login_required(login_url='')
 def allstats(request):
-    total_saved_units = DocumentationUnit.objects.filter(mappingunittouser__already_marked__exact=True)\
-                                     .count()
-    total_unmarked_units = DocumentationUnit.objects.filter(mappingunittouser__already_marked__exact=False)\
-                                     .count()
-    total_units = total_saved_units + total_unmarked_units
+    total_saved_units = MappingUnitToUser.objects.filter(already_marked=True)\
+                                                 .count()
+    total_unsaved_units =MappingUnitToUser.objects.filter(already_marked=False)\
+                                                 .count()
+    total_units = MappingUnitToUser.objects.count()
 
     marked_units_distinct = MarkedUnit.objects.order_by('documentation_unit__pk')\
                                                .distinct('documentation_unit', 'user')\
                                                .count()
     if request.user.is_superuser:
         return render(request, 'extractor/allstats.html', {'total_marked_units' : total_saved_units,
-                                                           'total_unmarked_units' : total_unmarked_units,
+                                                           'total_unmarked_units' : total_unsaved_units,
                                                            'total_units' : total_units,
                                                            'all_distinct' : marked_units_distinct})
 

@@ -121,7 +121,8 @@ def login(request):
 @login_required(login_url='')
 def show_next_unit(request):
 
-    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user, mappingunittouser__already_marked=False)\
+    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user,
+                                             mappingunittouser__already_marked=False)\
                                      .order_by('pk')
     if len(units) == 0:
         return render(request, 'extractor/no_units.html')
@@ -130,9 +131,9 @@ def show_next_unit(request):
 
 @login_required(login_url='')
 def marked_units(request):
-    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user)\
-                                     .filter(mappingunittouser__already_marked=True)\
-                                     .filter(markedunit__user=request.user)\
+    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user,
+                                     mappingunittouser__already_marked=True,
+                                     markedunit__user=request.user)\
                                      .distinct('pk')\
                                      .order_by('-pk')
 
@@ -155,11 +156,11 @@ def random_mapping(request):
 
 @login_required(login_url='')
 def mystats(request):
-    total_marked_units = MappingUnitToUser.objects.filter(already_marked=True)\
-                                                 .filter(user=request.user)\
+    total_marked_units = MappingUnitToUser.objects.filter(already_marked=True,
+                                                 user=request.user)\
                                                  .count()
-    total_unmarked_units = MappingUnitToUser.objects.filter(already_marked=False)\
-                                                 .filter(user=request.user)\
+    total_unmarked_units = MappingUnitToUser.objects.filter(already_marked=False,
+                                                 user=request.user)\
                                                  .count()
     total_units = MappingUnitToUser.objects.filter(user=request.user)\
                                                  .count()

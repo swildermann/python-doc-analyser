@@ -162,14 +162,12 @@ def random_mapping(request):
 
 @login_required(login_url='')
 def mystats(request):
-    total_marked_units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
-                                     .filter(mappingunittouser__already_marked__exact=True)\
-                                     .filter(markedunit__user__pk__exact=request.user.pk)\
-                                     .distinct('markedunit__user','pk')\
-                                     .count()
-    total_unmarked_units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
-                                     .filter(mappingunittouser__already_marked__exact=False)\
-                                     .count()
+    total_marked_units = MappingUnitToUser.objects.filter(already_marked=True)\
+                                                 .filter(user=request.user)\
+                                                 .count()
+    total_unmarked_units = MappingUnitToUser.objects.filter(already_marked=False)\
+                                                 .filter(user=request.user)\
+                                                 .count()
     total_units = total_marked_units + total_unmarked_units
 
     return render (request, 'extractor/mystats.html', {'total_marked_units' : total_marked_units,

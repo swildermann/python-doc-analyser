@@ -168,7 +168,8 @@ def mystats(request):
     total_unmarked_units = MappingUnitToUser.objects.filter(already_marked=False)\
                                                  .filter(user=request.user)\
                                                  .count()
-    total_units = total_marked_units + total_unmarked_units
+    total_units = MappingUnitToUser.objects.filter(user=request.user)\
+                                                 .count()
 
     return render (request, 'extractor/mystats.html', {'total_marked_units' : total_marked_units,
                                                        'total_unmarked_units' : total_unmarked_units,

@@ -132,8 +132,7 @@ def show_next_unit(request):
 @login_required(login_url='')
 def marked_units(request):
     units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user,
-                                     mappingunittouser__already_marked=True,
-                                     markedunit__user=request.user)\
+                                     mappingunittouser__already_marked=True)\
                                      .distinct('pk')\
                                      .order_by('-pk')
 

@@ -22,7 +22,7 @@ def view_unit(request, pk):
             user=current_user,
             documentation_unit=documentation_unit1,
             timestamp=now,
-            filename = "view_or_rate_unit")
+            filename = "rate_unit")
 
     marked_units = (MarkedUnit.objects.filter(user=request.user, documentation_unit=documentation_unit1))
 
@@ -120,28 +120,20 @@ def login(request):
 @csrf_exempt
 @login_required(login_url='')
 def show_next_unit(request):
-    unit_list = (MappingUnitToUser.objects.filter(user=request.user))\
-                .filter(already_marked=False).order_by('documentation_unit')
-    current_user = request.user
-    if len(unit_list) == 0:
-        return render(request, 'extractor/no_units.html')
-    unit = unit_list[0]
-    print(unit.id)
-    now = str(datetime.datetime.now())
-    store_unit = DocumentationUnit.objects.get(pk = unit.documentation_unit.id)
-    access_log = AccessLog.objects.create(
-        user=current_user,
-        documentation_unit=store_unit,
-        timestamp=now,
-        filename="rate_unit")
 
-    return render(request, 'extractor/detail.html', {'object': unit.documentation_unit})
+    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user)\
+                                     .filter(mappingunittouser__already_marked=False)\
+                                     .order_by('pk')
+    if len(units) == 0:
+        return render(request, 'extractor/no_units.html')
+
+    return render(request, 'extractor/next_units.html', {'units': units})
 
 @login_required(login_url='')
 def marked_units(request):
-    units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
-                                     .filter(mappingunittouser__already_marked__exact=True)\
-                                     .filter(markedunit__user__pk__exact=request.user.pk)\
+    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user)\
+                                     .filter(mappingunittouser__already_marked=True)\
+                                     .filter(markedunit__user=request.user)\
                                      .distinct('pk')\
                                      .order_by('pk')
 

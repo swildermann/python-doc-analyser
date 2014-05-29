@@ -38,10 +38,10 @@ li.delete-list-entry {
 
 }
 
-#marked-unit-list { width:95%; font-size:15px; }
-#marked-unit-list ul { list-style: none; }
-#marked-unit-list ul li { }
-#marked-unit-list ul li a {
+#unit-list { width:95%; font-size:15px; }
+#unit-list ul { list-style: none; }
+#unit-list ul li { }
+#unit-list ul li a {
   display:block;
   text-decoration:none;
   color:#000000;
@@ -54,12 +54,12 @@ li.delete-list-entry {
   cursor:pointer;
 }
 
-#marked-unit-list ul li a:hover {
+#unit-list ul li a:hover {
   color:#FFFFFF;
   background-color:#3F93F4;
   }
 
-#marked-unit-list ul li a strong { margin-right:10px; }
+#unit-list ul li a strong { margin-right:10px; }
 
 #fixed-menu {
   margin: 0;

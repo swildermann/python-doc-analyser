@@ -6,7 +6,7 @@
 {% block content %}
 {% csrf_token %}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-  <p><strong>This list contains every unit which was saved and has at least one marking. </strong></p>
+  <p><strong>This list contains every unit which was not saved yet.</strong></p>
 <div id="unit-list">
    <ul>
     {% for unit in units %}

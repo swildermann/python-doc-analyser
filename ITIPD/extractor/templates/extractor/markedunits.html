@@ -6,10 +6,11 @@
 {% block content %}
 {% csrf_token %}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+  <p><strong>This list contains every unit which was saved and contains at least one marking. </strong></p>
 <div id="marked-unit-list">
    <ul>
     {% for unit in units %}
-       <li><a href="/pydoc/{{ unit.id }}/"><strong>{{ unit.filename }}</strong>Markings: {{ unit.num_markings }}</a></li>
+       <li><a href="/pydoc/{{ unit.id }}/">ID: {{unit.id}}  <strong>{{ unit.filename }}</strong>Type: {{ unit.type }}</a></li>
     {% endfor %}
    </ul>
 </div>

@@ -22,11 +22,11 @@ def view_unit(request, pk):
             user=current_user,
             documentation_unit=documentation_unit1,
             timestamp=now,
-            filename = "view_unit")
+            filename = "view_or_rate_unit")
 
     marked_units = (MarkedUnit.objects.filter(user=request.user, documentation_unit=documentation_unit1))
 
-    return render(request, 'extractor/display_unit.html', {'object': documentation_unit1, 'marked_units': marked_units})
+    return render(request, 'extractor/detail.html', {'object': documentation_unit1, 'marked_units': marked_units})
 
 
 def show_parent(request, pk):
@@ -142,7 +142,9 @@ def marked_units(request):
     units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=True)\
                                      .filter(markedunit__user__pk__exact=request.user.pk)\
-                                     .annotate(num_markings = Count('markedunit')).order_by('id')
+                                     .distinct('pk')\
+                                     .order_by('pk')
+
     return render(request, 'extractor/markedunits.html', {'units': units})
 
 

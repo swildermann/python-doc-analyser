@@ -141,6 +141,7 @@ def show_next_unit(request):
 def marked_units(request):
     units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=True)\
+                                     .filter(markedunit__user__pk__exact=request.user.pk)\
                                      .annotate(num_markings = Count('markedunit')).order_by('id')
     return render(request, 'extractor/markedunits.html', {'units': units})
 
@@ -163,6 +164,8 @@ def random_mapping(request):
 def mystats(request):
     total_marked_units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=True)\
+                                     .filter(markedunit__user__pk__exact=request.user.pk)\
+                                     .distinct('markedunit__user','pk')\
                                      .count()
     total_unmarked_units = DocumentationUnit.objects.filter(mappingunittouser__user__pk__exact=request.user.pk)\
                                      .filter(mappingunittouser__already_marked__exact=False)\

@@ -147,6 +147,7 @@ def show_next_unit(request):
 
 @login_required(login_url='')
 def marked_units(request):
+    # shows all saved units (also with zero markings)
     units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user,
                                      mappingunittouser__already_marked=True)\
                                      .distinct('pk')\
@@ -157,6 +158,7 @@ def marked_units(request):
 
 
 def random_mapping(request):
+    #randomly maps a unit with an id between 1 and 8300
     number = random.randint(1, 8300)
     current_user = request.user
     unit = DocumentationUnit.objects.get(pk=number)

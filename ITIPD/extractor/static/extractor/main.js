@@ -158,7 +158,7 @@
   };
 
   showTypeMenu = function(atPositionX, atPositionY) {
-    ($(root.typemenu)).css('left', atPositionX);
+    ($(root.typemenu)).css('left', atPositionX - 80);
     ($(root.typemenu)).css('top', atPositionY);
     return ($(root.typemenu)).show();
   };

@@ -1,6 +1,9 @@
 body {
     margin: 5mm;
+    margin-left: 60px;
+    margin-right: 80px;
 }
+
 .center-table {
     text-align: center;
     margin-top: 10px;

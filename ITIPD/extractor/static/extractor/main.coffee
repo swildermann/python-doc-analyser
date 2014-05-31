@@ -81,7 +81,7 @@ resetColor = (type) ->
   ($ 'li.delete-list-entry').remove()
 
 showTypeMenu = (atPositionX, atPositionY) ->
-  ($ root.typemenu).css 'left', atPositionX
+  ($ root.typemenu).css 'left', atPositionX-80
   ($ root.typemenu).css 'top', atPositionY
   ($ root.typemenu).show()
 

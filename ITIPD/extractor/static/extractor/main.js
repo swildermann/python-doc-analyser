@@ -114,7 +114,7 @@
         unit: ($("#documentationunitid")).attr("class")
       }, function(data) {
         console.log("ajax request successful");
-        return window.location = '/pydoc/myunits/';
+        return window.location = '/pydoc/first_next/';
       });
     });
     return redrawColors();

@@ -10,6 +10,7 @@ from django.db.models import Count
 
 
 def view_unit(request, pk):
+    #it is more a rate than a view now
     documentation_id = pk
     try:
         documentation_unit1 = DocumentationUnit.objects.get(id=documentation_id)
@@ -28,6 +29,21 @@ def view_unit(request, pk):
 
     return render(request, 'extractor/detail.html', {'object': documentation_unit1, 'marked_units': marked_units})
 
+def first_next(request):
+    unit_list = (MappingUnitToUser.objects.filter(user=request.user, already_marked=False)\
+                                          .order_by('documentation_unit'))
+    current_user = request.user
+    if len(unit_list) == 0:
+        return render(request, 'extractor/no_units.html')
+    unit = unit_list[0]
+    now = str(datetime.datetime.now())
+    store_unit = DocumentationUnit.objects.get(pk = unit.documentation_unit.id)
+    access_log = AccessLog.objects.create(
+        user=current_user,
+        documentation_unit=store_unit,
+        timestamp=now,
+        filename="rate_unit")
+    return render(request, 'extractor/detail.html', {'object': unit.documentation_unit})
 
 def show_parent(request, pk):
     documentation_id = pk

@@ -15,5 +15,6 @@ urlpatterns = patterns('',
       url(r'^randomunit/$', views.random_mapping, name = 'random_mapping'),
       url(r'^mystats/$', views.mystats, name='mystats'),
       url(r'^allstats/$', views.allstats, name='allstats'),
+      url(r'^first_next/$', views.first_next, name='first_next'),
       url(r'', 'django.contrib.auth.views.login', name='login')
 )

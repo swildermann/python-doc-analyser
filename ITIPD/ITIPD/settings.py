@@ -108,4 +108,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-LOGIN_REDIRECT_URL ="/pydoc/myunits/"
+LOGIN_REDIRECT_URL ="/pydoc/first_next/"

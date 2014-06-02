@@ -70,14 +70,17 @@ def show_file(request, pk):
         raise Http404
     current_user = request.user
     now = str(datetime.datetime.now())
-
     access_log = AccessLog.objects.create(
             user=current_user,
             documentation_unit=documentation_unit1,
             timestamp=now,
             filename = "file")
-
-    return render(request, 'extractor/display_file.html', {'object': documentation_unit1})
+    
+    filename = str(documentation_unit1.filename)
+    parts_of_name = filename.split("/")
+    last_part = parts_of_name[-1]
+    link = "https://docs.python.org/3/library/" + last_part
+    return redirect(link)
 
 
 @csrf_exempt
@@ -204,3 +207,14 @@ def allstats(request):
                                                            'all_distinct' : marked_units_distinct})
 
     return HttpResponse("You need to be superuser for that..!")
+
+
+def how_much_is_marked(request, pk):
+    state = " "
+    all_markings = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user)
+    for each in all_markings:
+        string_each = str(each)
+
+    return render (request, 'extractor/how_much_is_marked.html', {'units' : all_markings,
+                                                                  'state' : state})
+

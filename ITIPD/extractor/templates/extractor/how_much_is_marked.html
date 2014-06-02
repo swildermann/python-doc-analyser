@@ -1,9 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}How much is marked{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+  <p><strong>...</strong></p>
+<div id="unit-list">
+   <ul>
+    {% for unit in units %}
+       <li> {{unit.char_range}} {{state}}</li>
+    {% endfor %}
+   </ul>
+</div>
+{% endblock %}

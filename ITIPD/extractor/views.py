@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User, Group
 from django.db.models import Count
 
 
@@ -75,7 +76,7 @@ def show_file(request, pk):
             documentation_unit=documentation_unit1,
             timestamp=now,
             filename = "file")
-    
+
     filename = str(documentation_unit1.filename)
     parts_of_name = filename.split("/")
     last_part = parts_of_name[-1]
@@ -200,11 +201,21 @@ def allstats(request):
     marked_units_distinct = MarkedUnit.objects.order_by('documentation_unit__pk')\
                                                .distinct('documentation_unit', 'user')\
                                                .count()
+    all_students = User.objects.filter(groups__name='Students')
+
+    units_per_student = {}
+    for student in all_students:
+        counter =  MappingUnitToUser.objects.filter(already_marked=True, user=student)\
+                                                 .count()
+        units_per_student.update({student:counter})
+
     if request.user.is_superuser:
         return render(request, 'extractor/allstats.html', {'total_marked_units' : total_saved_units,
                                                            'total_unmarked_units' : total_unsaved_units,
                                                            'total_units' : total_units,
-                                                           'all_distinct' : marked_units_distinct})
+                                                           'all_distinct' : marked_units_distinct,
+                                                           'all_students' : all_students,
+                                                           'units_per_student' : units_per_student})
 
     return HttpResponse("You need to be superuser for that..!")
 

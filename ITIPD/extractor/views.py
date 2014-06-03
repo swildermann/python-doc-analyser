@@ -223,7 +223,7 @@ def allstats(request):
 
 def how_much_is_marked(request, pk):
     all_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user).values('id', 'char_range')
-    unit_attributes = DocumentationUnit.objects.filter(id=pk).values('length')
+    unit_attributes = DocumentationUnit.objects.filter(id=pk).values('plaintext')
     data = []
     for each in all_ranges:
         ids = each["id"]
@@ -239,9 +239,8 @@ def how_much_is_marked(request, pk):
             unmarked_chars += each[1]-currentPos
         currentPos = each[2]+1
 
-    length = unit_attributes[0]["length"]
+    length = len(unit_attributes[0]["plaintext"])
 
-    #TODO: GET THE CORRECT LENGTH OF THE UNIT! THIS IS THE HTML LENGTH! 
     if currentPos < length:
         unmarked_chars += length-currentPos
 

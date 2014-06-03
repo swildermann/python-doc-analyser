@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, Http404
-import datetime, random
+import datetime, random, ast
 from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser, AccessLog
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -221,13 +221,35 @@ def allstats(request):
 
     return HttpResponse("You need to be superuser for that..!")
 
-
 def how_much_is_marked(request, pk):
-    state = " "
-    all_markings = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user)
-    for each in all_markings:
-        string_each = str(each)
+    all_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user).values('id', 'char_range')
+    unit_attributes = DocumentationUnit.objects.filter(id=pk).values('length')
+    data = []
+    for each in all_ranges:
+        ids = each["id"]
+        start= ast.literal_eval(each["char_range"])[0]["characterRange"]["start"]
+        end= ast.literal_eval(each["char_range"])[0]["characterRange"]["end"]
+        data.append((ids,start,end))
+    data.sort(key=lambda tup: tup[1])
 
-    return render (request, 'extractor/how_much_is_marked.html', {'units' : all_markings,
-                                                                  'state' : state})
+    currentPos = 0
+    unmarked_chars = 0
+    for each in data:
+        if each[1]>currentPos:
+            unmarked_chars += each[1]-currentPos
+        currentPos = each[2]+1
+
+    length = unit_attributes[0]["length"]
+
+    #TODO: GET THE CORRECT LENGTH OF THE UNIT! THIS IS THE HTML LENGTH! 
+    if currentPos < length:
+        unmarked_chars += length-currentPos
+
+    percentage = round(unmarked_chars/length * 100, 2)
+
+
+    return render (request, 'extractor/how_much_is_marked.html', {'pk': pk,
+                                                                  'data' : data,
+                                                                  'unmarked_chars' : unmarked_chars,
+                                                                  'percentage' : percentage})
 

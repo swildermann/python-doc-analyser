@@ -171,7 +171,8 @@ def random_mapping(request):
         mapUnitToUser = MappingUnitToUser.objects.create(
             user=current_user,
             documentation_unit=unit,
-            already_marked=False
+            already_marked=False,
+            last_change =  "1900-01-01 00:00:00"
         )
         return render(request, 'extractor/randomunit.html')
     return HttpResponse("You need to be superuser for that..!")

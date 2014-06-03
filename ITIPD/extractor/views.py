@@ -113,6 +113,7 @@ def vote(request):
         )
     mappedunit = MappingUnitToUser.objects.get(documentation_unit=documentation_id, user=current_user)
     mappedunit.already_marked = True
+    mappedunit.last_change = now
     mappedunit.save()
 
     return HttpResponse(

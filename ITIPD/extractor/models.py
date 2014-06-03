@@ -31,6 +31,7 @@ class MappingUnitToUser(models.Model):
     user = models.ForeignKey('auth.User', null=True, blank=True)
     documentation_unit = models.ForeignKey(DocumentationUnit)
     already_marked = models.BooleanField(default=False)
+    last_change = models.DateTimeField(default=0)
 
 
 class AccessLog(models.Model):

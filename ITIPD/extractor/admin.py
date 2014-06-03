@@ -22,7 +22,7 @@ class MappingUnitToUserAdmin(admin.ModelAdmin):
     def unitid(self, obj):
         return obj.documentation_unit.id
 
-    list_display = ['user', 'unitid', 'last_change' 'already_marked']
+    list_display = ['user', 'unitid', 'last_change', 'already_marked']
 
 
 class AccessLogAdmin(admin.ModelAdmin):

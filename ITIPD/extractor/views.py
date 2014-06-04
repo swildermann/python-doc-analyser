@@ -113,6 +113,7 @@ def vote(request):
         )
     mappedunit = MappingUnitToUser.objects.get(documentation_unit=documentation_id, user=current_user)
     mappedunit.already_marked = True
+    mappedunit.unmarked_chars = how_much_is_marked(request.user, documentation_id)
     mappedunit.last_change = now
     mappedunit.save()
 
@@ -172,7 +173,8 @@ def random_mapping(request):
             user=current_user,
             documentation_unit=unit,
             already_marked=False,
-            last_change =  "1900-01-01 00:00:00"
+            last_change =  "1900-01-01 00:00:00",
+            unmarked_chars = len(unit.plaintext)
         )
         return render(request, 'extractor/randomunit.html')
     return HttpResponse("You need to be superuser for that..!")
@@ -221,8 +223,8 @@ def allstats(request):
 
     return HttpResponse("You need to be superuser for that..!")
 
-def how_much_is_marked(request, pk):
-    all_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user).values('id', 'char_range')
+def how_much_is_marked(curr_user, pk):
+    all_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = curr_user).values('id', 'char_range')
     unit_attributes = DocumentationUnit.objects.filter(id=pk).values('plaintext')
     data = []
     for each in all_ranges:
@@ -240,15 +242,9 @@ def how_much_is_marked(request, pk):
         currentPos = each[2]+1
 
     length = len(unit_attributes[0]["plaintext"])
-
     if currentPos < length:
         unmarked_chars += length-currentPos
 
     percentage = round(unmarked_chars/length * 100, 2)
-
-
-    return render (request, 'extractor/how_much_is_marked.html', {'pk': pk,
-                                                                  'data' : data,
-                                                                  'unmarked_chars' : unmarked_chars,
-                                                                  'percentage' : percentage})
+    return unmarked_chars
 

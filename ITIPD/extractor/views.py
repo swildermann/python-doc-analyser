@@ -113,7 +113,7 @@ def vote(request):
         )
     mappedunit = MappingUnitToUser.objects.get(documentation_unit=documentation_id, user=current_user)
     mappedunit.already_marked = True
-    mappedunit.unmarked_chars = how_much_is_marked(request.user, documentation_id)
+    mappedunit.unmarked_chars = how_much_is_unmarked(request.user, documentation_id)
     mappedunit.last_change = now
     mappedunit.save()
 
@@ -142,7 +142,6 @@ def login(request):
 @csrf_exempt
 @login_required(login_url='')
 def show_next_unit(request):
-
     units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user,
                                              mappingunittouser__already_marked=False)\
                                      .order_by('pk')
@@ -154,6 +153,7 @@ def show_next_unit(request):
 @login_required(login_url='')
 def marked_units(request):
     # shows all saved units (also with zero markings)
+    # TODO: how to get the "unmarked_chars" attribute here ?
     units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user,
                                      mappingunittouser__already_marked=True)\
                                      .distinct('pk')\
@@ -223,7 +223,7 @@ def allstats(request):
 
     return HttpResponse("You need to be superuser for that..!")
 
-def how_much_is_marked(curr_user, pk):
+def how_much_is_unmarked(curr_user, pk):
     all_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = curr_user).values('id', 'char_range')
     unit_attributes = DocumentationUnit.objects.filter(id=pk).values('plaintext')
     data = []
@@ -245,6 +245,7 @@ def how_much_is_marked(curr_user, pk):
     if currentPos < length:
         unmarked_chars += length-currentPos
 
+    #TODO: delete or use percentage
     percentage = round(unmarked_chars/length * 100, 2)
     return unmarked_chars
 

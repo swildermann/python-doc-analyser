@@ -33,6 +33,7 @@ class MappingUnitToUser(models.Model):
     already_marked = models.BooleanField(default=False)
     last_change = models.DateTimeField(default=0)
     unmarked_chars = models.IntegerField(default=0)
+    unmarked_percent = models.IntegerField(default=0)
 
 
 class AccessLog(models.Model):

@@ -113,7 +113,9 @@ def vote(request):
         )
     mappedunit = MappingUnitToUser.objects.get(documentation_unit=documentation_id, user=current_user)
     mappedunit.already_marked = True
-    mappedunit.unmarked_chars = how_much_is_unmarked(request.user, documentation_id)
+    unmarked_results =  how_much_is_unmarked(request.user, documentation_id)
+    mappedunit.unmarked_chars = unmarked_results[0]
+    mappedunit.unmarked_percent = unmarked_results[1]
     mappedunit.last_change = now
     mappedunit.save()
 
@@ -158,8 +160,11 @@ def marked_units(request):
                                      mappingunittouser__already_marked=True)\
                                      .distinct('pk')\
                                      .order_by('-pk')
+    units2 = MappingUnitToUser.objects.filter(user=request.user, already_marked=True)\
+                                      .distinct('documentation_unit__pk')\
+                                      .order_by('-documentation_unit__pk')
 
-    return render(request, 'extractor/markedunits.html', {'units': units})
+    return render(request, 'extractor/markedunits.html', {'units': units2})
 
 
 
@@ -174,7 +179,8 @@ def random_mapping(request):
             documentation_unit=unit,
             already_marked=False,
             last_change =  "1900-01-01 00:00:00",
-            unmarked_chars = len(unit.plaintext)
+            unmarked_chars = len(unit.plaintext),
+            unmarked_percent = 100
         )
         return render(request, 'extractor/randomunit.html')
     return HttpResponse("You need to be superuser for that..!")
@@ -247,5 +253,5 @@ def how_much_is_unmarked(curr_user, pk):
 
     #TODO: delete or use percentage
     percentage = round(unmarked_chars/length * 100, 2)
-    return unmarked_chars
+    return (unmarked_chars, percentage)
 

@@ -10,7 +10,14 @@
 <div id="unit-list">
    <ul>
     {% for unit in units %}
-       <li><a href="/pydoc/{{ unit.id }}/">ID: {{unit.id}}  <strong>{{ unit.filename }}</strong>Type: {{ unit.type }}</a></li>
+       <li><a href="/pydoc/{{ unit.documentation_unit.id }}/">ID: {{unit.documentation_unit.id}}
+           <strong>{{ unit.documentation_unit.filename }}</strong>
+           <strong>Type:</strong> {{ unit.documentation_unit.type }}
+           <strong>Unmarked Chars:</strong> {{unit.unmarked_chars}}
+           Length: {{unit.documentation_unit.plaintext|length}}
+           Unmarked in percent: {{unit.unmarked_percent}} %
+       </a></li>
+
     {% endfor %}
    </ul>
 </div>

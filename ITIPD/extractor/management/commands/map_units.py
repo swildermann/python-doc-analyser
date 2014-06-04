@@ -8,7 +8,7 @@ map each unit to 2 different users
 
 
 class Command(BaseCommand):
-    help = 'Closes the specified poll for voting'
+    help = 'maps a sample to the 7 students with their id'
 
     def create_mapping(self, object_list, offset, max_elems):
         howfull= [0 for x in range(7)]

@@ -32,6 +32,7 @@ class MappingUnitToUser(models.Model):
     documentation_unit = models.ForeignKey(DocumentationUnit)
     already_marked = models.BooleanField(default=False)
     last_change = models.DateTimeField(default=0)
+    unmarked_chars = models.IntegerField(default=0)
 
 
 class AccessLog(models.Model):

@@ -156,7 +156,7 @@ def show_next_unit(request):
 def marked_units(request):
     # shows all saved units (also with zero markings)
     units = MappingUnitToUser.objects.filter(user=request.user, already_marked=True)\
-                                      .order_by('documentation_unit__pk')
+                                      .order_by('-documentation_unit__pk')
     return render(request, 'extractor/markedunits.html', {'units': units})
 
 def random_mapping(request):

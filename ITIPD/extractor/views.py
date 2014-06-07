@@ -155,18 +155,9 @@ def show_next_unit(request):
 @login_required(login_url='')
 def marked_units(request):
     # shows all saved units (also with zero markings)
-    # TODO: how to get the "unmarked_chars" attribute here ?
-    units = DocumentationUnit.objects.filter(mappingunittouser__user=request.user,
-                                     mappingunittouser__already_marked=True)\
-                                     .distinct('pk')\
-                                     .order_by('-pk')
-    units2 = MappingUnitToUser.objects.filter(user=request.user, already_marked=True)\
-                                      .distinct('documentation_unit__pk')\
-                                      .order_by('-documentation_unit__pk')
-
-    return render(request, 'extractor/markedunits.html', {'units': units2})
-
-
+    units = MappingUnitToUser.objects.filter(user=request.user, already_marked=True)\
+                                      .order_by('documentation_unit__pk')
+    return render(request, 'extractor/markedunits.html', {'units': units})
 
 def random_mapping(request):
     #randomly maps a unit with an id between 1 and 8300
@@ -251,7 +242,6 @@ def how_much_is_unmarked(curr_user, pk):
     if currentPos < length:
         unmarked_chars += length-currentPos
 
-    #TODO: delete or use percentage
     percentage = round(unmarked_chars/length * 100, 2)
     return (unmarked_chars, percentage)
 

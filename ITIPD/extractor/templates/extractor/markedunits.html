@@ -7,17 +7,22 @@
 {% csrf_token %}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
   <p><strong>This list contains every unit which was saved.. </strong></p>
+  <p>Unfinished units are yellow highlighted</p>
 <div id="unit-list">
    <ul>
     {% for unit in units %}
-       <li><a href="/pydoc/{{ unit.documentation_unit.id }}/">ID: {{unit.documentation_unit.id}}
-           <strong>{{ unit.documentation_unit.filename }}</strong>
-           <strong>Type:</strong> {{ unit.documentation_unit.type }}
-           <strong>Unmarked Chars:</strong> {{unit.unmarked_chars}}
-           Length: {{unit.documentation_unit.plaintext|length}}
-           Unmarked in percent: {{unit.unmarked_percent}} %
-       </a></li>
-
+       {% if unit.unmarked_chars > 100 and unit.unmarked_percent > 20 %}
+           <li><a href="/pydoc/{{ unit.documentation_unit.id }}/" class="unmarked">ID: {{unit.documentation_unit.id}}
+            <strong>{{ unit.documentation_unit.filename }}</strong>
+            - Type: {{ unit.documentation_unit.type }}
+            - Unmarked in percent: {{unit.unmarked_percent}} %
+            </a></li>
+       {% else %}
+           <li><a href="/pydoc/{{ unit.documentation_unit.id }}/">ID: {{unit.documentation_unit.id}}
+            <strong>{{ unit.documentation_unit.filename }}</strong>
+            Type: {{ unit.documentation_unit.type }}
+            </a></li>
+       {% endif %}
     {% endfor %}
    </ul>
 </div>

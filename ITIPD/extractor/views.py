@@ -248,15 +248,14 @@ def how_much_is_unmarked(curr_user, pk):
 
 
 def agreement(request, pk):
+    doc_unit = DocumentationUnit.objects.get(id=pk)
+    marked_unit = MarkedUnit.objects.filter(documentation_unit__pk=pk,user=request.user).count()
+    marked_unit_of_others = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
+        .count()
+    how_many = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
+        .distinct('user').count()
     try:
-        doc_unit = DocumentationUnit.objects.get(id=pk)
         mapped_unit = MappingUnitToUser.objects.get(documentation_unit__pk=pk,user=request.user)
-        marked_unit = MarkedUnit.objects.filter(documentation_unit__pk=pk,user=request.user).count()
-        marked_unit_of_others = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
-            .count()
-        how_many = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
-            .distinct('user').count()
-
     except MappingUnitToUser.DoesNotExist:
         return HttpResponse("This unit is not mapped.")
 
@@ -267,9 +266,9 @@ def agreement(request, pk):
         end= ast.literal_eval(each["char_range"])[0]["characterRange"]["end"]
         data.append((ids,start,end))
     data.sort(key=lambda tup: tup[1])
+
     #TODO merge beneath markings!
-
-
+    #TODO Only compare units of Students and not of validaters
     return render(request, 'extractor/agreement.html', {'unit' : mapped_unit,
                                                         'doc_unit': doc_unit,
                                                         'marked_unit' : marked_unit,

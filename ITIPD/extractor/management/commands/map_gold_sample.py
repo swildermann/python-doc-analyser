@@ -7,7 +7,7 @@ from django.db.models import Q
 
 class Command(BaseCommand):
     help = 'maps the gold sample'
-    
+
     def create_mapping(self,object_list,debug,number):
         random.shuffle(object_list)
         object_list = object_list[:number]

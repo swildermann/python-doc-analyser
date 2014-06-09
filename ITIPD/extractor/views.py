@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, Http404
 import datetime, random, ast
+from datetime import timedelta
 from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser, AccessLog
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -186,10 +187,21 @@ def mystats(request):
                                                  .count()
     total_units = MappingUnitToUser.objects.filter(user=request.user)\
                                                  .count()
+    how_many_days = 30
+    marked_8 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
+                                                last_change__gte=datetime.datetime.now()-timedelta(days=8)).count()
+    marked_4 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
+                                                last_change__gte=datetime.datetime.now()-timedelta(days=4)).count()
+    marked_2 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
+                                                last_change__gte=datetime.datetime.now()-timedelta(days=2)).count()
+
 
     return render (request, 'extractor/mystats.html', {'total_marked_units' : total_marked_units,
                                                        'total_unmarked_units' : total_unmarked_units,
-                                                       'total_units' : total_units})
+                                                       'total_units' : total_units,
+                                                       'marked_8' : marked_8,
+                                                       'marked_4' : marked_4,
+                                                       'marked_2' : marked_2})
 
 @login_required(login_url='')
 def allstats(request):
@@ -248,6 +260,7 @@ def how_much_is_unmarked(curr_user, pk):
 
 
 def agreement(request, pk):
+    all_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user).values('id', 'char_range')
     doc_unit = DocumentationUnit.objects.get(id=pk)
     marked_unit = MarkedUnit.objects.filter(documentation_unit__pk=pk,user=request.user).count()
     marked_unit_of_others = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
@@ -260,7 +273,7 @@ def agreement(request, pk):
         return HttpResponse("This unit is not mapped.")
 
     data = []
-    for each in mapped_unit:
+    for each in all_ranges:
         ids = each["id"]
         start= ast.literal_eval(each["char_range"])[0]["characterRange"]["start"]
         end= ast.literal_eval(each["char_range"])[0]["characterRange"]["end"]

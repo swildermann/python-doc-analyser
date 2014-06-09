@@ -163,7 +163,7 @@ def random_mapping(request):
     #randomly maps a unit with an id between 1 and 8300
     number = random.randint(1, 8300)
     current_user = request.user
-    unit = DocumentationUnit.objects.get(pk=number)
+    unit = DocumentationUnit.objects.get(pk=1544)
     if current_user.is_superuser:
         mapUnitToUser = MappingUnitToUser.objects.create(
             user=current_user,
@@ -220,6 +220,7 @@ def allstats(request):
 
     return HttpResponse("You need to be superuser for that..!")
 
+
 def how_much_is_unmarked(curr_user, pk):
     all_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = curr_user).values('id', 'char_range')
     unit_attributes = DocumentationUnit.objects.filter(id=pk).values('plaintext')
@@ -245,3 +246,32 @@ def how_much_is_unmarked(curr_user, pk):
     percentage = round(unmarked_chars/length * 100, 2)
     return (unmarked_chars, percentage)
 
+
+def agreement(request, pk):
+    try:
+        doc_unit = DocumentationUnit.objects.get(id=pk)
+        mapped_unit = MappingUnitToUser.objects.get(documentation_unit__pk=pk,user=request.user)
+        marked_unit = MarkedUnit.objects.filter(documentation_unit__pk=pk,user=request.user).count()
+        marked_unit_of_others = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
+            .count()
+        how_many = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
+            .distinct('user').count()
+
+    except MappingUnitToUser.DoesNotExist:
+        return HttpResponse("This unit is not mapped.")
+
+    data = []
+    for each in mapped_unit:
+        ids = each["id"]
+        start= ast.literal_eval(each["char_range"])[0]["characterRange"]["start"]
+        end= ast.literal_eval(each["char_range"])[0]["characterRange"]["end"]
+        data.append((ids,start,end))
+    data.sort(key=lambda tup: tup[1])
+    #TODO merge beneath markings!
+
+
+    return render(request, 'extractor/agreement.html', {'unit' : mapped_unit,
+                                                        'doc_unit': doc_unit,
+                                                        'marked_unit' : marked_unit,
+                                                        'marked_unit2' : marked_unit_of_others,
+                                                        'how_many' : how_many})

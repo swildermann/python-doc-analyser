@@ -16,5 +16,8 @@ class Command(BaseCommand):
             unmarked_results = how_much_is_unmarked(each.user,each.documentation_unit.id)
             self.stdout.write(str(each.documentation_unit.id))
             each.unmarked_chars = unmarked_results[0]
-            each.unmarked_percent = unmarked_results[1]
+            try:
+                each.unmarked_percent = unmarked_results[1]
+            except:
+                each.unmarked_percent = 999
             each.save()

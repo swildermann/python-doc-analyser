@@ -11,7 +11,7 @@
 <div id="unit-list">
    <ul>
     {% for unit in units %}
-       {% if unit.unmarked_chars > 100 and unit.unmarked_percent > 20 %}
+       {% if unit.unmarked_chars > 100 and unit.unmarked_percent > 25 %}
            <li><a href="/pydoc/{{ unit.documentation_unit.id }}/" class="unmarked">ID: {{unit.documentation_unit.id}}
             <strong>{{ unit.documentation_unit.filename }}</strong>
             - Type: {{ unit.documentation_unit.type }}

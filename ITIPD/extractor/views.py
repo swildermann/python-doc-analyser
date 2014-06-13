@@ -2,13 +2,13 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadReque
 import datetime, random, ast
 from datetime import timedelta
 from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser, AccessLog
-import json
+import json, copy
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, logout
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, Group
-from django.db.models import Count
+
 
 
 def view_unit(request, pk):
@@ -32,7 +32,7 @@ def view_unit(request, pk):
     return render(request, 'extractor/detail.html', {'object': documentation_unit1, 'marked_units': marked_units})
 
 def first_next(request):
-    unit_list = (MappingUnitToUser.objects.filter(user=request.user, already_marked=False)\
+    unit_list = (MappingUnitToUser.objects.filter(user=request.user, already_marked=False)
                                           .order_by('documentation_unit'))
     current_user = request.user
     if len(unit_list) == 0:
@@ -164,7 +164,7 @@ def random_mapping(request):
     #randomly maps a unit with an id between 1 and 8300
     number = random.randint(1, 8300)
     current_user = request.user
-    unit = DocumentationUnit.objects.get(pk=1544)
+    unit = DocumentationUnit.objects.get(pk=number)
     if current_user.is_superuser:
         mapUnitToUser = MappingUnitToUser.objects.create(
             user=current_user,
@@ -187,14 +187,12 @@ def mystats(request):
                                                  .count()
     total_units = MappingUnitToUser.objects.filter(user=request.user)\
                                                  .count()
-    how_many_days = 30
     marked_8 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
                                                 last_change__gte=datetime.datetime.now()-timedelta(days=8)).count()
     marked_4 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
                                                 last_change__gte=datetime.datetime.now()-timedelta(days=4)).count()
     marked_2 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
                                                 last_change__gte=datetime.datetime.now()-timedelta(days=2)).count()
-
 
     return render (request, 'extractor/mystats.html', {'total_marked_units' : total_marked_units,
                                                        'total_unmarked_units' : total_unmarked_units,
@@ -243,7 +241,6 @@ def how_much_is_unmarked(curr_user, pk):
         end= ast.literal_eval(each["char_range"])[0]["characterRange"]["end"]
         data.append((ids,start,end))
     data.sort(key=lambda tup: tup[1])
-
     currentPos = 0
     unmarked_chars = 0
     for each in data:
@@ -255,35 +252,63 @@ def how_much_is_unmarked(curr_user, pk):
     if currentPos < length:
         unmarked_chars += length-currentPos
 
-    percentage = round(unmarked_chars/length * 100, 2)
-    return (unmarked_chars, percentage)
+    percentage = round((unmarked_chars/length) * 100, 2)
+    return unmarked_chars, percentage
 
 
 def agreement(request, pk):
-    all_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user).values('id', 'char_range')
+    my_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user)\
+        .values('id', 'char_range','knowledge_type')
+    ranges_to_compare = MarkedUnit.objects.filter(documentation_unit__pk=pk).exclude(user=request.user)\
+        .values('id', 'char_range', 'knowledge_type')
     doc_unit = DocumentationUnit.objects.get(id=pk)
     marked_unit = MarkedUnit.objects.filter(documentation_unit__pk=pk,user=request.user).count()
-    marked_unit_of_others = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
+    marked_unit_of_others = MarkedUnit.objects.exclude(user=request.user)\
+        .filter(documentation_unit__pk=pk, user__groups__name='Students')\
         .count()
-    how_many = MarkedUnit.objects.exclude(user=request.user).filter(documentation_unit__pk=pk)\
+    how_many = MarkedUnit.objects.exclude(user=request.user)\
+        .filter(documentation_unit__pk=pk, user__groups__name='Students')\
         .distinct('user').count()
     try:
         mapped_unit = MappingUnitToUser.objects.get(documentation_unit__pk=pk,user=request.user)
     except MappingUnitToUser.DoesNotExist:
         return HttpResponse("This unit is not mapped.")
-
-    data = []
-    for each in all_ranges:
-        ids = each["id"]
-        start= ast.literal_eval(each["char_range"])[0]["characterRange"]["start"]
-        end= ast.literal_eval(each["char_range"])[0]["characterRange"]["end"]
-        data.append((ids,start,end))
-    data.sort(key=lambda tup: tup[1])
-
-    #TODO merge beneath markings!
-    #TODO Only compare units of Students and not of validaters
+    my_results = merge_markings(my_ranges)
+    results_to_compare = merge_markings(ranges_to_compare)
+    count_after = len(my_results)
     return render(request, 'extractor/agreement.html', {'unit' : mapped_unit,
                                                         'doc_unit': doc_unit,
                                                         'marked_unit' : marked_unit,
                                                         'marked_unit2' : marked_unit_of_others,
-                                                        'how_many' : how_many})
+                                                        'how_many' : how_many,
+                                                        'count_after' : count_after,
+                                                        'my_results' : str(my_results),
+                                                        'results_comp' : str(results_to_compare)})
+
+def merge_markings(all_ranges):
+    row_data = []
+    results = []
+    for each in all_ranges:
+        ids = each["id"]
+        start= ast.literal_eval(each["char_range"])[0]["characterRange"]["start"]
+        end= ast.literal_eval(each["char_range"])[0]["characterRange"]["end"]
+        knowledge_type = each["knowledge_type"]
+        row_data.append([ids,start,end,knowledge_type])
+    row_data.sort(key=lambda tup: tup[1])
+
+    for knowledge_type in range(1,13):
+        data = [val for val in row_data if val[3] == knowledge_type]
+        for idx, val in enumerate(data):
+            if idx+1 >= len(data):
+                break
+            if (data[idx+1][1]-data[idx][2]) <= 3 or (data[idx+1][2] <= data[idx][2]):
+                   if data[idx][3] == data[idx+1][3]:
+                       new_start = min(data[idx][1],data[idx+1][1])
+                       new_end = max(data[idx][2],data[idx+1][2])
+                       data[idx+1][1] = new_start
+                       data[idx+1][2] = new_end
+                       data[idx][1] = -1
+                       data[idx][2] = -1
+        results.extend(data)
+    results = [x for x in results if not x[1] == x[2] ==-1]
+    return results

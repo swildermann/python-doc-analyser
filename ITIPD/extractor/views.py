@@ -353,10 +353,13 @@ def calculate_agreement(current_user, pk):
         get_co = [val for val in results_to_compare if val[3] == each]
         count_markings_me[each-1] = len(get_my)
         count_markings_comp[each-1]=len(get_co)
-    if len(my_results)==0:
-        agree = 0
+
+    if len(my_results)!=0:
+        agree = abs(100((round(errors(count_markings_me,count_markings_comp)/len(my_results),4))*100))
+    elif len(results_to_compare)!=0:
+        agree = abs(100((round(errors(count_markings_me,count_markings_comp)/len(results_to_compare),4))*100))
     else:
-        agree = 100-((round(errors(count_markings_me,count_markings_comp)/len(my_results),4))*100)
+        agree = 0
 
     first_mapping = MappingUnitToUser.objects.get(pk=min(id_to_compare.id, mapped_id.pk))
     second_mapping = MappingUnitToUser.objects.get(pk=max(id_to_compare.id, mapped_id.pk))

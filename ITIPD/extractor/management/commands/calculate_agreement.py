@@ -17,5 +17,5 @@ class Command(BaseCommand):
             status_array.append(status)
             self.stdout.write(str(status))
 
-
         self.stdout.write(str(status_array))
+        self.stdout.write(len([x for x in status_array  if x == True]))

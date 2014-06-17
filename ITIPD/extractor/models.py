@@ -41,3 +41,9 @@ class AccessLog(models.Model):
     documentation_unit = models.ForeignKey(DocumentationUnit)
     timestamp = models.DateTimeField(default=0)
     filename = models.CharField(max_length=100, default='') #improve name ? filename to action?
+
+class Agreement(models.Model):
+    first = models.ForeignKey(MappingUnitToUser, related_name="first")
+    second = models.ForeignKey(MappingUnitToUser, related_name="second")
+    percentage_by_types = models.IntegerField(default=0)
+    percentage_by_chars = models.IntegerField(default=0)

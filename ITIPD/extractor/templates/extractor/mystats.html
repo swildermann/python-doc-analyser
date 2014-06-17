@@ -13,7 +13,8 @@
 <table border="0" class="center-table">
   <tr>
     <th>Description</th>
-    <th>Number of elements</th>
+    <th>total elements</th>
+    <th>last 14 days</th>
     <th>last 8 days</th>
     <th>last 4 days</th>
     <th>last 2 days</th>
@@ -21,6 +22,7 @@
   <tr>
     <td>Already saved elements</td>
     <td>{{total_marked_units}}</td>
+    <td>{{marked_14}}</td>
     <td>{{marked_8}}</td>
     <td>{{marked_4}}</td>
     <td>{{marked_2}}</td>
@@ -30,10 +32,28 @@
     <td>{{total_unmarked_units}}</td>
   </tr>
   <tr>
-    <td>elements total</td>
+    <td>saved and unsaved</td>
     <td>{{total_units}}</td>
   </tr>
+  <tr>
+    <td>agreement in %</td>
+    <td>{{agreement_total}}</td>
+    <td>{{agreement_14}}</td>
+    <td>{{agreement_8}}</td>
+    <td>{{agreement_4}}</td>
+    <td>{{agreement_2}}</td>
+  </tr>
+  <tr>
+    <td>agreement based on </td>
+    <td>{{agreement_total_count}} units</td>
+    <td>{{agreement_14_count}} units</td>
+    <td>{{agreement_8_count}} units</td>
+    <td>{{agreement_4_count}} units</td>
+    <td>{{agreement_2_count}} units</td>
+  </tr>
+
 </table>
+
 
 
         

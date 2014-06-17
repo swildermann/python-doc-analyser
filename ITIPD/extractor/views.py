@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, Sum, Count
 
 
 
@@ -186,21 +186,69 @@ def mystats(request):
     total_unmarked_units = MappingUnitToUser.objects.filter(already_marked=False,
                                                  user=request.user)\
                                                  .count()
-    total_units = MappingUnitToUser.objects.filter(user=request.user)\
-                                                 .count()
+    all_units = MappingUnitToUser.objects.filter(user=request.user)
+    total_units = all_units.count()
+    marked_14 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
+                                                last_change__gte=datetime.datetime.now()-timedelta(days=14))
     marked_8 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
-                                                last_change__gte=datetime.datetime.now()-timedelta(days=8)).count()
+                                                last_change__gte=datetime.datetime.now()-timedelta(days=8))
     marked_4 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
-                                                last_change__gte=datetime.datetime.now()-timedelta(days=4)).count()
+                                                last_change__gte=datetime.datetime.now()-timedelta(days=4))
     marked_2 = MappingUnitToUser.objects.filter(already_marked=True, user=request.user,
-                                                last_change__gte=datetime.datetime.now()-timedelta(days=2)).count()
+                                                last_change__gte=datetime.datetime.now()-timedelta(days=2))
+
+    agreement_total = Agreement.objects.filter(Q(first=all_units) | Q(second=all_units))\
+        .aggregate(Sum('percentage_by_types'),Count('percentage_by_types'))
+    agree_percentage_total  = round(divide(agreement_total["percentage_by_types__sum"],
+                         agreement_total["percentage_by_types__count"]),2)
+    agreement_14 = Agreement.objects.filter(Q(first=marked_14) | Q(second=marked_14))\
+        .aggregate(Sum('percentage_by_types'), Count('percentage_by_types'))
+    agree_percentage_14 = round(divide(agreement_14["percentage_by_types__sum"],
+                         agreement_14["percentage_by_types__count"]),2)
+    agreement_8 = Agreement.objects.filter(Q(first=marked_8) | Q(second=marked_8))\
+        .aggregate(Sum('percentage_by_types'), Count('percentage_by_types'))
+    agree_percentage_8 = round(divide(agreement_8["percentage_by_types__sum"],
+                         agreement_8["percentage_by_types__count"]),2)
+    agreement_4 = Agreement.objects.filter(Q(first=marked_4) | Q(second=marked_4))\
+        .aggregate(Sum('percentage_by_types'), Count('percentage_by_types'))
+    agree_percentage_4 = round(divide(agreement_4["percentage_by_types__sum"],
+                         agreement_4["percentage_by_types__count"]),2)
+    agreement_2 = Agreement.objects.filter(Q(first=marked_2) | Q(second=marked_2))\
+        .aggregate(Sum('percentage_by_types'), Count('percentage_by_types'))
+    agree_percentage_2 = round(divide(agreement_2["percentage_by_types__sum"],
+                         agreement_2["percentage_by_types__count"]),2)
+
+
+
+
+
+
+
 
     return render (request, 'extractor/mystats.html', {'total_marked_units' : total_marked_units,
                                                        'total_unmarked_units' : total_unmarked_units,
                                                        'total_units' : total_units,
-                                                       'marked_8' : marked_8,
-                                                       'marked_4' : marked_4,
-                                                       'marked_2' : marked_2})
+                                                       'marked_14' : marked_14.count(),
+                                                       'marked_8' : marked_8.count(),
+                                                       'marked_4' : marked_4.count(),
+                                                       'marked_2' : marked_2.count(),
+                                                       'agreement_total_count' :
+                                                           agreement_total["percentage_by_types__count"],
+                                                       'agreement_total' : agree_percentage_total,
+                                                       'agreement_14_count' :
+                                                           agreement_14["percentage_by_types__count"],
+                                                       'agreement_14' : agree_percentage_14,
+                                                       'agreement_8_count' :
+                                                           agreement_8["percentage_by_types__count"],
+                                                       'agreement_8' : agree_percentage_8,
+                                                       'agreement_4_count' :
+                                                           agreement_4["percentage_by_types__count"],
+                                                       'agreement_4' : agree_percentage_4,
+                                                       'agreement_2_count' :
+                                                           agreement_2["percentage_by_types__count"],
+                                                       'agreement_2' : agree_percentage_2,
+
+                                                       })
 
 @login_required(login_url='')
 def allstats(request):
@@ -377,3 +425,10 @@ def calculate_agreement(current_user, pk):
         )
 
     return True
+
+
+def divide(a,b):
+    try:
+        return a/b
+    except:
+        return 0

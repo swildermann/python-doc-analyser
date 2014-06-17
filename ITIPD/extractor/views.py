@@ -1,13 +1,14 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, Http404
 import datetime, random, ast
 from datetime import timedelta
-from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser, AccessLog
-import json, copy
+from extractor.models import DocumentationUnit, MarkedUnit, MappingUnitToUser, AccessLog, Agreement
+import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 
@@ -257,33 +258,17 @@ def how_much_is_unmarked(curr_user, pk):
 
 
 def agreement(request, pk):
-    my_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = request.user)\
-        .values('id', 'char_range','knowledge_type')
-    ranges_to_compare = MarkedUnit.objects.filter(documentation_unit__pk=pk).exclude(user=request.user)\
-        .values('id', 'char_range', 'knowledge_type')
-    doc_unit = DocumentationUnit.objects.get(id=pk)
-    marked_unit = MarkedUnit.objects.filter(documentation_unit__pk=pk,user=request.user).count()
-    marked_unit_of_others = MarkedUnit.objects.exclude(user=request.user)\
-        .filter(documentation_unit__pk=pk, user__groups__name='Students')\
-        .count()
-    how_many = MarkedUnit.objects.exclude(user=request.user)\
-        .filter(documentation_unit__pk=pk, user__groups__name='Students')\
-        .distinct('user').count()
+    calculate_agreement(request.user, pk)
+    mapped_unit = MappingUnitToUser.objects.get(user=request.user, documentation_unit__pk=pk)
     try:
-        mapped_unit = MappingUnitToUser.objects.get(documentation_unit__pk=pk,user=request.user)
-    except MappingUnitToUser.DoesNotExist:
-        return HttpResponse("This unit is not mapped.")
-    my_results = merge_markings(my_ranges)
-    results_to_compare = merge_markings(ranges_to_compare)
-    count_after = len(my_results)
-    return render(request, 'extractor/agreement.html', {'unit' : mapped_unit,
-                                                        'doc_unit': doc_unit,
-                                                        'marked_unit' : marked_unit,
-                                                        'marked_unit2' : marked_unit_of_others,
-                                                        'how_many' : how_many,
-                                                        'count_after' : count_after,
-                                                        'my_results' : str(my_results),
-                                                        'results_comp' : str(results_to_compare)})
+        results = Agreement.objects.get(Q(first=mapped_unit) | Q(second=mapped_unit))
+    except Agreement.DoesNotExist:
+        return HttpResponse("Can not find an agreement")
+
+    return render(request, 'extractor/agreement.html', {'unit' : pk,
+                                                        'first' : results.first.pk,
+                                                        'second' : results.second.pk,
+                                                        'percentage' : results.percentage_by_types})
 
 def merge_markings(all_ranges):
     row_data = []
@@ -312,3 +297,77 @@ def merge_markings(all_ranges):
         results.extend(data)
     results = [x for x in results if not x[1] == x[2] ==-1]
     return results
+
+
+def errors(first,second):
+    error = 0
+    for id, val in enumerate(first):
+        calc = abs(val-second[id])
+        if calc == 0:
+            pass
+        else:
+            error += calc
+
+    return error/2  #divide by 2 for double count each error
+
+def calculate_agreement(current_user, pk):
+    """
+    :param current_user:
+    :param pk:
+    :return: Boolean - if this action ended with success or not
+    """
+    try:
+        mapped_id = MappingUnitToUser.objects.get(user=current_user, documentation_unit__pk=pk,
+                                                 user__groups__name='Students')
+    except (MappingUnitToUser.MultipleObjectsReturned, MappingUnitToUser.DoesNotExist) as e:
+        return False
+
+    my_ranges = MarkedUnit.objects.filter(documentation_unit__pk=pk, user = current_user)\
+        .values('id', 'char_range','knowledge_type')
+    ranges_to_compare = MarkedUnit.objects.filter(documentation_unit__pk=pk).exclude(user=current_user)\
+        .values('id', 'char_range', 'knowledge_type')
+
+    how_many = MarkedUnit.objects.exclude(user=current_user )\
+        .filter(documentation_unit__pk=pk, user__groups__name='Students')\
+        .distinct('user').count()
+    if how_many==1:
+        id_to_compare = MappingUnitToUser.objects.exclude(user=current_user) \
+            .get(documentation_unit__pk=pk, user__groups__name='Students')
+    else:
+        #got more than two units
+        return False
+
+    try:
+        mapped_unit = MappingUnitToUser.objects.get(documentation_unit__pk=pk,user=current_user )
+    except MappingUnitToUser.DoesNotExist:
+        #return HttpResponse("This unit is not mapped.")
+        return False
+
+    my_results = merge_markings(my_ranges)
+    results_to_compare = merge_markings(ranges_to_compare)
+
+    count_markings_me = [0,0,0,0,0,0,0,0,0,0,0,0]
+    count_markings_comp = [0,0,0,0,0,0,0,0,0,0,0,0]
+    for each in range(0,12):
+        get_my = [val for val in my_results if val[3] == each]
+        get_co = [val for val in results_to_compare if val[3] == each]
+        count_markings_me[each-1] = len(get_my)
+        count_markings_comp[each-1]=len(get_co)
+    agree = 100-((round(errors(count_markings_me,count_markings_comp)/len(my_results),4))*100)
+
+    first_mapping = MappingUnitToUser.objects.get(pk=min(id_to_compare.id, mapped_id.pk))
+    second_mapping = MappingUnitToUser.objects.get(pk=max(id_to_compare.id, mapped_id.pk))
+    try:
+        change_entry = Agreement.objects.get(first=first_mapping, second=second_mapping)
+        change_entry.percentage_by_types = agree
+        change_entry.save()
+
+    except Agreement.DoesNotExist:
+        Agreement.objects.create(
+            first = first_mapping,
+            second = second_mapping,
+            percentage_by_types = agree,
+            percentage_by_chars = 0
+        )
+
+    return True

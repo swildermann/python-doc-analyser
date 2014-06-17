@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Agreement of this unit{% endblock %}
+{% block title %}Agreement of unit {{ unit }}{% endblock %}
 {% block head %}{% endblock %}
 
 {% block content %}
@@ -8,17 +8,9 @@
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-
-
-<p> Mapped-unit-id: {{unit.id}}
-Documentation-unit-id: {{doc_unit.id}}
-Markings: {{marked_unit}}
-Marking of others: {{marked_unit2}}
-how many: {{how_many}}
-count after: {{count_after}},
-my results: : {{my_results}}
-results_compare: {{results_comp}}</p>
-
-
+<h2> Agreement of documenation-unit {{ unit }}</h2>
+<p>
+compared {{ first }} with {{ second }}. They agree with {{ percentage }} %.
+</p>
 
 {%endblock%}

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser, AccessLog
+from extractor.models import DocumentationUnit, KnowledgeType, MarkedUnit, MappingUnitToUser, \
+    AccessLog, Agreement
 
 
 class KnowledgeTypesAdmin(admin.ModelAdmin):
@@ -37,3 +38,4 @@ admin.site.register(KnowledgeType, KnowledgeTypesAdmin)
 admin.site.register(MarkedUnit, MarkedUnitAdmin)
 admin.site.register(MappingUnitToUser,MappingUnitToUserAdmin)
 admin.site.register(AccessLog, AccessLogAdmin)
+admin.site.register(Agreement)

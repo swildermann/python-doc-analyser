@@ -355,9 +355,9 @@ def calculate_agreement(current_user, pk):
         count_markings_comp[each-1]=len(get_co)
 
     if len(my_results)!=0:
-        agree = abs(100((round(errors(count_markings_me,count_markings_comp)/len(my_results),4))*100))
+        agree = abs(100-((round(errors(count_markings_me,count_markings_comp)/len(my_results),4))*100))
     elif len(results_to_compare)!=0:
-        agree = abs(100((round(errors(count_markings_me,count_markings_comp)/len(results_to_compare),4))*100))
+        agree = abs(100-((round(errors(count_markings_me,count_markings_comp)/len(results_to_compare),4))*100))
     else:
         agree = 0
 

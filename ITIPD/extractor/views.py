@@ -366,7 +366,7 @@ def calculate_agreement(current_user, pk):
     """
     try:
         mapped_id = MappingUnitToUser.objects.get(user=current_user, documentation_unit__pk=pk,
-                                                 user__groups__name='Students')
+                                                 user__groups__name='Students', already_marked=True)
     except (MappingUnitToUser.MultipleObjectsReturned, MappingUnitToUser.DoesNotExist) as e:
         return False
 
@@ -380,13 +380,13 @@ def calculate_agreement(current_user, pk):
         .distinct('user').count()
     if how_many==1:
         id_to_compare = MappingUnitToUser.objects.exclude(user=current_user) \
-            .get(documentation_unit__pk=pk, user__groups__name='Students')
+            .get(documentation_unit__pk=pk, user__groups__name='Students', already_marked=True)
     else:
         #got more than two units
         return False
 
     try:
-        mapped_unit = MappingUnitToUser.objects.get(documentation_unit__pk=pk,user=current_user )
+        mapped_unit = MappingUnitToUser.objects.get(documentation_unit__pk=pk,user=current_user, already_marked=True)
     except MappingUnitToUser.DoesNotExist:
         #return HttpResponse("This unit is not mapped.")
         return False

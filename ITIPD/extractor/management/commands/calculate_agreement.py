@@ -18,4 +18,4 @@ class Command(BaseCommand):
             self.stdout.write(str(status))
 
         self.stdout.write(str(status_array))
-        self.stdout.write(len([x for x in status_array  if x == True]))
+        self.stdout.write(str(len([x for x in status_array  if x == True])))

@@ -33,16 +33,22 @@
 </table>
 
 
-<table border="0" class="center-table">
+<table border="1" class="center-table">
   <tr>
     <th>Student</th>
     <th>saved elements</th>
+    <th>total agreement</th>
+    <th>saved in 14 days</th>
+    <th>agreement in 14 days</th>
   </tr>
   <tr>
   {% for key, value in units_per_student.items %}
-    <td>{{key.username}} </td>
-    <td>{{value}}</td>
+      <td>{{key.username}} </td>
+      {% for items in value %}
+        <td>{{items}}</td>
+      {% endfor %}
   </tr>
+
  {% endfor %}
 </table>
 

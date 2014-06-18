@@ -276,20 +276,6 @@ def how_much_is_unmarked(curr_user, pk):
     percentage = round((unmarked_chars/length) * 100, 2)
     return unmarked_chars, percentage
 
-
-def agreement(request, pk):
-    calculate_agreement(request.user, pk)
-    mapped_unit = MappingUnitToUser.objects.get(user=request.user, documentation_unit__pk=pk)
-    try:
-        results = Agreement.objects.get(Q(first=mapped_unit) | Q(second=mapped_unit))
-    except Agreement.DoesNotExist:
-        return HttpResponse("Can not find an agreement")
-
-    return render(request, 'extractor/agreement.html', {'unit' : pk,
-                                                        'first' : results.first.pk,
-                                                        'second' : results.second.pk,
-                                                        'percentage' : results.percentage_by_types})
-
 def merge_markings(all_ranges):
     row_data = []
     results = []

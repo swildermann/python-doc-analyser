@@ -16,6 +16,5 @@ urlpatterns = patterns('',
       url(r'^mystats/$', views.mystats, name='mystats'),
       url(r'^allstats/$', views.allstats, name='allstats'),
       url(r'^first_next/$', views.first_next, name='first_next'),
-      url(r'^agreement/(?P<pk>\d+)/$', views.agreement, name='agreement'),
       url(r'', 'django.contrib.auth.views.login', name='login')
 )

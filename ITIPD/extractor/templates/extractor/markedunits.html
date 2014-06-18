@@ -23,9 +23,6 @@
             Type: {{ unit.documentation_unit.type }}
             </a></li>
        {% endif %}
-       {% if user.is_superuser %}
-       <a href="/pydoc/agreement/{{unit.documentation_unit.id}}/"> Agreement</a>
-       {% endif %}
     {% endfor %}
    </ul>
 </div>

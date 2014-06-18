@@ -219,14 +219,25 @@ def allstats(request):
     all_students = User.objects.filter(groups__name='Students')
 
     units_per_student = {}
+    agreement_per_student = {}
     for student in all_students:
 
         all_stats = stats_per_student(student)
-        counter = all_stats["total_marked_units"]
-        total_agreement = all_stats["agreement_total"]
+        total_saved = all_stats["total_marked_units"]
         saved_elements_14 = all_stats["marked_14_count"]
+        saved_elements_8 = all_stats["marked_8_count"]
+        saved_elements_4 = all_stats["marked_4_count"]
+        saved_elements_2 = all_stats["marked_2_count"]
+        units_per_student.update({student:(total_saved, saved_elements_14, saved_elements_8, saved_elements_4,
+        saved_elements_2)})
+
+        total_agreement = all_stats["agreement_total"]
         agreement_14 = all_stats["agreement_14"]
-        units_per_student.update({student:(counter, total_agreement, saved_elements_14, agreement_14)})
+        agreement_8 = all_stats["agreement_8"]
+        agreement_4 = all_stats["agreement_4"]
+        agreement_2 = all_stats["agreement_2"]
+        agreement_per_student.update({student:(total_agreement, agreement_14, agreement_8, agreement_4,
+                                               agreement_2)})
 
 
     if request.user.is_superuser:
@@ -235,7 +246,8 @@ def allstats(request):
                                                            'total_units' : total_units,
                                                            'all_distinct' : marked_units_distinct,
                                                            'all_students' : all_students,
-                                                           'units_per_student' : units_per_student})
+                                                           'units_per_student' : units_per_student,
+                                                           'agreement_per_student' : agreement_per_student})
 
     return HttpResponse("You need to be superuser for that..!")
 

@@ -38,7 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'extractor',
     'south',
-    'static_precompiler',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -67,7 +66,7 @@ STATIC_PRECOMPILER_COMPILERS = (
 
 ROOT_URLCONF = 'ITIPD.urls'
 
-WSGI_APPLICATION = 'ITIPD.wsgi.application'
+#WSGI_APPLICATION = 'ITIPD.wsgi.application'
 
 
 # Database

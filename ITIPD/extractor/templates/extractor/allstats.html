@@ -71,6 +71,26 @@
  {% endfor %}
 </table>
 
+<table border="1" class="center-table">
+  <tr>
+    <th>Validator</th>
+    <th>saved elements</th>
+    <th>in 14 days</th>
+    <th>in 8 days</th>
+    <th>in 4 days</th>
+    <th>in 2 days</th>
+
+  </tr>
+  <tr>
+  {% for key, value in units_per_validator.items %}
+      <td>{{key.username}} </td>
+      {% for items in value %}
+        <td>{{items}}</td>
+      {% endfor %}
+  </tr>
+ {% endfor %}
+</table>
+
 
 
 

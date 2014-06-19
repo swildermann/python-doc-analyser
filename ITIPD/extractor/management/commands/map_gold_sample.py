@@ -13,13 +13,13 @@ class Command(BaseCommand):
         object_list = object_list[:number]
         self.stdout.write("counting:"+str(len(object_list)))
         self.stdout.write(str(object_list))
-        all_validaters = User.objects.filter(groups__name='validaters')
+        all_validators = User.objects.filter(groups__name='validators')
         for object in object_list:
             unit=DocumentationUnit.objects.get(id=object)
-            for validater in all_validaters:
+            for validator in all_validators:
                 if debug==False:
                     mapUnitToUser = MappingUnitToUser.objects.create(
-                        user=validater,
+                        user=validator,
                         documentation_unit=unit,
                         already_marked=False,
                         last_change =  "1900-01-01 00:00:00",

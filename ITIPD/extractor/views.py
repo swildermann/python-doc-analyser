@@ -217,6 +217,25 @@ def allstats(request):
                                                .distinct('documentation_unit', 'user')\
                                                .count()
     all_students = User.objects.filter(groups__name='Students')
+    all_validators = User.objects.filter(groups__name='validators')
+
+    units_per_validator = {}
+    units_per_validator_14 = {}
+    units_per_validator_8 = {}
+    units_per_validator_4 = {}
+    units_per_validator_2 = {}
+    for validator in all_validators:
+        counter = MappingUnitToUser.objects.filter(already_marked=True, user = validator).count()
+        counter_14 = MappingUnitToUser.objects.filter(already_marked=True, user = validator,
+                                                   last_change__gte=datetime.datetime.now()-timedelta(days=14)).count()
+        counter_8 = MappingUnitToUser.objects.filter(already_marked=True, user = validator,
+                                                    last_change__gte=datetime.datetime.now()-timedelta(days=8)).count()
+        counter_4 = MappingUnitToUser.objects.filter(already_marked=True, user = validator,
+                                                    last_change__gte=datetime.datetime.now()-timedelta(days=4)).count()
+        counter_2 = MappingUnitToUser.objects.filter(already_marked=True, user = validator,
+                                                    last_change__gte=datetime.datetime.now()-timedelta(days=2)).count()
+        units_per_validator.update({validator: [counter, counter_14, counter_8, counter_4, counter_2]})
+
 
     units_per_student = {}
     agreement_per_student = {}
@@ -240,6 +259,7 @@ def allstats(request):
                                                agreement_2)})
 
 
+
     if request.user.is_superuser:
         return render(request, 'extractor/allstats.html', {'total_marked_units' : total_saved_units,
                                                            'total_unmarked_units' : total_unsaved_units,
@@ -247,7 +267,8 @@ def allstats(request):
                                                            'all_distinct' : marked_units_distinct,
                                                            'all_students' : all_students,
                                                            'units_per_student' : units_per_student,
-                                                           'agreement_per_student' : agreement_per_student})
+                                                           'agreement_per_student' : agreement_per_student,
+                                                           'units_per_validator' : units_per_validator})
 
     return HttpResponse("You need to be superuser for that..!")
 

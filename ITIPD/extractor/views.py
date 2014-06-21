@@ -331,31 +331,14 @@ def merge_markings(all_ranges):
 
 
 def agreement(first,second):
-    do_agree = 0
-    first_new = []
-    second_new = []
-    for each in first:
-        if each > 0:
-            new = 1
-        else:
-            new = 0
-        first_new.append(new)
-
-    for each in second:
-        if each > 0:
-            new2 = 1
-        else:
-            new2 = 0
-        second_new.append(new2)
-
-    for id, val in enumerate(first_new):
-        if val == second_new[id]:
-            do_agree += 1
+    count_agreements = 0
+    for id, val in enumerate(first):
+        if (val > 0 and second[id]>0):
+            count_agreements += 1
         else:
             pass
-        
-    do_agree * (100/12)
-    return do_agree
+    in_percent = count_agreements * (100/12)
+    return in_percent
 
 def calculate_agreement(current_user, pk):
     """
@@ -402,7 +385,6 @@ def calculate_agreement(current_user, pk):
         count_markings_comp[each-1]=len(get_co)
 
     agree = agreement(count_markings_me,count_markings_comp)
-
 
     first_mapping = MappingUnitToUser.objects.get(pk=min(id_to_compare.id, mapped_id.pk))
     second_mapping = MappingUnitToUser.objects.get(pk=max(id_to_compare.id, mapped_id.pk))

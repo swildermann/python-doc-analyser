@@ -15,12 +15,14 @@
            <li><a href="/pydoc/{{ unit.documentation_unit.id }}/" class="unmarked">ID: {{unit.documentation_unit.id}}
             <strong>{{ unit.documentation_unit.filename }}</strong>
             - Type: {{ unit.documentation_unit.type }}
-            - Unmarked in percent: {{unit.unmarked_percent}} %
+            - Unmarked: {{unit.unmarked_percent}} %
+            - last save: {{ unit.last_change }}
             </a></li>
        {% else %}
            <li><a href="/pydoc/{{ unit.documentation_unit.id }}/">ID: {{unit.documentation_unit.id}}
             <strong>{{ unit.documentation_unit.filename }}</strong>
-            Type: {{ unit.documentation_unit.type }}
+            - Type: {{ unit.documentation_unit.type }}
+            - last save: {{ unit.last_change }}
             </a></li>
        {% endif %}
     {% endfor %}

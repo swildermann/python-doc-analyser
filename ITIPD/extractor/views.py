@@ -289,13 +289,17 @@ def how_much_is_unmarked(curr_user, pk):
         if each[1]>currentPos:
             unmarked_chars += each[1]-currentPos
         currentPos = each[2]+1
-
-    length = len(unit_attributes[0]["plaintext"])
+    plaintext = unit_attributes[0]["plaintext"].replace('[something removed here]','')
+    length = len(plaintext)
     if currentPos < length:
         unmarked_chars += length-currentPos
 
     percentage = round((unmarked_chars/length) * 100, 2)
     return unmarked_chars, percentage
+
+
+
+
 
 def merge_markings(all_ranges):
     row_data = []

@@ -45,5 +45,5 @@ class AccessLog(models.Model):
 class Agreement(models.Model):
     first = models.ForeignKey(MappingUnitToUser, related_name="first")
     second = models.ForeignKey(MappingUnitToUser, related_name="second")
-    percentage_by_types = models.IntegerField(default=0)
+    percentage_by_types = models.FloatField(default=0)
     percentage_by_chars = models.IntegerField(default=0)

@@ -332,14 +332,19 @@ def merge_markings(all_ranges):
 
 def errors(first,second):
     error = 0
+    for each in first:
+        if each > 0:
+            each = 1
+    for each in second:
+        if each > 0:
+            each = 1
     for id, val in enumerate(first):
         calc = abs(val-second[id])
         if calc == 0:
             pass
         else:
             error += calc
-
-    return error/2  #divide by 2 for double count each error
+    return error
 
 def calculate_agreement(current_user, pk):
     """
@@ -365,7 +370,7 @@ def calculate_agreement(current_user, pk):
         id_to_compare = MappingUnitToUser.objects.exclude(user=current_user) \
             .get(documentation_unit__pk=pk, user__groups__name='Students', already_marked=True)
     else:
-        #got more than two units
+        #got more than two units or None
         return False
 
     try:
@@ -385,12 +390,8 @@ def calculate_agreement(current_user, pk):
         count_markings_me[each-1] = len(get_my)
         count_markings_comp[each-1]=len(get_co)
 
-    if len(my_results)!=0:
-        agree = abs(100-((round(errors(count_markings_me,count_markings_comp)/len(my_results),4))*100))
-    elif len(results_to_compare)!=0:
-        agree = abs(100-((round(errors(count_markings_me,count_markings_comp)/len(results_to_compare),4))*100))
-    else:
-        agree = 0
+    agree = 100-(errors(count_markings_me,count_markings_comp)*8,3333)
+
 
     first_mapping = MappingUnitToUser.objects.get(pk=min(id_to_compare.id, mapped_id.pk))
     second_mapping = MappingUnitToUser.objects.get(pk=max(id_to_compare.id, mapped_id.pk))

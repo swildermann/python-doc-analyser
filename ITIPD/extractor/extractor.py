@@ -1,3 +1,5 @@
+
+
 from bs4 import BeautifulSoup, Tag
 import re
 import psycopg2
@@ -43,21 +45,8 @@ def summarize_placeholders(parent, string):
 
 
 def find_parents(childs):
-    """ finds the parent of each BeautifulSoup-Element given in a list (childs).
-    in case of multiple childs having the same parent, the index of the parent 
-    will be returned for each element after the first"""
+    """ finds the parent of each BeautifulSoup-Element given in a list (childs) """
     parents = []
-    # for child in childs:
-    #     b_found = False
-    #     for parent in parents:
-    #         foundParent = child.findParent()
-    #         if foundParent == parent:
-    #             parents.append(parents.index(parent))
-    #             b_found = True
-    #             break
-    #     if not b_found:
-    #         parents.append(child.findParent())
-    # return parents
     for child in childs:
         parents.append(child.findParent())
     return parents
@@ -80,7 +69,7 @@ def find_type(r):
 
 
 def grab_elements(soup, elem, attr1, attr2):
-    """grabs the different elemens with the given attributes out of a soup"""
+    """grabs the different elements with the given attributes out of a soup"""
     return soup.find_all([elem], attrs={attr1: [attr2]})
 
 
@@ -126,7 +115,6 @@ if __name__ == "__main__":
 
         ### store all parents together in one big array
         ### the id of the parents is identical to the documentation_units
-        # TODO: this is a dirty way and needs to be improved
         all_parents = find_parents(
             methods + functions + attributes + classmethods + staticmethods + sections + classes +
             exceptions + describtions + datas)

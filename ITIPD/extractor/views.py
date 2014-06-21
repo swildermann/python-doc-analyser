@@ -330,8 +330,8 @@ def merge_markings(all_ranges):
     return results
 
 
-def errors(first,second):
-    error = 0
+def agreement(first,second):
+    do_agree = 0
     for each in first:
         if each > 0:
             each = 1
@@ -339,12 +339,13 @@ def errors(first,second):
         if each > 0:
             each = 1
     for id, val in enumerate(first):
-        calc = abs(val-second[id])
-        if calc == 0:
-            pass
+        if val == second[id]:
+            do_agree += 1
         else:
-            error += calc
-    return error
+            pass
+
+    do_agree * (100/12)
+    return do_agree
 
 def calculate_agreement(current_user, pk):
     """
@@ -390,7 +391,7 @@ def calculate_agreement(current_user, pk):
         count_markings_me[each-1] = len(get_my)
         count_markings_comp[each-1]=len(get_co)
 
-    agree = 100-(errors(count_markings_me,count_markings_comp)*8.3333)
+    agree = agreement(count_markings_me,count_markings_comp)
 
 
     first_mapping = MappingUnitToUser.objects.get(pk=min(id_to_compare.id, mapped_id.pk))

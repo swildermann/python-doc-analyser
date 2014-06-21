@@ -168,7 +168,7 @@ def random_mapping(request):
     #randomly maps a unit with an id between 1 and 8300
     number = random.randint(1, 8300)
     current_user = request.user
-    unit = DocumentationUnit.objects.get(pk=number)
+    unit = DocumentationUnit.objects.get(pk=666)
     if current_user.is_superuser:
         mapUnitToUser = MappingUnitToUser.objects.create(
             user=current_user,
@@ -375,13 +375,14 @@ def calculate_agreement(current_user, pk):
 
     count_markings_me = [0,0,0,0,0,0,0,0,0,0,0,0]
     count_markings_comp = [0,0,0,0,0,0,0,0,0,0,0,0]
-    for each in range(0,12):
+    for each in range(1,13):
+        #calculate quantity of each knowledge type
         get_my = [val for val in my_results if val[3] == each]
         get_co = [val for val in results_to_compare if val[3] == each]
         count_markings_me[each-1] = len(get_my)
         count_markings_comp[each-1]=len(get_co)
 
-    agree = agreement(count_markings_me,count_markings_comp)*(8.3333) # 8.3333 = 100/12
+    agree = agreement(count_markings_me,count_markings_comp)*8.3333 # 8.3333 = 100/12
 
     first_mapping = MappingUnitToUser.objects.get(pk=min(id_to_compare.id, mapped_id.pk))
     second_mapping = MappingUnitToUser.objects.get(pk=max(id_to_compare.id, mapped_id.pk))
@@ -429,23 +430,23 @@ def stats_per_student(current_user):
     agreement_total = Agreement.objects.filter(Q(first=all_units) | Q(second=all_units))\
         .aggregate(Sum('percentage_by_types'),Count('percentage_by_types'))
     agree_percentage_total  = round(divide(agreement_total["percentage_by_types__sum"],
-                         agreement_total["percentage_by_types__count"]),2)
+                         agreement_total["percentage_by_types__count"]),5)
     agreement_14 = Agreement.objects.filter(Q(first=marked_14) | Q(second=marked_14))\
         .aggregate(Sum('percentage_by_types'), Count('percentage_by_types'))
     agree_percentage_14 = round(divide(agreement_14["percentage_by_types__sum"],
-                         agreement_14["percentage_by_types__count"]),2)
+                         agreement_14["percentage_by_types__count"]),5)
     agreement_8 = Agreement.objects.filter(Q(first=marked_8) | Q(second=marked_8))\
         .aggregate(Sum('percentage_by_types'), Count('percentage_by_types'))
     agree_percentage_8 = round(divide(agreement_8["percentage_by_types__sum"],
-                         agreement_8["percentage_by_types__count"]),2)
+                         agreement_8["percentage_by_types__count"]),5)
     agreement_4 = Agreement.objects.filter(Q(first=marked_4) | Q(second=marked_4))\
         .aggregate(Sum('percentage_by_types'), Count('percentage_by_types'))
     agree_percentage_4 = round(divide(agreement_4["percentage_by_types__sum"],
-                         agreement_4["percentage_by_types__count"]),2)
+                         agreement_4["percentage_by_types__count"]),5)
     agreement_2 = Agreement.objects.filter(Q(first=marked_2) | Q(second=marked_2))\
         .aggregate(Sum('percentage_by_types'), Count('percentage_by_types'))
     agree_percentage_2 = round(divide(agreement_2["percentage_by_types__sum"],
-                         agreement_2["percentage_by_types__count"]),2)
+                         agreement_2["percentage_by_types__count"]),5)
 
     marked_14_count= marked_14.count()
     marked_8_count= marked_8.count()

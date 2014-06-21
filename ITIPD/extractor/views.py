@@ -220,10 +220,6 @@ def allstats(request):
     all_validators = User.objects.filter(groups__name='validators')
 
     units_per_validator = {}
-    units_per_validator_14 = {}
-    units_per_validator_8 = {}
-    units_per_validator_4 = {}
-    units_per_validator_2 = {}
     for validator in all_validators:
         counter = MappingUnitToUser.objects.filter(already_marked=True, user = validator).count()
         counter_14 = MappingUnitToUser.objects.filter(already_marked=True, user = validator,
@@ -334,6 +330,8 @@ def agreement(first,second):
     count_agreements = 0
     for id, val in enumerate(first):
         if (val > 0 and second[id]>0):
+            count_agreements += 1
+        elif (val == 0 and second[id]==0):
             count_agreements += 1
         else:
             pass

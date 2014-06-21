@@ -390,7 +390,7 @@ def calculate_agreement(current_user, pk):
         count_markings_me[each-1] = len(get_my)
         count_markings_comp[each-1]=len(get_co)
 
-    agree = 100-(errors(count_markings_me,count_markings_comp)*8,3333)
+    agree = 100-(errors(count_markings_me,count_markings_comp)*8.3333)
 
 
     first_mapping = MappingUnitToUser.objects.get(pk=min(id_to_compare.id, mapped_id.pk))

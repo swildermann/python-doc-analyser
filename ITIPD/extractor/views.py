@@ -337,8 +337,7 @@ def agreement(first,second):
             count_agreements += 1
         else:
             pass
-    in_percent = count_agreements * (100/12)
-    return in_percent
+    return count_agreements
 
 def calculate_agreement(current_user, pk):
     """
@@ -384,7 +383,7 @@ def calculate_agreement(current_user, pk):
         count_markings_me[each-1] = len(get_my)
         count_markings_comp[each-1]=len(get_co)
 
-    agree = agreement(count_markings_me,count_markings_comp)
+    agree = agreement(count_markings_me,count_markings_comp)*(8.3333) # 8.3333 = 100/12
 
     first_mapping = MappingUnitToUser.objects.get(pk=min(id_to_compare.id, mapped_id.pk))
     second_mapping = MappingUnitToUser.objects.get(pk=max(id_to_compare.id, mapped_id.pk))

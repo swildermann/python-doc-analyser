@@ -8,6 +8,8 @@ venv/
 # Backups
 /backups/
 
+#DS_Store
+*.DS_Store
 # Distribution / packaging
 bin/
 build/

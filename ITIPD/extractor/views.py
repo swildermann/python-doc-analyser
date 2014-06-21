@@ -332,18 +332,28 @@ def merge_markings(all_ranges):
 
 def agreement(first,second):
     do_agree = 0
+    first_new = []
+    second_new = []
     for each in first:
         if each > 0:
-            each = 1
+            new = 1
+        else:
+            new = 0
+        first_new.append(new)
+
     for each in second:
         if each > 0:
-            each = 1
-    for id, val in enumerate(first):
-        if val == second[id]:
+            new2 = 1
+        else:
+            new2 = 0
+        second_new.append(new2)
+
+    for id, val in enumerate(first_new):
+        if val == second_new[id]:
             do_agree += 1
         else:
             pass
-
+        
     do_agree * (100/12)
     return do_agree
 

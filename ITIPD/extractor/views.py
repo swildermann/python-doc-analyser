@@ -168,7 +168,7 @@ def random_mapping(request):
     #randomly maps a unit with an id between 1 and 8300
     number = random.randint(1, 8300)
     current_user = request.user
-    unit = DocumentationUnit.objects.get(pk=666)
+    unit = DocumentationUnit.objects.get(pk=number)
     if current_user.is_superuser:
         mapUnitToUser = MappingUnitToUser.objects.create(
             user=current_user,

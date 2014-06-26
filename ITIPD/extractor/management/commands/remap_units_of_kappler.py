@@ -69,6 +69,6 @@ class Command(BaseCommand):
             how_full[new_user] += 1
             new_user_object = User.objects.get(username=new_user)
             old_user_object = User.objects.get(username="robert")
-            Command.map_new_and_delete_old(self,each,new_user_object,old_user_object)
-            
+            Command.map_new_and_delete_old(self,id,new_user_object,old_user_object)
+
         self.stdout.write(str(how_full))

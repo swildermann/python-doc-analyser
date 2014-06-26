@@ -16,7 +16,7 @@ class Command(BaseCommand):
         how_full = {}
 
         kapplers_units = MappingUnitToUser.objects.filter(user__username="robert", already_marked="False")\
-            .order_by("-documentation_unit__id").values_list("documentation_unit__id", flat=True)[:221]
+            .order_by("-documentation_unit__id").values_list("documentation_unit__id", flat=True)
 
         extra_28 = User.objects.filter(groups__name="extra_28").values_list("username",flat=True)
         extra_28_as_list=[]
@@ -24,6 +24,7 @@ class Command(BaseCommand):
             extra_28_as_list.append(each)
             how_full.update({each:0})
 
+        counter = 0
         for each in kapplers_units:
             already_mapped_to = MappingUnitToUser.objects.filter(documentation_unit__id=each)\
                 .values_list("user__username", flat=True)
@@ -40,16 +41,18 @@ class Command(BaseCommand):
                 if each == "sven_user":
                     new_students.remove('sven_extra_28')
 
+            counter += 1
             random.seed()
             new_user=new_students[random.randint(0,len(new_students)-1)]
             how_full[new_user] += 1
+
 
 
             self.stdout.write("new students:")
             self.stdout.write(str(new_students))
 
 
-
+        self.stdout.write(counter)
         self.stdout.write(str(how_full))
 
 

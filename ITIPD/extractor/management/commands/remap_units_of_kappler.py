@@ -43,20 +43,20 @@ class Command(BaseCommand):
             extra_28_as_list.append(each)
             how_full.update({each:0})
 
-        for each in kapplers_units:
-            already_mapped_to = MappingUnitToUser.objects.filter(documentation_unit__id=each)\
+        for id in kapplers_units:
+            already_mapped_to = MappingUnitToUser.objects.filter(documentation_unit__id=id)\
                 .values_list("user__username", flat=True)
             self.stdout.write("Already mapped to:")
             self.stdout.write(str(already_mapped_to))
 
             new_students = copy.deepcopy(extra_28_as_list)
-            for each in already_mapped_to:
+            for user in already_mapped_to:
                 # do not map a unit to one user twice
-                if each in new_students:
-                    new_students.remove(each)
-                if each == "prechelt_user":
+                if user in new_students:
+                    new_students.remove(user)
+                if user == "prechelt_user":
                     new_students.remove('prechelt_extra_28')
-                if each == "sven_user":
+                if user == "sven_user":
                     new_students.remove('sven_extra_28')
 
             random.seed()
@@ -71,7 +71,7 @@ class Command(BaseCommand):
             new_user_object = User.objects.get(username=new_user)
             old_user_object = User.objects.get(username="robert")
 
-            self.stdout.write(each)
+            self.stdout.write(id)
 
             #Command.map_new_and_delete_old(self,each,new_user_object,old_user_object)
 

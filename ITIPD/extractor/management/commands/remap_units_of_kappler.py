@@ -25,10 +25,13 @@ class Command(BaseCommand):
             new_students=[]
             for each in extra_28:
                 new_students.append(each)
-            
             for each in already_mapped_to:
                 if each in new_students:
                     new_students.remove(each)
+                if each == "prechelt_user":
+                    new_students.remove("prechelt_extra_28")
+                if each == "sven_user":
+                    new_students.remove("sven_extra_28")
             self.stdout.write("new students:")
             self.stdout.write(str(new_students))
 

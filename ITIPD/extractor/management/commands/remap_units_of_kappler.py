@@ -21,8 +21,8 @@ class Command(BaseCommand):
                 .values_list("user__username", flat=True)
             self.stdout.write("Already mapped to:")
             self.stdout.write(str(already_mapped_to))
-
-            new_students = copy.deepcopy(extra_28)
+            new_students = []
+            new_students = extra_28
             for each in already_mapped_to:
                 if each in new_students:
                     new_students.remove(each)

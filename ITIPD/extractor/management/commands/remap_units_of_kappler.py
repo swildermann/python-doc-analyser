@@ -67,15 +67,8 @@ class Command(BaseCommand):
                 new_user=new_students[random.randint(0,len(new_students)-1)]
 
             how_full[new_user] += 1
-
             new_user_object = User.objects.get(username=new_user)
             old_user_object = User.objects.get(username="robert")
-
-            self.stdout.write(str(id))
-
-            #Command.map_new_and_delete_old(self,each,new_user_object,old_user_object)
-
-
-
-
+            Command.map_new_and_delete_old(self,each,new_user_object,old_user_object)
+            
         self.stdout.write(str(how_full))

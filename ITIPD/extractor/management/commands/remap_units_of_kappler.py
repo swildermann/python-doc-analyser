@@ -29,9 +29,9 @@ class Command(BaseCommand):
                 if each in new_students:
                     new_students.remove(each)
                 if each == "prechelt_user":
-                    new_students.remove("prechelt_extra_28")
+                    new_students.remove('prechelt_extra_28')
                 if each == "sven_user":
-                    new_students.remove("sven_extra_28")
+                    new_students.remove('sven_extra_28')
             self.stdout.write("new students:")
             self.stdout.write(str(new_students))
 

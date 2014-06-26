@@ -11,7 +11,26 @@ map half of the units of Robert Kappler to other students
 class Command(BaseCommand):
     help = 'maps a sample to the 7 students with their id'
 
-    def get_units(self):
+    def map_new_and_delete_old(self,doc_unit_id,new_user,old_user):
+
+        doc_unit = DocumentationUnit.objects.get(id=doc_unit_id)
+
+        mapUnitToUser = MappingUnitToUser.objects.create(
+            user=new_user,
+            documentation_unit=doc_unit,
+            already_marked=False,
+            last_change =  "1900-01-01 00:00:00",
+            unmarked_chars = len(doc_unit.plaintext),
+            unmarked_percent = 100
+            )
+
+        delete_old = MappingUnitToUser.objects.filter(
+            user=old_user,
+            documentation_unit=doc_unit
+        ).delete()
+
+
+    def handle(self, *args, **options):
 
         how_full = {}
 
@@ -24,7 +43,6 @@ class Command(BaseCommand):
             extra_28_as_list.append(each)
             how_full.update({each:0})
 
-        counter = 0
         for each in kapplers_units:
             already_mapped_to = MappingUnitToUser.objects.filter(documentation_unit__id=each)\
                 .values_list("user__username", flat=True)
@@ -41,10 +59,8 @@ class Command(BaseCommand):
                 if each == "sven_user":
                     new_students.remove('sven_extra_28')
 
-            counter += 1
             random.seed()
             minimum = min(how_full, key=how_full.get)
-            self.stdout.write(minimum)
             if minimum in new_students:
                 new_user = minimum
             else:
@@ -52,16 +68,12 @@ class Command(BaseCommand):
 
             how_full[new_user] += 1
 
+            new_user_object = User.objects.get(user__username=new_user)
+            old_user_object = User.objects.get(user__username="robert")
+
+            #Command.map_new_and_delete_old(self,each,new_user_object,old_user_object)
 
 
-            self.stdout.write("new students:")
-            self.stdout.write(str(new_students))
 
 
-        self.stdout.write(str(counter))
         self.stdout.write(str(how_full))
-
-
-    def handle(self, *args, **options):
-
-        Command.get_units(self)

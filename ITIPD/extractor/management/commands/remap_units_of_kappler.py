@@ -52,7 +52,7 @@ class Command(BaseCommand):
             self.stdout.write(str(new_students))
 
 
-        self.stdout.write(counter)
+        self.stdout.write(str(counter))
         self.stdout.write(str(how_full))
 
 

@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
         how_full = {}
 
-        kapplers_units = MappingUnitToUser.objects.filter(user__username="robert", already_marked="False")\
+        kapplers_units = MappingUnitToUser.objects.filter(user__username="robert", already_marked="True")\
             .order_by("-documentation_unit__id").values_list("documentation_unit__id", flat=True)
 
         extra_28 = User.objects.filter(groups__name="extra_28").values_list("username",flat=True)

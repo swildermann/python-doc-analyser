@@ -41,7 +41,7 @@ class Command(BaseCommand):
                     new_students.remove('sven_extra_28')
 
             random.seed()
-            new_user=new_students[random.randint(0,len(new_students))]
+            new_user=new_students[random.randint(0,len(new_students)-1)]
             how_full[new_user] += 1
 
 

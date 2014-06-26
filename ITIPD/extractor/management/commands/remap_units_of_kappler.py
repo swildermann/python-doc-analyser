@@ -16,7 +16,7 @@ class Command(BaseCommand):
         how_full = {}
 
         kapplers_units = MappingUnitToUser.objects.filter(user__username="robert", already_marked=False)\
-            .order_by("-documentation_unit__id").values_list("documentation_unit__id", flat=True)
+            .order_by("-documentation_unit__id").values_list("documentation_unit__id", flat=True)[:221]
 
         extra_28 = User.objects.filter(groups__name="extra_28").values_list("username",flat=True)
         extra_28_as_list=[]
@@ -43,7 +43,13 @@ class Command(BaseCommand):
 
             counter += 1
             random.seed()
-            new_user=new_students[random.randint(0,len(new_students)-1)]
+            minimum = min(how_full, key=how_full.get)
+            self.stdout.write(minimum)
+            if minimum in new_students:
+                new_user = minimum
+            else:
+                new_user=new_students[random.randint(0,len(new_students)-1)]
+
             how_full[new_user] += 1
 
 

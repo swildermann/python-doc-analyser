@@ -71,7 +71,7 @@ class Command(BaseCommand):
             new_user_object = User.objects.get(username=new_user)
             old_user_object = User.objects.get(username="robert")
 
-            self.stdout.write(id)
+            self.stdout.write(str(id))
 
             #Command.map_new_and_delete_old(self,each,new_user_object,old_user_object)
 

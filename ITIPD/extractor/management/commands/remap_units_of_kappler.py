@@ -9,7 +9,7 @@ map half of the units of Robert Kappler to other students
 
 
 class Command(BaseCommand):
-    help = 'maps a sample to the 7 students with their id'
+    help = 'maps 221 units of user robert to the users in group "extra_28"'
 
     def map_new_and_delete_old(self,doc_unit_id,new_user,old_user):
 
@@ -70,6 +70,8 @@ class Command(BaseCommand):
 
             new_user_object = User.objects.get(username=new_user)
             old_user_object = User.objects.get(username="robert")
+
+            self.stdout.write(each)
 
             #Command.map_new_and_delete_old(self,each,new_user_object,old_user_object)
 

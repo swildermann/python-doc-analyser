@@ -47,3 +47,12 @@ class Agreement(models.Model):
     second = models.ForeignKey(MappingUnitToUser, related_name="second")
     percentage_by_types = models.FloatField(default=0)
     percentage_by_chars = models.IntegerField(default=0)
+
+class Compatibility(models.Model):
+    one = models.ForeignKey(MappingUnitToUser, related_name="one", default=None)
+    two = models.ForeignKey(MappingUnitToUser, related_name="two", default=None)
+    compatible = models.IntegerField(default=0)
+    non_compatible = models.IntegerField(default=0)
+    percentage_compatible = models.FloatField(default=0)
+
+

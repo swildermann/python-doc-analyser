@@ -15,7 +15,5 @@ class Command(BaseCommand):
         for each in all_units:
             status = calculate_compatiblity(each.user,each.documentation_unit.id)
             status_array.append(status)
-            #self.stdout.write(str(status))
 
         self.stdout.write(str(status_array))
-        self.stdout.write(str(len([x for x in status_array  if x == True])))

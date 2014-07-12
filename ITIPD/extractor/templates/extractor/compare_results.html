@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}General Statistics{% endblock %}
+{% block head %}{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+<table border="1" class="center-table">
+  <tr>
+    <th>saving</th>
+    <th>unit(id)</th>
+    <th>agreement</th>
+    <th>compatibility in chars</th>
+    <th>compatibility by type</th>
+  </tr>
+  <tr>
+  {% for value in results %}
+      <td>{{value.0}} </td>
+      <td>{{value.1}} </td>
+      <td>{{value.2}} </td>
+      <td>{{value.3}} </td>
+      <td>{{value.4}} </td>
+  </tr>
+  {% endfor %}
+
+</table>
+
+{% endblock %}

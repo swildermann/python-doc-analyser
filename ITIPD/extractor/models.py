@@ -54,5 +54,6 @@ class Compatibility(models.Model):
     compatible = models.IntegerField(default=0)
     non_compatible = models.IntegerField(default=0)
     percentage_compatible = models.FloatField(default=0)
+    percentage_based_on_chars = models.FloatField(default=0)
 
 

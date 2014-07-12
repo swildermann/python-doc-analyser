@@ -5,12 +5,12 @@ from extractor.views import calculate_compatiblity
 
 
 class Command(BaseCommand):
-    help = 'calculates the compatibility of 2 units'
+    help = 'calculates the compatibility of 2 units for all students'
 
     def handle(self, *args, **options):
         self.stdout.write("***START***")
 
-        all_units = MappingUnitToUser.objects.all()
+        all_units = MappingUnitToUser.objects.filter(user__groups__name='Students')
         status_array = []
         for each in all_units:
             status = calculate_compatiblity(each.user,each.documentation_unit.id)

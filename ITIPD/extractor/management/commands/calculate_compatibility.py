@@ -14,10 +14,7 @@ class Command(BaseCommand):
         status_array = []
         for each in all_units:
             status = calculate_compatiblity(each.user,each.documentation_unit.id)
-            if isinstance(status,basestring):
-                status_array.append(status)
-            else:
-                status_array.append(True)
+            status_array.append(status)
             #self.stdout.write(str(status))
 
         self.stdout.write(str(status_array))

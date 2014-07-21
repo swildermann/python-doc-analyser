@@ -56,4 +56,9 @@ class Compatibility(models.Model):
     percentage_compatible = models.FloatField(default=0)
     percentage_based_on_chars = models.FloatField(default=0)
 
-
+class Confusions(models.Model):
+    a = models.ForeignKey(KnowledgeType, related_name="a", default=None)
+    b = models.ForeignKey(KnowledgeType, related_name="b", default=None)
+    a_id = models.ForeignKey(MarkedUnit, related_name="a_id", default=0)
+    b_id = models.ForeignKey(MarkedUnit, related_name="b_id", default=0)
+    length = models.IntegerField(default=0)

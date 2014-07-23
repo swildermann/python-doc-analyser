@@ -16,7 +16,7 @@ class Command(BaseCommand):
         first_type = KnowledgeType.objects.get(pk=args[0])
         second_type = KnowledgeType.objects.get(pk=args[1])
         confusion = Confusions.objects.filter(Q(atype_id=first_type, btype_id=second_type) \
-            | Q(atype_id=second_type, btype_id=first_type))
+            | Q(atype_id=second_type, btype_id=first_type)).order_by("?")[10]
         for unit in confusion:
             MarkedUnit1 = MarkedUnit.objects.get(pk=unit.idofa.id)
             MarkedUnit2 = MarkedUnit.objects.get(pk=unit.idofb.id)
@@ -30,10 +30,8 @@ class Command(BaseCommand):
                 raise CommandError('can not compare the units of the same user')
 
 
-            string = User1.username + "|" + User2.username + "|" + str(DocUnit1.id)
+            string = User1.username + "|" + User2.username + "|" + str(DocUnit1.id) + "|" + str(DocUnit1.offset) + "|"
             self.stdout.write(string)
-
-            self.stdout.write('test')
 
 
 

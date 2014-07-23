@@ -1,5 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
-from extractor.models import DocumentationUnit, MappingUnitToUser, MarkedUnit
+from django.core.management.base import BaseCommand
+from extractor.models import MappingUnitToUser
 from extractor.views import calculate_agreement
 
 
@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("***START***")
 
-        all_units = MappingUnitToUser.objects.all()
+        all_units = MappingUnitToUser.objects.filter(user__groups__name='Students')
         status_array = []
         for each in all_units:
             status = calculate_agreement(each.user,each.documentation_unit.id)

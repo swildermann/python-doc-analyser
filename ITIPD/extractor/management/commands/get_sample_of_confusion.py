@@ -45,7 +45,7 @@ class Command(BaseCommand):
                 raise CommandError('can not compare the units of the same user')
 
 
-            string = User1.username + "|" + User2.username + "|" + str(DocUnit1.id) + "|" + str(DocUnit1.offset) + "|"
+            string = User1.username + " | " + User2.username + " | " + str(DocUnit1.id) + " | "
             self.stdout.write(string)
 
 

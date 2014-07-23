@@ -18,8 +18,8 @@ class Command(BaseCommand):
         confusion = Confusions.objects.filter(Q(atype_id=first_type, btype_id=second_type) \
             | Q(atype_id=second_type, btype_id=first_type))
         for unit in confusion:
-            MarkedUnit1 = MarkedUnit.objects.get(pk=unit.idofa)
-            MarkedUnit2 = MarkedUnit.objects.get(pk=unit.idofb)
+            MarkedUnit1 = MarkedUnit.objects.get(pk=unit.idofa__id)
+            MarkedUnit2 = MarkedUnit.objects.get(pk=unit.idofb__id)
             DocUnit1 = DocumentationUnit.objects.get(pk=MarkedUnit1.documentation_unit_id)
             DocUnit2 = DocumentationUnit.objects.get(pk=MarkedUnit2.documentation_unit_id)
             if DocUnit1!=DocUnit2:

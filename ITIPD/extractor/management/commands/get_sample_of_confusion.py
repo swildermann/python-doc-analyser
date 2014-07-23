@@ -10,11 +10,29 @@ class Command(BaseCommand):
     args = '<knowledgtype_id, knowledgetype_id>'
     help = 'return 10 units with the users of the given confusion'
 
+
+    def add_arguments(self, parser):
+
+        # Named (optional) arguments
+        parser.add_argument('--count',
+            action='store_true',
+            dest='count',
+            default=False,
+            help='Just count all available confusions with that input')
+
+
     def handle(self, *args, **options):
         if len(args)!=2:
             raise CommandError('get_sample_of_confusion takes exactly 2 arguments')
         first_type = KnowledgeType.objects.get(pk=args[0])
         second_type = KnowledgeType.objects.get(pk=args[1])
+
+        if options['count']:
+            self.stdout.write(Confusions.objects.filter(Q(atype_id=first_type, btype_id=second_type) \
+            | Q(atype_id=second_type, btype_id=first_type)).count())
+
+            return None
+        
         confusion = Confusions.objects.filter(Q(atype_id=first_type, btype_id=second_type) \
             | Q(atype_id=second_type, btype_id=first_type)).order_by("?")[:10]
         for unit in confusion:

@@ -30,7 +30,7 @@ class Command(BaseCommand):
                 raise CommandError('can not compare the units of the same user')
 
 
-            self.stdout.write(User1, User2, DocUnit1)
+            self.stdout.write(User1.username, User2.username, DocUnit1.id)
 
             self.stdout.write('test')
 

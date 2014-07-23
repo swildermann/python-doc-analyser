@@ -13,7 +13,9 @@ class Command(BaseCommand):
         if len(args)!=2:
             raise CommandError('get_sample_of_confusion takes exactly 2 arguments')
         first_type = KnowledgeType.objects.get(pk=args[0])
-        new = Confusions.objects.filter(Q(atype_id=first_type)).count()
+        second_type = KnowledgeType.objects.get(pk=args[1])
+        new = Confusions.objects.filter(Q(atype_id=first_type, btype_id=second_type) \
+            | Q(atype_id=second_type, btype_id=first_type)).count()
 
         self.stdout.write(str(new))
 

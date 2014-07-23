@@ -18,10 +18,10 @@ class Command(BaseCommand):
         confusion = Confusions.objects.filter(Q(atype_id=first_type, btype_id=second_type) \
             | Q(atype_id=second_type, btype_id=first_type))
         for unit in confusion:
-            MarkedUnit1 = MarkedUnit.objects.get(pk=unit.idofa__id)
-            MarkedUnit2 = MarkedUnit.objects.get(pk=unit.idofb__id)
-            DocUnit1 = DocumentationUnit.objects.get(pk=MarkedUnit1.documentation_unit_id)
-            DocUnit2 = DocumentationUnit.objects.get(pk=MarkedUnit2.documentation_unit_id)
+            MarkedUnit1 = MarkedUnit.objects.get(pk=unit.idofa.id)
+            MarkedUnit2 = MarkedUnit.objects.get(pk=unit.idofb.id)
+            DocUnit1 = DocumentationUnit.objects.get(pk=MarkedUnit1.documentation_unit_id.id)
+            DocUnit2 = DocumentationUnit.objects.get(pk=MarkedUnit2.documentation_unit_id.id)
             if DocUnit1!=DocUnit2:
                 raise CommandError('Something went wrong. Trying to compare different documentation units')
             User1 = User.objects.get(pk=MarkedUnit1.user)

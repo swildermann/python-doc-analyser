@@ -21,8 +21,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if len(args)!=2:
             raise CommandError('get_sample_of_confusion takes exactly 2 arguments')
-        first_type = KnowledgeType.objects.get(pk=args[0])
-        second_type = KnowledgeType.objects.get(pk=args[1])
+        try:
+            first_type = KnowledgeType.objects.get(pk=args[0])
+            second_type = KnowledgeType.objects.get(pk=args[1])
+        except KnowledgeType.DoesNotExist:
+            raise CommandError('This KnowledgeType does not exist')
+
 
         if options['count']:
             self.stdout.write(str(Confusions.objects.filter(Q(atype_id=first_type, btype_id=second_type) \

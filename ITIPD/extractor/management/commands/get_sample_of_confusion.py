@@ -52,7 +52,4 @@ class Command(BaseCommand):
             string = User1.username + " | " + User2.username + " | " + str(DocUnit1.id) + " | "
             self.stdout.write(string)
 
-
-
-
-        self.stdout.write(str(len(confusion)))
+        self.stdout.write("returned "+str(len(confusion))+" lines")

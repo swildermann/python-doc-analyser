@@ -9,6 +9,7 @@ class Command(BaseCommand):
         self.stdout.write("***START***")
 
         all_units = MappingUnitToUser.objects.filter(user__groups__name='validators')\
+            .distinct('documentation_unit')\
             .values_list('documentation_unit__pk', flat=True)
         status_array = []
         for each in all_units:

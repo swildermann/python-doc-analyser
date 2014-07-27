@@ -82,10 +82,11 @@ def copy_to_dummy(markings):
     dummy= User.objects.get(pk=17)
 
     for every in markings:
-        every.pk = None #creates a copy of that object
-        every.user=dummy
-        every.save()
-        doc_unit = every.documentation_unit
+        MarkedObject = MarkedUnit.objects.get(pk=every[0])
+        MarkedObject.pk = None #creates a copy of that object
+        MarkedObject.user=dummy
+        MarkedObject.save()
+        doc_unit = MarkedObject.documentation_unit
 
     MappingUnitToUser.objects.create(
         user=dummy,

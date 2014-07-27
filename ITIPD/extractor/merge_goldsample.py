@@ -85,7 +85,7 @@ def copy_to_dummy(markings):
     dummy= User.objects.get(pk=17)
 
     for every in markings:
-        every.id = None #creates a copy of that object
+        every.pk = None     #creates a copy of that object
         every.user=dummy
         every.save()
         doc_unit = every.documentation_unit

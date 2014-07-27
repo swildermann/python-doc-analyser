@@ -11,15 +11,15 @@ def calculate_best_goldsample(pk):
 
     original_1 = MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
                                           user__username="prechelt_user")\
-                                         .values('id', 'char_range','knowledge_type')
+                                         .values('id', 'char_range','knowledge_type','user')
     markings1=merge_markings(original_1)
     original_2 = MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
                                           user__username="sven_user")\
-                                          .values('id', 'char_range','knowledge_type')
+                                          .values('id', 'char_range','knowledge_type','user')
     markings2=merge_markings(original_2)
     original_3 = MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
                                           user__username="SchmeiskyZieris")\
-                                         .values('id', 'char_range','knowledge_type')
+                                         .values('id', 'char_range','knowledge_type','user')
     markings3=merge_markings(original_3)
     if len(markings1)==0 and len(markings2)==0 and len(markings3):
         return "wayne"
@@ -85,7 +85,7 @@ def copy_to_dummy(markings):
     dummy= User.objects.get(pk=17)
 
     for every in markings:
-        every.pk = None #creates a copy of that object
+        every.id = None #creates a copy of that object
         every.user=dummy
         every.save()
         doc_unit = every.documentation_unit

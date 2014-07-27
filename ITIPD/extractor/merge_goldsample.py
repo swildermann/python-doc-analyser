@@ -24,6 +24,7 @@ def calculate_best_goldsample(pk):
     if len(markings1)==0 and len(markings2)==0 and len(markings3):
         return "wayne"
     if len(markings1)==0 or len(markings2)==0 or len(markings3)==0:
+        map_unit(User.objects.get(pk=17),pk)
         return "difficult!"
 
 

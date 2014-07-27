@@ -52,5 +52,6 @@ def get_compatible_in_percent(ranges1,ranges2):
 
     total_length = length_of_all_true + length_of_all_falses
     percentage_based_on_chars = round((length_of_all_true/total_length)*100,5)
+    
 
     return percentage_based_on_chars

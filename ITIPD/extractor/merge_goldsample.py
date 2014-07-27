@@ -25,9 +25,17 @@ def calculate_best_goldsample(pk):
 
 
     firstAndSecond=get_compatible_in_percent(markings1,markings2)
+    secondAndThird=get_compatible_in_percent(markings2,markings3)
+    ThirdandFirst=get_compatible_in_percent(markings3,markings1)
 
-
-    return firstAndSecond
+    if firstAndSecond>=secondAndThird>=ThirdandFirst:
+        return "Sven"
+    elif firstAndSecond>=ThirdandFirst>=secondAndThird:
+        return "Prechelt"
+    elif secondAndThird>=ThirdandFirst>=firstAndSecond:
+        return "Schmeisky"
+    else:
+        return "NIEMAND?"
 
 
 

@@ -18,21 +18,21 @@ def calculate_best_goldsample(pk):
     markings3 = merge_markings(MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
                                           user__username="SchmeiskyZieris")\
                                          .values('id', 'char_range','knowledge_type'))
-    if len(markings1)==0 and len(markings2)==0:
-        return 100
+    if len(markings1)==0 and len(markings2)==0 and len(markings3):
+        return "wayne"
     if len(markings1)==0 or len(markings2)==0 or len(markings3)==0:
-        return 0
+        return "difficult!"
 
 
     firstAndSecond=get_compatible_in_percent(markings1,markings2)
     secondAndThird=get_compatible_in_percent(markings2,markings3)
-    ThirdandFirst=get_compatible_in_percent(markings3,markings1)
+    ThirdAndFirst=get_compatible_in_percent(markings3,markings1)
 
-    if firstAndSecond>=secondAndThird>=ThirdandFirst:
+    if firstAndSecond>=ThirdAndFirst and secondAndThird>=ThirdAndFirst:
         return "Sven"
-    elif firstAndSecond>=ThirdandFirst>=secondAndThird:
+    elif firstAndSecond>=secondAndThird and ThirdAndFirst>=secondAndThird:
         return "Prechelt"
-    elif secondAndThird>=ThirdandFirst>=firstAndSecond:
+    elif secondAndThird>=firstAndSecond and ThirdAndFirst>=firstAndSecond:
         return "Schmeisky"
     else:
         return "NIEMAND?"

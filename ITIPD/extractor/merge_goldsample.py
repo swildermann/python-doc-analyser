@@ -18,7 +18,7 @@ def calculate_best_goldsample(pk):
     markings3 = merge_markings(MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
                                           user__username="SchmeiskyZieris")\
                                          .values('id', 'char_range','knowledge_type'))
-    if len(markings1)==0 and len(markings2==0):
+    if len(markings1)==0 and len(markings2)==0:
         return 100
     if len(markings1)==0 or len(markings2)==0 or len(markings3)==0:
         return 0

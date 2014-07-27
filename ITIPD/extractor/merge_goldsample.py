@@ -29,13 +29,19 @@ def calculate_best_goldsample(pk):
     ThirdAndFirst=get_compatible_in_percent(markings3,markings1)
 
     if firstAndSecond>=ThirdAndFirst and secondAndThird>=ThirdAndFirst:
-        return "Sven"
+        return "Sven "+max(firstAndSecond,secondAndThird)
     elif firstAndSecond>=secondAndThird and ThirdAndFirst>=secondAndThird:
-        return "Prechelt"
+        return "Prechelt "+max(firstAndSecond,ThirdAndFirst)
     elif secondAndThird>=firstAndSecond and ThirdAndFirst>=firstAndSecond:
-        return "Schmeisky"
+        return "Schmeisky "+max(secondAndThird,ThirdAndFirst)
     else:
         return "NIEMAND?"
+
+
+    #copy all markings of the best user to the dummy "goldsample" with ID 17
+    #also map this unit to "goldsample"
+    #if markings do already exist: delete them first
+    #if mapping already exist: set already_marked to false!
 
 
 

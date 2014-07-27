@@ -29,10 +29,13 @@ def calculate_best_goldsample(pk):
     ThirdAndFirst=get_compatible_in_percent(markings3,markings1)
 
     if firstAndSecond>=ThirdAndFirst and secondAndThird>=ThirdAndFirst:
+        copy_to_dummy(markings2)
         return "Sven "+str(max(firstAndSecond,secondAndThird))
     elif firstAndSecond>=secondAndThird and ThirdAndFirst>=secondAndThird:
+        copy_to_dummy(markings1)
         return "Prechelt "+str(max(firstAndSecond,ThirdAndFirst))
     elif secondAndThird>=firstAndSecond and ThirdAndFirst>=firstAndSecond:
+        copy_to_dummy(markings3)
         return "Schmeisky "+str(max(secondAndThird,ThirdAndFirst))
     else:
         return "NIEMAND?"
@@ -74,3 +77,18 @@ def get_compatible_in_percent(ranges1,ranges2):
 
 
     return percentage_based_on_chars
+
+def copy_to_dummy(markings):
+    dummy= User.objects.get(pk=17)
+
+    for every in markings:
+        every.pk = None #creates a copy of that object
+        every.user=dummy
+        every.save()
+        doc_unit = every.documentation_unit
+
+    MappingUnitToUser.objects.create(
+        user=dummy,
+        documentation_unit = doc_unit,
+        already_marked = False
+    )

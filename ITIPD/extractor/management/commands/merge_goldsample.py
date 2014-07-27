@@ -8,7 +8,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write("***START***")
 
-        all_units = MappingUnitToUser.objects.filter(user__groups__name='validator')\
+        all_units = MappingUnitToUser.objects.filter(user__groups__name='validators')\
             .values_list('documentation_unit__pk', flat=True)
         status_array = []
         for each in all_units:

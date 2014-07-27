@@ -9,15 +9,18 @@ def calculate_best_goldsample(pk):
     #wenn 1 und 3 am höchsten: id1
     #wenn 2 und 3 am höchsten: id3
 
-    markings1 = merge_markings(MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
+    original_1 = MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
                                           user__username="prechelt_user")\
-                                         .values('id', 'char_range','knowledge_type'))
-    markings2 = merge_markings(MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
+                                         .values('id', 'char_range','knowledge_type')
+    markings1=merge_markings(original_1)
+    original_2 = MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
                                           user__username="sven_user")\
-                                          .values('id', 'char_range','knowledge_type'))
-    markings3 = merge_markings(MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
+                                          .values('id', 'char_range','knowledge_type')
+    markings2=merge_markings(original_2)
+    original_3 = MarkedUnit.objects.filter(user__groups__name="validators", documentation_unit__pk=pk,
                                           user__username="SchmeiskyZieris")\
-                                         .values('id', 'char_range','knowledge_type'))
+                                         .values('id', 'char_range','knowledge_type')
+    markings3=merge_markings(original_3)
     if len(markings1)==0 and len(markings2)==0 and len(markings3):
         return "wayne"
     if len(markings1)==0 or len(markings2)==0 or len(markings3)==0:
@@ -29,13 +32,13 @@ def calculate_best_goldsample(pk):
     ThirdAndFirst=get_compatible_in_percent(markings3,markings1)
 
     if firstAndSecond>=ThirdAndFirst and secondAndThird>=ThirdAndFirst:
-        copy_to_dummy(markings2)
+        copy_to_dummy(original_2)
         return "Sven "+str(max(firstAndSecond,secondAndThird))
     elif firstAndSecond>=secondAndThird and ThirdAndFirst>=secondAndThird:
-        copy_to_dummy(markings1)
+        copy_to_dummy(original_1)
         return "Prechelt "+str(max(firstAndSecond,ThirdAndFirst))
     elif secondAndThird>=firstAndSecond and ThirdAndFirst>=firstAndSecond:
-        copy_to_dummy(markings3)
+        copy_to_dummy(original_3)
         return "Schmeisky "+str(max(secondAndThird,ThirdAndFirst))
     else:
         return "NIEMAND?"
@@ -82,15 +85,21 @@ def copy_to_dummy(markings):
     dummy= User.objects.get(pk=17)
 
     for every in markings:
-        MarkedObject = MarkedUnit.objects.get(pk=every[0])
-        MarkedObject.pk = None #creates a copy of that object
-        MarkedObject.user=dummy
-        MarkedObject.save()
-        doc_unit = MarkedObject.documentation_unit
+        every.pk = None #creates a copy of that object
+        every.user=dummy
+        every.save()
+        doc_unit = every.documentation_unit
+
+    map_unit(dummy,doc_unit)
+
+    return True
+
+
+def map_unit(new_user,unit_id):
 
     MappingUnitToUser.objects.create(
-        user=dummy,
-        documentation_unit = doc_unit,
+        user=new_user,
+        documentation_unit = unit_id,
         already_marked = False,
         last_change =  "1900-01-01 00:00:00",
         unmarked_chars = 999,

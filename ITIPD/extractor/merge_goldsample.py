@@ -91,5 +91,8 @@ def copy_to_dummy(markings):
     MappingUnitToUser.objects.create(
         user=dummy,
         documentation_unit = doc_unit,
-        already_marked = False
+        already_marked = False,
+        last_change =  "1900-01-01 00:00:00",
+        unmarked_chars = 999,
+        unmarked_percent = 100
     )

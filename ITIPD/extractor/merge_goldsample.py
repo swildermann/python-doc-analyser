@@ -2,6 +2,7 @@ from extractor.views import *
 
 
 def calculate_best_goldsample(pk):
+
     #1- compare 1 and 2
     #2- compare 2 and 3
     #3- compare 3 and 1
@@ -24,7 +25,7 @@ def calculate_best_goldsample(pk):
     if len(markings1)==0 and len(markings2)==0 and len(markings3):
         return "wayne"
     if len(markings1)==0 or len(markings2)==0 or len(markings3)==0:
-        map_unit(User.objects.get(pk=17),pk)
+        map_unit(User.objects.get(pk=17),DocumentationUnit.objects.get(pk=pk))
         return "difficult!"
 
 

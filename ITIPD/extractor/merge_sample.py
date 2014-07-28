@@ -1,4 +1,5 @@
-from extractor.views import *
+from extractor.views import save_confusion
+from operator import itemgetter
 
 
 def compare_stretch_with_confusions(first,second, all_indexes):

@@ -12,13 +12,20 @@ class Command(BaseCommand):
         all_students = User.objects.filter(groups__name='Students')
         for student in all_students:
             results = agreement_by_coder(student)
-            self.stdout.write(str(results))
-            first_part = results[0]
-            for key,val in enumerate(first_part):
-                if val+results[1][key] != results[2]:
-                    self.stdout.write("****CHECKSUM FAILED!")
-                    break;
-                self.stdout.write("****CHECKSUM PASSED****")
+            agreement = results[0]
+            counter = results[2]
+            results_percentage = [x/counter for x in agreement ]
+            self.stdout.write(str(student.username))
+            self.stdout.write(str(results_percentage))
+            self.stdout.write("+-+-+-+-+-+-+-+-+-+-+-+")
+
+            # self.stdout.write(str(results))
+            # first_part = results[0]
+            # for key,val in enumerate(first_part):
+            #     if val+results[1][key] != results[2]:
+            #         self.stdout.write("****CHECKSUM FAILED!")
+            #         break;
+            #     self.stdout.write("****CHECKSUM PASSED****")
 
         self.stdout.write("***FINISH***")
 

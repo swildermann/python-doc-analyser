@@ -1,6 +1,5 @@
-from extractor.views import save_confusion
 from operator import itemgetter
-
+from extractor.models import *
 
 def compare_stretch_with_confusions(first,second, all_indexes):
     inside_if=0
@@ -46,3 +45,23 @@ def compare_stretch_with_confusions(first,second, all_indexes):
 
 
     return inside_if
+
+
+def save_confusion(as_list):
+    atype = KnowledgeType.objects.get(id=as_list[0])
+    btype = KnowledgeType.objects.get(id=as_list[1])
+    aid = MarkedUnit.objects.get(id=(max(as_list[2],as_list[3])))
+    bid = MarkedUnit.objects.get(id=(min(as_list[2],as_list[3])))
+
+    try:
+        change_entry = Confusions.objects.get(idofa=aid,idofb=bid)
+        change_entry.atype = atype
+        change_entry.btype = btype
+        change_entry.length = as_list[4]
+    except Confusions.DoesNotExist:
+        Confusions.objects.create(atype=atype,
+                                  btype=btype,
+                                  idofa=aid,
+                                  idofb=bid,
+                                  length=as_list[4])
+    return True

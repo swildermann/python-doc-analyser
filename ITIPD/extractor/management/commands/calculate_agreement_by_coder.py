@@ -15,7 +15,7 @@ class Command(BaseCommand):
             agreement = results[0]
             counter = results[2]
             results_percentage = [x/counter for x in agreement ]
-            self.stdout.write(str(student.username))
+            self.stdout.write(str(student.username)+": "+str(student.id))
             self.stdout.write(str(results_percentage))
             self.stdout.write("+-+-+-+-+-+-+-+-+-+-+-+")
 

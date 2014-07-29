@@ -19,6 +19,11 @@ class Command(BaseCommand):
             results.update({categorie:Command.get_avg(self,get_values)})
 
         self.stdout.write(str(results))
+        self.stdout.write('methods: '+str((results["method"]+results["classmethod"]+results["staticmethod"]+results["function"])/4))
+        self.stdout.write('fields: '+str((results["attribute"]+results["data"])/2))
+        self.stdout.write('modules: '+str((results["section"])/1))
+        self.stdout.write('classes: '+str((results["class"]+results["exception"])/2))
+        self.stdout.write('describe: '+str((results["describe"])/1))
         self.stdout.write("***FINISH***")
 
 

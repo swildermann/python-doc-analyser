@@ -14,7 +14,7 @@ def compare_stretch_with_confusions(first,second, all_indexes):
             state = 0 # 1 = first if is true, 2 = second if is true
             if my[1]>=opposite[1] and my[2]<=opposite[2]:
                 state = 1
-            if my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2):
+            if my[1]<=my[2]>=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2):
                 state = 2
             if state==1 or state==2:
                 if my[3]==opposite[3] \

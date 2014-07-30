@@ -7,10 +7,10 @@ class Command(BaseCommand):
     help = 'get compatibility-values sorted by categorie/type of the units'
 
     def handle(self, *args, **options):
-        if args[0]==0:
+        if args[0]=="0":
             self.stdout.write("return by chars")
             Command.by_chars(self)
-        if args[0]==1:
+        if args[0]=="1":
             self.stdout.write("return by markings")
             Command.by_markings(self)
 

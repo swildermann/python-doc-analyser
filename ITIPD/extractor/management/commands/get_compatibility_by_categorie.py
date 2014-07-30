@@ -34,7 +34,7 @@ class Command(BaseCommand):
                                                   Q(two_id__documentation_unit__type=categorie),
                                                   Q(one_id__user__groups__name="Students"),
                                                   Q(two_id__user__groups__name='Students')).\
-                values_list('percentage_compatible',flat=True)
+                values_list('percentage_based_on_chars',flat=True)
             results.update({categorie:Command.get_avg(self,get_values)})
 
         self.stdout.write(str(results))
@@ -55,7 +55,7 @@ class Command(BaseCommand):
                                                   Q(two_id__documentation_unit__type=categorie),
                                                   Q(one_id__user__groups__name="Students"),
                                                   Q(two_id__user__groups__name='Students')).\
-                values_list('percentage_based_on_chars',flat=True)
+                values_list('percentage_compatible',flat=True)
             results.update({categorie:Command.get_avg(self,get_values)})
 
         self.stdout.write(str(results))

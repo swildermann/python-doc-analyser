@@ -14,7 +14,8 @@ class Command(BaseCommand):
         for categorie in all_categories:
             get_values = Agreement.objects.filter(Q(first_id__documentation_unit__type=categorie) |
                                                   Q(second_id__documentation_unit__type=categorie),
-                                                  Q(first_id__user__groups__name="Students")).\
+                                                  Q(first_id__user__groups__name="Students"),
+                                                  Q(second_id__user__groups__name='Students')).\
                 values_list('percentage_by_types',flat=True)
             results.update({categorie:Command.get_avg(self,get_values)})
 

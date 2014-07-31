@@ -23,6 +23,7 @@ class Command(BaseCommand):
         for user in User.objects.filter(groups__name='Students').values_list('id',flat=True):
             false_positive = {}
             false_negative = {}
+            fits = {}
             for gold_unit in all_gold_units:
                 user_unit = MappingUnitToUser.objects.filter(user__id=user,id=gold_unit.id)
                 gold_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,
@@ -47,23 +48,20 @@ class Command(BaseCommand):
 
                 bits_of_markings_coder= [Command.greater_zero(self,x) for x in count_markings_coder]
                 bits_of_markings_gold = [Command.greater_zero(self,x) for x in count_markings_gold]
-                Command.calculate_disagreement(self,bits_of_markings_gold,bits_of_markings_coder,false_positive,false_negative)
+                Command.calculate_disagreement(self,bits_of_markings_gold,bits_of_markings_coder,false_positive,false_negative,fits)
 
             self.stdout.write(str(user))
             self.stdout.write("false positive: "+str(false_positive))
             self.stdout.write("false negative: "+str(false_negative))
+            self.stdout.write("correct: "+str(fits))
 
 
-    def calculate_disagreement(self,first,second,false_pos,false_neg):
+    def calculate_disagreement(self,first,second,false_pos,false_neg,correct):
         #first input is goldsample (the better one)
 
         for idx,val in enumerate(first):
-            try:
-                test = second[idx]
-            except:
-                self.stdout.write("INDEX ERROR!")
-
-
+            if val==second[idx]:
+                correct.update({idx+1:correct.get(idx+1,0)+1})
             if val==0 and second[idx]==1:
                 false_pos.update({idx+1:false_pos.get(idx+1,0)+1})
             elif val==1 and second[idx]==0:

@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from extractor.models import *
 from extractor.views import merge_markings
-from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):
@@ -20,7 +19,8 @@ class Command(BaseCommand):
         self.stdout.write("***START***")
 
         all_gold_units = MappingUnitToUser.objects.filter(user__username='goldsample')
-        for user in User.objects.filter(groups__name='Students').values_list('id',flat=True):
+        #for user in User.objects.filter(groups__name='Students').values_list('id',flat=True):
+        for user in range(15,16):
             false_positive = {}
             false_negative = {}
             for gold_unit in all_gold_units:
@@ -62,6 +62,13 @@ class Command(BaseCommand):
         #first input is goldsample (the better one)
 
         for idx,val in enumerate(first):
+            try:
+                self.stdout.write(str(val))
+                self.stdout.write(str(second[idx]))
+            except:
+                self.stdout.write("INDEX ERROR!")
+
+
             if val==0 and second[idx]==1:
                 false_pos.update({idx+1:false_pos.get(idx+1,0)+1})
             elif val==1 and second[idx]==0:

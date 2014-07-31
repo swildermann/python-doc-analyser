@@ -24,6 +24,7 @@ class Command(BaseCommand):
         in_total_pos = {}
         in_total_neg = {}
         all_users = User.objects.filter(groups__name='Students')
+        big_counter =0
         for user in all_users:
             false_positive = {}
             false_negative = {}
@@ -38,8 +39,6 @@ class Command(BaseCommand):
                                                        user=gold_unit.user).values('id', 'char_range','knowledge_type')
                 coders_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,
                                                          user=user).values('id', 'char_range','knowledge_type')
-                # if len(coders_range)==0:
-                #     continue
 
                 counter+=1
                 coders_results = merge_markings(coders_range)
@@ -60,6 +59,7 @@ class Command(BaseCommand):
                 Command.calculate_disagreement(self,bits_of_markings_gold,bits_of_markings_coder,false_positive,false_negative,fits)
             in_total_pos=Command.d_sum(self,in_total_pos,false_positive)
             in_total_neg=Command.d_sum(self,in_total_neg,false_negative)
+            big_counter+=counter
             self.stdout.write(str(user.username)+" ** "+str(user.id))
             self.stdout.write("false positive: "+str(false_positive))
             self.stdout.write("false negative: "+str(false_negative))

@@ -27,13 +27,17 @@ class Command(BaseCommand):
             fits = {}
             counter=0
             for gold_unit in all_gold_units:
-                user_unit = MappingUnitToUser.objects.filter(user__id=user,id=gold_unit.id)
+                try:
+                    user_unit = MappingUnitToUser.objects.get(user=user,id=gold_unit.id)
+                except MappingUnitToUser.DoesNotExist:
+                    continue
                 gold_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,
                                                        user=gold_unit.user).values('id', 'char_range','knowledge_type')
                 coders_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,
                                                          user=user).values('id', 'char_range','knowledge_type')
-                if len(coders_range)==0:
-                    continue
+                # if len(coders_range)==0:
+                #     continue
+
                 counter+=1
                 coders_results = merge_markings(coders_range)
                 gold_results = merge_markings(gold_range)
@@ -56,6 +60,7 @@ class Command(BaseCommand):
             self.stdout.write("false positive: "+str(false_positive))
             self.stdout.write("false negative: "+str(false_negative))
             self.stdout.write("correct: "+str(fits))
+            self.stdout.write("counter: "+str(counter))
 
 
     def calculate_disagreement(self,first,second,false_pos,false_neg,correct):

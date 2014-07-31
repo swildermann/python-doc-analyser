@@ -19,8 +19,7 @@ class Command(BaseCommand):
         self.stdout.write("***START***")
 
         all_gold_units = MappingUnitToUser.objects.filter(user__username='goldsample')
-        #for user in User.objects.filter(groups__name='Students').values_list('id',flat=True):
-        for user in range(15,16):
+        for user in User.objects.filter(groups__name='Students').values_list('id',flat=True):
             false_positive = {}
             false_negative = {}
             for gold_unit in all_gold_units:
@@ -54,18 +53,12 @@ class Command(BaseCommand):
             self.stdout.write("false negative: "+str(false_negative))
 
 
-
-
-
-
-
     def calculate_disagreement(self,first,second,false_pos,false_neg):
         #first input is goldsample (the better one)
 
         for idx,val in enumerate(first):
             try:
-                self.stdout.write(str(val))
-                self.stdout.write(str(second[idx]))
+                test = second[idx]
             except:
                 self.stdout.write("INDEX ERROR!")
 

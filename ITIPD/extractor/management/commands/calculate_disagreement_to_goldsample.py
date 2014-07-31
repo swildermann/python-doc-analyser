@@ -44,8 +44,8 @@ class Command(BaseCommand):
                     count_markings_coder[each-1] = len(get_my)
                     count_markings_gold[each-1]=len(get_co)
 
-                bits_of_markings_coder= [Command.greater_zero(x) for x in count_markings_coder]
-                bits_of_markings_gold = [Command.greater_zero(x) for x in count_markings_gold]
+                bits_of_markings_coder= [Command.greater_zero(self,x) for x in count_markings_coder]
+                bits_of_markings_gold = [Command.greater_zero(self,x) for x in count_markings_gold]
                 Command.calculate_disagreement(self,bits_of_markings_gold,bits_of_markings_coder,false_positive,false_negative)
 
             self.stdout.write(str(user))

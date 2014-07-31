@@ -20,10 +20,12 @@ class Command(BaseCommand):
         self.stdout.write("***START***")
 
         all_gold_units = MappingUnitToUser.objects.filter(user__username='goldsample')
-        for user in User.objects.filter(groups__name='Students').values_list('id',flat=True):
+        all_users = User.objects.filter(groups__name='Students')
+        for user in all_users:
             false_positive = {}
             false_negative = {}
             fits = {}
+            counter=0
             for gold_unit in all_gold_units:
                 user_unit = MappingUnitToUser.objects.filter(user__id=user,id=gold_unit.id)
                 gold_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,
@@ -32,7 +34,7 @@ class Command(BaseCommand):
                                                          user=user).values('id', 'char_range','knowledge_type')
                 if len(coders_range)==0:
                     continue
-
+                counter+=1
                 coders_results = merge_markings(coders_range)
                 gold_results = merge_markings(gold_range)
 
@@ -50,7 +52,7 @@ class Command(BaseCommand):
                 bits_of_markings_gold = [Command.greater_zero(self,x) for x in count_markings_gold]
                 Command.calculate_disagreement(self,bits_of_markings_gold,bits_of_markings_coder,false_positive,false_negative,fits)
 
-            self.stdout.write(str(user))
+            self.stdout.write(str(user.username)+" ** "+str(user.id))
             self.stdout.write("false positive: "+str(false_positive))
             self.stdout.write("false negative: "+str(false_negative))
             self.stdout.write("correct: "+str(fits))

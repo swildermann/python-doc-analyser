@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from extractor.models import *
 from extractor.views import merge_markings
 from django.contrib.auth.models import User
+from collections import defaultdict
 
 
 class Command(BaseCommand):
@@ -20,6 +21,8 @@ class Command(BaseCommand):
         self.stdout.write("***START***")
 
         all_gold_units = MappingUnitToUser.objects.filter(user__username='goldsample')
+        in_total_pos = {}
+        in_total_neg = {}
         all_users = User.objects.filter(groups__name='Students')
         for user in all_users:
             false_positive = {}
@@ -55,12 +58,15 @@ class Command(BaseCommand):
                 bits_of_markings_coder= [Command.greater_zero(self,x) for x in count_markings_coder]
                 bits_of_markings_gold = [Command.greater_zero(self,x) for x in count_markings_gold]
                 Command.calculate_disagreement(self,bits_of_markings_gold,bits_of_markings_coder,false_positive,false_negative,fits)
-
+            in_total_pos=Command.d_sum(in_total_pos,false_positive)
+            in_total_neg=Command.d_sum(in_total_neg,false_positive)
             self.stdout.write(str(user.username)+" ** "+str(user.id))
             self.stdout.write("false positive: "+str(false_positive))
             self.stdout.write("false negative: "+str(false_negative))
             self.stdout.write("correct: "+str(fits))
             self.stdout.write("counter: "+str(counter))
+        self.stdout.write("total pos:: "+str(in_total_pos))
+        self.stdout.write("total neg:: "+str(in_total_neg))
 
 
     def calculate_disagreement(self,first,second,false_pos,false_neg,correct):
@@ -75,3 +81,9 @@ class Command(BaseCommand):
                 #false negative
                 false_neg.update({idx+1:false_neg.get(idx+1,0)+1})
         return None
+
+    def d_sum(self,a, b):
+        d = defaultdict(int, a)
+        for k, v in b.items():
+            d[k] += v
+        return dict(d)

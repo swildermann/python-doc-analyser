@@ -28,7 +28,7 @@ class Command(BaseCommand):
             counter=0
             for gold_unit in all_gold_units:
                 try:
-                    user_unit = MappingUnitToUser.objects.get(user=user,id=gold_unit.id)
+                    user_unit = MappingUnitToUser.objects.get(user=user,documentation_unit__id=gold_unit.documentation_unit__id)
                 except MappingUnitToUser.DoesNotExist:
                     continue
                 gold_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,

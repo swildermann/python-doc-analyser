@@ -59,7 +59,7 @@ class Command(BaseCommand):
                 bits_of_markings_gold = [Command.greater_zero(self,x) for x in count_markings_gold]
                 Command.calculate_disagreement(self,bits_of_markings_gold,bits_of_markings_coder,false_positive,false_negative,fits)
             in_total_pos=Command.d_sum(self,in_total_pos,false_positive)
-            in_total_neg=Command.d_sum(self,in_total_neg,false_positive)
+            in_total_neg=Command.d_sum(self,in_total_neg,false_negative)
             self.stdout.write(str(user.username)+" ** "+str(user.id))
             self.stdout.write("false positive: "+str(false_positive))
             self.stdout.write("false negative: "+str(false_negative))

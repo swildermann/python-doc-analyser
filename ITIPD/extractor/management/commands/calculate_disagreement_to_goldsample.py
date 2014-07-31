@@ -29,7 +29,8 @@ class Command(BaseCommand):
                                                        user=gold_unit.user).values('id', 'char_range','knowledge_type')
                 coders_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,
                                                          user=user).values('id', 'char_range','knowledge_type')
-
+                if len(coders_range)==0:
+                    break
 
                 coders_results = merge_markings(coders_range)
                 gold_results = merge_markings(gold_range)

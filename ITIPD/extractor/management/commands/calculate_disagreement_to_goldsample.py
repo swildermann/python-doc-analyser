@@ -67,6 +67,7 @@ class Command(BaseCommand):
             self.stdout.write("counter: "+str(counter))
         self.stdout.write("total pos:: "+str(in_total_pos))
         self.stdout.write("total neg:: "+str(in_total_neg))
+        self.stdout.write("total counter: "+str(big_counter))
 
 
     def calculate_disagreement(self,first,second,false_pos,false_neg,correct):

@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from extractor.models import *
 from extractor.views import merge_markings
+from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):

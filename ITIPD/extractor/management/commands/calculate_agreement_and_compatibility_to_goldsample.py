@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 counter+=1
 
                 if len(coders_range)==0 and len(gold_range)==0:
-                    self.stdout.write(str(user.username)+" || "+str(gold_unit.documentation_unit__id))
+                    self.stdout.write(str(user.username)+" || "+str(gold_unit.documentation_unit_id))
                     how_much_true_in_total+=100
                     continue
                 if len(coders_range)==0 or len(gold_range)==0:

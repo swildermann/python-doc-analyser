@@ -45,7 +45,7 @@ class Command(BaseCommand):
         return all_indexes
 
 
-    def handle(self, *args, **options):
+    def handle(self, **options):
         self.stdout.write("***START***")
 
         all_gold_units = MappingUnitToUser.objects.filter(user__username='goldsample')

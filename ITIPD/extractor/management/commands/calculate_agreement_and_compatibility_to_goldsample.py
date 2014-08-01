@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from extractor.models import *
-from extractor.views import merge_markings, idx_to_dict, get_length_of_marking
-from extractor.merge_sample import compare_stretch_with_confusions
+from extractor.views import merge_markings, idx_to_dict, get_length_of_marking, compare_stretch
 from django.contrib.auth.models import User
 
 
@@ -46,8 +45,8 @@ class Command(BaseCommand):
                 all_idx.update(idx_to_dict(my_results))
                 all_idx.update(idx_to_dict(results_to_compare))
 
-                comp2 = compare_stretch_with_confusions(results_to_compare,my_results,all_idx)
-                compatible = compare_stretch_with_confusions(my_results,results_to_compare,all_idx)
+                comp2 = compare_stretch(results_to_compare,my_results,all_idx)
+                compatible = compare_stretch(my_results,results_to_compare,all_idx)
                 compatible += comp2
 
 

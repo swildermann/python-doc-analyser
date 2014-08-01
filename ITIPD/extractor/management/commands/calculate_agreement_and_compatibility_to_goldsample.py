@@ -28,12 +28,14 @@ class Command(BaseCommand):
                 coders_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,
                                                          user=user).values('id', 'char_range','knowledge_type')
 
-                if len(coders_range)==0 and len(gold_range)==0:
-                    continue #TODO
-                if len(coders_range)==0 or len(gold_range)==0:
-                    continue  #TODO
 
                 counter+=1
+
+                if len(coders_range)==0 and len(gold_range)==0:
+                    continue #TODO this is full compatible
+                if len(coders_range)==0 or len(gold_range)==0:
+                    continue  #TODO this is not compatible
+
 
                 my_results = merge_markings(coders_range)
                 results_to_compare = merge_markings(coders_range)
@@ -64,9 +66,7 @@ class Command(BaseCommand):
 
                 total_length = length_of_all_trues + length_of_all_false
                 how_much_is_true = round((length_of_all_trues/total_length)*100,5)
-                how_much_is_false = round((length_of_all_false/total_length)*100,5)
-                total = trues+falses
-                in_percent = round(trues/total * 100,5)
+
                 how_much_true_in_total+=how_much_is_true
 
             self.stdout.write("username:" +str(user.username))

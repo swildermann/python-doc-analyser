@@ -1,11 +1,24 @@
+from optparse import make_option
+
 from django.core.management.base import BaseCommand
 from extractor.models import *
 from extractor.views import merge_markings, idx_to_dict, get_length_of_marking
+from extractor.merge_sample import compare_stretch_with_confusions
 from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):
     help = '''this command calculates for each student the agreement-score to the goldsample'''
+
+
+
+    option_list = BaseCommand.option_list + (
+        make_option('--confusion',
+            action='store_true',
+            dest='count',
+            default=False,
+            help='Get the results including confusion-solution'),
+        )
 
     def compare_stretch(self,first,second, all_indexes):
         #is replaced by compare_stretch_with_confusions
@@ -66,9 +79,12 @@ class Command(BaseCommand):
                 all_idx = {}
                 all_idx.update(idx_to_dict(my_results))
                 all_idx.update(idx_to_dict(results_to_compare))
-
-                Command.compare_stretch(self,results_to_compare,my_results,all_idx)
-                Command.compare_stretch(self,my_results,results_to_compare,all_idx)
+                if options['confusion']:
+                    compare_stretch_with_confusions(my_results,results_to_compare,all_idx)
+                    compare_stretch_with_confusions(results_to_compare,my_results,all_idx)
+                else:
+                    Command.compare_stretch(self,results_to_compare,my_results,all_idx)
+                    Command.compare_stretch(self,my_results,results_to_compare,all_idx)
 
                 trues = 0
                 length_of_all_trues = 0

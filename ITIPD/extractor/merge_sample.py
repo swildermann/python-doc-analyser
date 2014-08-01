@@ -1,4 +1,3 @@
-from operator import itemgetter
 from extractor.models import *
 
 def compare_stretch_with_confusions(first,second, all_indexes):
@@ -35,13 +34,13 @@ def compare_stretch_with_confusions(first,second, all_indexes):
                     all_indexes.update({my[0]:True})
                     all_indexes.update({opposite[0]:True})
                     break
-            if state==1:
-                overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-my[3]))
-            if state==2:
-                overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-opposite[1]))
-        if len(overlap)>0:
-            to_save = max(overlap,key=itemgetter(4))
-            save_confusion(to_save)
+        #     if state==1:
+        #         overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-my[3]))
+        #     if state==2:
+        #         overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-opposite[1]))
+        # if len(overlap)>0:
+        #     to_save = max(overlap,key=itemgetter(4))
+        #     save_confusion(to_save)
 
 
     return inside_if

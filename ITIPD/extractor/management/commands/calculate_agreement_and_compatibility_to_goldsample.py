@@ -10,12 +10,10 @@ from django.contrib.auth.models import User
 class Command(BaseCommand):
     help = '''this command calculates for each student the agreement-score to the goldsample'''
 
-
-
     option_list = BaseCommand.option_list + (
         make_option('--confusion',
             action='store_true',
-            dest='count',
+            dest='confusion',
             default=False,
             help='Get the results including confusion-solution'),
         )
@@ -45,7 +43,7 @@ class Command(BaseCommand):
         return all_indexes
 
 
-    def handle(self, **options):
+    def handle(self, *args, **options):
         self.stdout.write("***START***")
 
         all_gold_units = MappingUnitToUser.objects.filter(user__username='goldsample')

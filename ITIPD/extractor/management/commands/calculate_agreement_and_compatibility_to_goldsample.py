@@ -28,12 +28,8 @@ class Command(BaseCommand):
                     all_indexes.update({my[0]:True})
                     all_indexes.update({opposite[0]:True})
                     break
-                if state==1:
-                    overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-my[3]))
-                if state==2:
-                    overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-opposite[1]))
 
-        return inside_if
+        return all_indexes
 
 
     def handle(self, *args, **options):
@@ -71,8 +67,8 @@ class Command(BaseCommand):
                 all_idx.update(idx_to_dict(my_results))
                 all_idx.update(idx_to_dict(results_to_compare))
 
-                Command.compare_stretch(self,results_to_compare,my_results,all_idx)
-                Command.compare_stretch(self,my_results,results_to_compare,all_idx)
+                all_idx.update(Command.compare_stretch(self,results_to_compare,my_results,all_idx))
+                all_idx.update(Command.compare_stretch(self,my_results,results_to_compare,all_idx))
 
                 trues = 0
                 length_of_all_trues = 0

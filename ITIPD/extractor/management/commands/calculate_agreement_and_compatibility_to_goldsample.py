@@ -64,15 +64,15 @@ class Command(BaseCommand):
 
                 total_length = length_of_all_trues + length_of_all_false
                 how_much_is_true = round((length_of_all_trues/total_length)*100,5)
-                how_much_is_false = round((length_of_all_false/total_length)*100,5)
+                #how_much_is_false = round((length_of_all_false/total_length)*100,5)
                 total = trues+falses
-                in_percent = round(trues/total * 100,5)
+                #in_percent = round(trues/total * 100,5)
                 how_much_true_in_total+=how_much_is_true
 
             self.stdout.write("username:" +str(user.username))
             if counter!=0:
                 how_much_true_in_total=how_much_true_in_total/counter
-                self.stdout.write(str(how_much_true_in_total))
+                self.stdout.write("test")
             else:
                 self.stdout.write("null")
             self.stdout.write("***********")

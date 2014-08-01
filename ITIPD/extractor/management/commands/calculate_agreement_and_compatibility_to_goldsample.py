@@ -6,6 +6,34 @@ from extractor.views import merge_markings, idx_to_dict, get_length_of_marking
 class Command(BaseCommand):
     help = '''this command calculates for each student the agreement-score to the goldsample'''
 
+    def compare_stretch(self,first,second, all_indexes):
+        #is replaced by compare_stretch_with_confusions
+        #will not be deleted as it is may will be needed later
+        inside_if=0
+        '''check if my is inside of opposite
+        check if opposite is inside of my
+        check of my and opposite contain each other for at least 50%
+        '''
+        for my in first:
+            overlap = []
+            for opposite in second:
+                state = 0 # 1 = first if is true, 2 = second if is true
+                if my[1]>=opposite[1] and my[2]<=opposite[2]:
+                    state = 1
+                if my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2):
+                    state = 2
+                if (state==1 or state==2) and my[3]==opposite[3]:
+                    inside_if+=1
+                    all_indexes.update({my[0]:True})
+                    all_indexes.update({opposite[0]:True})
+                    break
+                if state==1:
+                    overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-my[3]))
+                if state==2:
+                    overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-opposite[1]))
+
+        return inside_if
+
 
     def handle(self, *args, **options):
         self.stdout.write("***START***")
@@ -26,7 +54,6 @@ class Command(BaseCommand):
                 coders_range = MarkedUnit.objects.filter(documentation_unit=gold_unit.documentation_unit,
                                                          user=user).values('id', 'char_range','knowledge_type')
 
-
                 counter+=1
 
                 if len(coders_range)==0 and len(gold_range)==0:
@@ -43,8 +70,8 @@ class Command(BaseCommand):
                 all_idx.update(idx_to_dict(my_results))
                 all_idx.update(idx_to_dict(results_to_compare))
 
-                compare_stretch(results_to_compare,my_results,all_idx)
-                compare_stretch(my_results,results_to_compare,all_idx)
+                Command.compare_stretch(self,results_to_compare,my_results,all_idx)
+                Command.compare_stretch(self,my_results,results_to_compare,all_idx)
 
                 trues = 0
                 length_of_all_trues = 0
@@ -76,31 +103,3 @@ class Command(BaseCommand):
                 self.stdout.write("could not compare anything")
             self.stdout.write("***********")
 
-
-    def compare_stretch(self,first,second, all_indexes):
-        #is replaced by compare_stretch_with_confusions
-        #will not be deleted as it is may will be needed later
-        inside_if=0
-        '''check if my is inside of opposite
-        check if opposite is inside of my
-        check of my and opposite contain each other for at least 50%
-        '''
-        for my in first:
-            overlap = []
-            for opposite in second:
-                state = 0 # 1 = first if is true, 2 = second if is true
-                if my[1]>=opposite[1] and my[2]<=opposite[2]:
-                    state = 1
-                if my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2):
-                    state = 2
-                if (state==1 or state==2) and my[3]==opposite[3]:
-                    inside_if+=1
-                    all_indexes.update({my[0]:True})
-                    all_indexes.update({opposite[0]:True})
-                    break
-                if state==1:
-                    overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-my[3]))
-                if state==2:
-                    overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-opposite[1]))
-
-        return inside_if

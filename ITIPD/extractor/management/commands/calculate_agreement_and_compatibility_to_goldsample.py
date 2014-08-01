@@ -32,6 +32,7 @@ class Command(BaseCommand):
                 counter+=1
 
                 if len(coders_range)==0 and len(gold_range)==0:
+                    self.stdout.write(str(user.username)+" || "+str(gold_unit.documentation_unit__id))
                     how_much_true_in_total+=100
                     continue
                 if len(coders_range)==0 or len(gold_range)==0:
@@ -72,8 +73,9 @@ class Command(BaseCommand):
 
             self.stdout.write("username:" +str(user.username))
             if counter!=0:
-                how_much_true_in_total=how_much_true_in_total/counter
-                self.stdout.write(str(how_much_true_in_total))
+                output=(how_much_true_in_total/counter)
+                self.stdout.write(str(output))
+                self.stdout.write(str(counter))
             else:
                 self.stdout.write("null")
             self.stdout.write("***********")

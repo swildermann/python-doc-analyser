@@ -53,7 +53,7 @@ class Command(BaseCommand):
                     if value:
                         trues+= 1
                         length_of_all_trues += get_length_of_marking(key, my_results, results_to_compare)
-                        self.stdout.write(length_of_all_trues)
+                        self.stdout.write(str(length_of_all_trues))
 
                 falses = 0
                 length_of_all_false = 0

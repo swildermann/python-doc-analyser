@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from extractor.models import *
-from extractor.views import merge_markings, idx_to_dict, get_length_of_marking, compare_stretch
-from django.contrib.auth.models import User
+from extractor.views import merge_markings, idx_to_dict, get_length_of_marking
 
 
 class Command(BaseCommand):
@@ -58,7 +57,7 @@ class Command(BaseCommand):
                 falses = 0
                 length_of_all_false = 0
                 for key, value in all_idx.items():
-                    if value==False:
+                    if not value:
                         length_of_all_false += get_length_of_marking(key, my_results, results_to_compare)
                         falses+= 1
                         self.stdout.write(str(length_of_all_false))
@@ -76,3 +75,32 @@ class Command(BaseCommand):
             else:
                 self.stdout.write("could not compare anything")
             self.stdout.write("***********")
+
+
+    def compare_stretch(self,first,second, all_indexes):
+        #is replaced by compare_stretch_with_confusions
+        #will not be deleted as it is may will be needed later
+        inside_if=0
+        '''check if my is inside of opposite
+        check if opposite is inside of my
+        check of my and opposite contain each other for at least 50%
+        '''
+        for my in first:
+            overlap = []
+            for opposite in second:
+                state = 0 # 1 = first if is true, 2 = second if is true
+                if my[1]>=opposite[1] and my[2]<=opposite[2]:
+                    state = 1
+                if my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2):
+                    state = 2
+                if (state==1 or state==2) and my[3]==opposite[3]:
+                    inside_if+=1
+                    all_indexes.update({my[0]:True})
+                    all_indexes.update({opposite[0]:True})
+                    break
+                if state==1:
+                    overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-my[3]))
+                if state==2:
+                    overlap.append((my[3],opposite[3],my[0],opposite[0],my[2]-opposite[1]))
+
+        return inside_if

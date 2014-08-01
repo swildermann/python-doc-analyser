@@ -68,13 +68,13 @@ class Command(BaseCommand):
                 total = trues+falses
                 in_percent = round(trues/total * 100,5)
                 how_much_true_in_total+=how_much_is_true
-                
+
             self.stdout.write("username:" +str(user.username))
             if counter!=0:
                 how_much_true_in_total=how_much_true_in_total/counter
                 self.stdout.write(str(how_much_true_in_total))
             else:
-                self.stdout.write("0")
+                self.stdout.write("null")
             self.stdout.write("***********")
 
 

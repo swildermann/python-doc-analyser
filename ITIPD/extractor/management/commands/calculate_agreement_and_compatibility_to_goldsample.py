@@ -59,7 +59,7 @@ class Command(BaseCommand):
                 if len(coders_range)==0 or len(gold_range)==0:
                     continue
 
-
+                self.stdout.write(str(gold_unit.documentation_unit.id))
                 my_results = merge_markings(coders_range)
                 results_to_compare = merge_markings(coders_range)
 

@@ -16,7 +16,6 @@ class Command(BaseCommand):
         check of my and opposite contain each other for at least 50%
         '''
         for my in first:
-            overlap = []
             for opposite in second:
                 state = 0 # 1 = first if is true, 2 = second if is true
                 if my[1]>=opposite[1] and my[2]<=opposite[2]:
@@ -24,10 +23,11 @@ class Command(BaseCommand):
                 if my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2):
                     state = 2
                 if (state==1 or state==2) and my[3]==opposite[3]:
+                    self.stdout.write(str(my[3]))
+                    self.stdout.write(str(opposite[3]))
                     inside_if+=1
                     all_indexes.update({my[0]:True})
                     all_indexes.update({opposite[0]:True})
-                    break
 
         return all_indexes
 

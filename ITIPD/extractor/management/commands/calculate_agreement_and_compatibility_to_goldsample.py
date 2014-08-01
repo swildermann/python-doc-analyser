@@ -44,10 +44,8 @@ class Command(BaseCommand):
                 all_idx.update(idx_to_dict(my_results))
                 all_idx.update(idx_to_dict(results_to_compare))
 
-                comp2 = compare_stretch(results_to_compare,my_results,all_idx)
-                compatible = compare_stretch(my_results,results_to_compare,all_idx)
-                compatible += comp2
-
+                compare_stretch(results_to_compare,my_results,all_idx)
+                compare_stretch(my_results,results_to_compare,all_idx)
 
                 trues = 0
                 length_of_all_trues = 0

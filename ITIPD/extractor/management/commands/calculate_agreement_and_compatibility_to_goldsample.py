@@ -29,9 +29,9 @@ class Command(BaseCommand):
                                                          user=user).values('id', 'char_range','knowledge_type')
 
                 if len(coders_range)==0 and len(gold_range)==0:
-                    return 100
+                    continue #TODO
                 if len(coders_range)==0 or len(gold_range)==0:
-                    return 0
+                    continue  #TODO
 
                 counter+=1
 
@@ -67,7 +67,7 @@ class Command(BaseCommand):
                 how_much_is_false = round((length_of_all_false/total_length)*100,5)
                 total = trues+falses
                 in_percent = round(trues/total * 100,5)
-                how_much_true_in_total+=int(how_much_is_true)
+                how_much_true_in_total+=how_much_is_true
 
             self.stdout.write("username:" +str(user.username))
             if counter!=0:

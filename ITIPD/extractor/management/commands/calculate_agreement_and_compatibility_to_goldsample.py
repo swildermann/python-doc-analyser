@@ -23,8 +23,8 @@ class Command(BaseCommand):
                 if my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2):
                     state = 2
                 if (state==1 or state==2) and my[3]==opposite[3]:
-                    self.stdout.write(str(my[3]))
-                    self.stdout.write(str(opposite[3]))
+                    #self.stdout.write(str(my[3]))
+                    #self.stdout.write(str(opposite[3]))
                     inside_if+=1
                     all_indexes.update({my[0]:True})
                     all_indexes.update({opposite[0]:True})
@@ -59,16 +59,16 @@ class Command(BaseCommand):
                 if len(coders_range)==0 or len(gold_range)==0:
                     continue
 
-                self.stdout.write(str(gold_unit.documentation_unit.id))
+                #self.stdout.write(str(gold_unit.documentation_unit.id))
                 my_results = merge_markings(coders_range)
-                results_to_compare = merge_markings(coders_range)
+                results_to_compare = merge_markings(gold_range)
 
                 all_idx = {}
                 all_idx.update(idx_to_dict(my_results))
                 all_idx.update(idx_to_dict(results_to_compare))
 
-                all_idx.update(Command.compare_stretch(self,results_to_compare,my_results,all_idx))
-                all_idx.update(Command.compare_stretch(self,my_results,results_to_compare,all_idx))
+                Command.compare_stretch(self,results_to_compare,my_results,all_idx)
+                Command.compare_stretch(self,my_results,results_to_compare,all_idx)
 
                 trues = 0
                 length_of_all_trues = 0

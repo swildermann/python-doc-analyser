@@ -32,9 +32,10 @@ class Command(BaseCommand):
                 counter+=1
 
                 if len(coders_range)==0 and len(gold_range)==0:
-                    continue #TODO this is full compatible
+                    how_much_true_in_total+=100
+                    continue
                 if len(coders_range)==0 or len(gold_range)==0:
-                    continue  #TODO this is not compatible
+                    continue
 
 
                 my_results = merge_markings(coders_range)

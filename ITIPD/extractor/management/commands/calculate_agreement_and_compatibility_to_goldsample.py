@@ -34,7 +34,6 @@ class Command(BaseCommand):
                     how_much_true_in_total+=100
                     continue
                 if len(coders_range)==0 or len(gold_range)==0:
-                    self.stdout.write("thats it!?")
                     continue
 
 
@@ -76,5 +75,5 @@ class Command(BaseCommand):
                 self.stdout.write(str(output))
                 self.stdout.write(str(counter))
             else:
-                self.stdout.write("null")
+                self.stdout.write("could not compare anything")
             self.stdout.write("***********")

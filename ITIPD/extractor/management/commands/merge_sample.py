@@ -106,7 +106,7 @@ class Command(BaseCommand):
             MarkedObject.save()
 
             for each in pk_rest:
-                if each>=:
+                if each>=0:
                     Command.copy_to_dummy(self,each,[])
 
         return True

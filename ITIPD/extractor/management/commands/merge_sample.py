@@ -83,10 +83,8 @@ class Command(BaseCommand):
                             continue
             if winner==1:
                 Command.copy_to_dummy(self,my[0])
-                break
             elif winner==2:
                 Command.copy_to_dummy(self,opposite[0])
-                break
 
         return winner
 

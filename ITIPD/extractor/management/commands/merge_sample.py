@@ -80,11 +80,13 @@ class Command(BaseCommand):
                                 winner=points.index(max(points[1],points[2]))
                         elif is_compatible==-1:
                             #is not compatible and so nothing will happen as winner is still zero
-                            pass
+                            continue
                 if winner==1:
                     Command.copy_to_dummy(self,my[0])
+                    break
                 elif winner==2:
                     Command.copy_to_dummy(self,opposite[0])
+                    break
 
         return winner
 

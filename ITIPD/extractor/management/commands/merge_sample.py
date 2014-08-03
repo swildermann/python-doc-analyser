@@ -12,7 +12,7 @@ class Command(BaseCommand):
         self.stdout.write("***START***")
 
         all_units = MappingUnitToUser.objects.filter(user__groups__name='Students',documentation_unit_id=8300)\
-            .distinct('documentation_unit').
+            .distinct('documentation_unit')
         for unit in all_units:
             first_mapped_id = MappingUnitToUser.objects.get(pk=unit.id)
             all_other_mapped= MappingUnitToUser.objects.exclude(user=first_mapped_id.user)\

@@ -45,6 +45,7 @@ class Command(BaseCommand):
             first_results = merge_markings(first_markings)
             second_results = merge_markings(second_markings)
             Command.is_confusion(self,first_results,second_results,first_mapped_id.user.id,second_mapped_id.user.id)
+            Command.is_confusion(sself,second_results,first_results,second_mapped_id.user.id,first_mapped_id.user.id)
             Command.map_unit(self,unit.documentation_unit)
 
 

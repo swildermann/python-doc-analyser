@@ -70,7 +70,7 @@ class Command(BaseCommand):
                 self.stdout.write("loop start inner")
 
                 if (my[1]>=opposite[1] and my[2]<=opposite[2]) or \
-                   (my[1]<=my[2]>=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2)):
+                   (my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2)):
                         is_compatible = Command.confusion_results(self,my[3],opposite[3])
                         self.stdout.write("is_compatible: "+str(is_compatible))
                         if is_compatible >0:

@@ -1,8 +1,8 @@
+import ast
+
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 from extractor.models import MappingUnitToUser, MarkedUnit
-from extractor.views import merge_markings
-
 
 
 class Command(BaseCommand):
@@ -42,8 +42,8 @@ class Command(BaseCommand):
                 Command.map_unit(self,unit.documentation_unit)
                 continue
 
-            first_results = merge_markings(first_markings)
-            second_results = merge_markings(second_markings)
+            first_results = Command.merge_markings_but_hold_idx(self,first_markings)
+            second_results = Command.merge_markings_but_hold_idx(self,second_markings)
             Command.is_confusion(self,first_results,second_results,first_mapped_id.user.id,second_mapped_id.user.id)
             #Command.is_confusion(self,second_results,first_results,second_mapped_id.user.id,first_mapped_id.user.id)
             Command.map_unit(self,unit.documentation_unit)
@@ -85,24 +85,28 @@ class Command(BaseCommand):
                             #is not compatible and so nothing will happen as winner is still zero
                             continue
                 if winner==1:
-                    Command.copy_to_dummy(self,my[0])
+                    Command.copy_to_dummy(self,my[0],my[4:])
                 elif winner==2:
-                    Command.copy_to_dummy(self,opposite[0])
+                    Command.copy_to_dummy(self,opposite[0],opposite[4:])
 
         return winner
 
 
 
-    def copy_to_dummy(self,pk_of_markedunit):
+    def copy_to_dummy(self,pk1,pk_rest):
+
         dummy= User.objects.get(pk=18)
-        MarkedObject = MarkedUnit.objects.get(pk=pk_of_markedunit)
+        MarkedObject = MarkedUnit.objects.get(pk=pk1)
         try:
-            old_unit = MarkedUnit.objects.exclude(pk=pk_of_markedunit).get(user=dummy,char_range=MarkedObject.char_range,
+            old_unit = MarkedUnit.objects.exclude(pk=pk1).get(user=dummy,char_range=MarkedObject.char_range,
                                                                            timestamp=MarkedObject.timestamp)
         except MarkedUnit.DoesNotExist:
             MarkedObject.pk = None     #creates a copy of that object
             MarkedObject.user=dummy
             MarkedObject.save()
+
+            for each in pk_rest:
+                Command.copy_to_dummy(self,each)
 
         return True
 
@@ -176,3 +180,34 @@ class Command(BaseCommand):
             self.stdout.write('that should not be possible')
 
         return who_was_it
+
+    def merge_markings_but_hold_idx(self,all_ranges):
+        row_data = []
+        results = []
+        for each in all_ranges:
+            ids = each["id"]
+            start= ast.literal_eval(each["char_range"])[0]["characterRange"]["start"]
+            end= ast.literal_eval(each["char_range"])[0]["characterRange"]["end"]
+            knowledge_type = each["knowledge_type"]
+            row_data.append([ids,start,end,knowledge_type])
+        row_data.sort(key=lambda tup: tup[1])
+
+        for knowledge_type in range(1,13):
+            data = [val for val in row_data if val[3] == knowledge_type]
+            for idx, val in enumerate(data):
+                if idx+1 >= len(data):
+                    break
+                if (data[idx+1][1]-data[idx][2]) <= 3 or (data[idx+1][2] <= data[idx][2]):
+                       if data[idx][3] == data[idx+1][3]:
+                           new_start = min(data[idx][1],data[idx+1][1])
+                           new_end = max(data[idx][2],data[idx+1][2])
+                           data[idx+1][1] = new_start
+                           data[idx+1][2] = new_end
+                           data[idx][1] = -1
+                           data[idx][2] = -1
+                           data[idx+1].append(idx)
+            results.extend(data)
+        #only keep the merged markings
+        results = [x for x in results if not x[1] == x[2] ==-1]
+        return results
+

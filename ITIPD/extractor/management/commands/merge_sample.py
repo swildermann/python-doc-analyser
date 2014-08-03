@@ -66,7 +66,9 @@ class Command(BaseCommand):
         for my in first:
             for opposite in second:
                 if (my[1]>=opposite[1] and my[2]<=opposite[2]) or \
-                   (my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2)):
+                   (my[2]>=opposite[1] and my[1]<=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2)) or \
+                   (opposite[1]>=my[1] and opposite[2]<=my[2]) or \
+                   (opposite[2]>=my[1] and opposite[1]<=my[1] and opposite[2]-my[1]>=((opposite[2]-opposite[1])/2)):
                         is_compatible = Command.confusion_results(self,my[3],opposite[3])
                         if is_compatible >0:
                             points[is_compatible] += 1

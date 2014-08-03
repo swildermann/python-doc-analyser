@@ -210,7 +210,7 @@ class Command(BaseCommand):
                            data[idx+1][2] = new_end
                            data[idx][1] = -1
                            data[idx][2] = -1
-                           data[idx+1].append(idx)
+                           data[idx+1].append(data[idx][0])
             results.extend(data)
         #only keep the merged markings
         results = [x for x in results if not x[1] == x[2] ==-1]

@@ -93,9 +93,15 @@ class Command(BaseCommand):
     def copy_to_dummy(self,pk_of_markedunit):
         dummy= User.objects.get(pk=18)
         MarkedObject = MarkedUnit.objects.get(pk=pk_of_markedunit)
-        MarkedObject.pk = None     #creates a copy of that object
-        MarkedObject.user=dummy
-        MarkedObject.save()
+
+        try:
+            old_unit = MarkedUnit.objects.exclude(pk=pk_of_markedunit).get(user=dummy,char_range=MarkedObject.char_range,
+                                                                           timestamp=MarkedObject.timestamp)
+        except MarkedUnit.DoesNotExist:
+            MarkedObject.pk = None     #creates a copy of that object
+            MarkedObject.user=dummy
+            MarkedObject.save()
+
         return True
 
 

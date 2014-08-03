@@ -1,5 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
-from extractor.merge_goldsample import *
+from django.contrib.auth.models import User
+from extractor.models import MappingUnitToUser, MarkedUnit
+from extractor.views import merge_markings
+
 
 
 class Command(BaseCommand):
@@ -65,7 +68,7 @@ class Command(BaseCommand):
                    (my[1]<=my[2]>=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2)):
                         is_compatible = Command.confusion_results(self,my[3],opposite[3])
                         if is_compatible >0:
-                            points[is_compatible] = points[is_compatible]+1
+                            points[is_compatible] += 1
                             winner=is_compatible
                         elif is_compatible==0:
                             if points[1]==points[2]:
@@ -79,9 +82,9 @@ class Command(BaseCommand):
                             #is not compatible and so nothing will happen as winner is still zero
                             pass
                 if winner==1:
-                    copy_to_dummy(my[0])
+                    Command.copy_to_dummy(self,my[0])
                 elif winner==2:
-                    copy_to_dummy(opposite[0])
+                    Command.copy_to_dummy(self,opposite[0])
 
         return winner
 

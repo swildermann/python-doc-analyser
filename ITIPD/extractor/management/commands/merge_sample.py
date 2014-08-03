@@ -65,7 +65,10 @@ class Command(BaseCommand):
         #Weder Konfusion noch Gleichheit: Erst Pluspunkte, dann bessere Gutachter
 
         for my in first:
+            self.stdout.write("loop start outer")
             for opposite in second:
+                self.stdout.write("loop start inner")
+
                 if (my[1]>=opposite[1] and my[2]<=opposite[2]) or \
                    (my[1]<=my[2]>=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2)):
                         is_compatible = Command.confusion_results(self,my[3],opposite[3])
@@ -85,8 +88,8 @@ class Command(BaseCommand):
                             #is not compatible and so nothing will happen as winner is still zero
                             continue
                         self.stdout.write("winner: "+str(winner))
-                self.stdout.write("loop break")
-            self.stdout.write("loop break")
+                self.stdout.write("inner loop break")
+            self.stdout.write("outer loop break")
             if winner==1:
                 Command.copy_to_dummy(self,my[0])
             elif winner==2:
@@ -123,6 +126,7 @@ class Command(BaseCommand):
 
     def confusion_results(self,type1,type2):
         who_was_it = -1
+        confusion_result =0
         if type1==type2:
             who_was_it = 0
             return who_was_it  #they are the same, no point
@@ -175,6 +179,6 @@ class Command(BaseCommand):
         elif type2==confusion_result:
             who_was_it=2
         else:
-            who_was_it=-1
+            self.stdout.write('that should not be possible')
 
         return who_was_it

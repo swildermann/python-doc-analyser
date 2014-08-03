@@ -82,10 +82,10 @@ class Command(BaseCommand):
                         elif is_compatible==-1:
                             #is not compatible and so nothing will happen as winner is still zero
                             continue
-            if winner==1:
-                Command.copy_to_dummy(self,my[0])
-            elif winner==2:
-                Command.copy_to_dummy(self,opposite[0])
+                if winner==1:
+                    Command.copy_to_dummy(self,my[0])
+                elif winner==2:
+                    Command.copy_to_dummy(self,opposite[0])
 
         return winner
 

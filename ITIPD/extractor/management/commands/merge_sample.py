@@ -96,7 +96,10 @@ class Command(BaseCommand):
     def copy_to_dummy(self,pk1,pk_rest):
 
         dummy= User.objects.get(pk=18)
-        MarkedObject = MarkedUnit.objects.get(pk=pk1)
+        try:
+            MarkedObject = MarkedUnit.objects.get(pk=pk1)
+        except MarkedUnit.DoesNotExist:
+            self.stdout.write("could not get unit: "+str(pk1))
         try:
             old_unit = MarkedUnit.objects.exclude(pk=pk1).get(user=dummy,char_range=MarkedObject.char_range,
                                                                            timestamp=MarkedObject.timestamp)

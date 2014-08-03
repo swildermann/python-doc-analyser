@@ -94,7 +94,6 @@ class Command(BaseCommand):
     def copy_to_dummy(self,pk_of_markedunit):
         dummy= User.objects.get(pk=18)
         MarkedObject = MarkedUnit.objects.get(pk=pk_of_markedunit)
-
         try:
             old_unit = MarkedUnit.objects.exclude(pk=pk_of_markedunit).get(user=dummy,char_range=MarkedObject.char_range,
                                                                            timestamp=MarkedObject.timestamp)
@@ -125,9 +124,9 @@ class Command(BaseCommand):
         elif (type1==1 and type2==4) or (type1==4 and type2==1):
             #confusion_number = 2
             confusion_result = 1
-        elif (type1==1 and type2==2) or (type1==2 and type2==1):
+        #elif (type1==1 and type2==2) or (type1==2 and type2==1):
             #confusion_number = 3
-            confusion_result = 2
+            #confusion_result = 2
         elif (type1==1 and type2==12) or (type1==12 and type2==1):
             #confusion_number = 5
             confusion_result = 1

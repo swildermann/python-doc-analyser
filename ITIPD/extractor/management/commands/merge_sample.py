@@ -10,7 +10,6 @@ class Command(BaseCommand):
 
         all_units = MappingUnitToUser.objects.filter(user__groups__name='Students')\
             .distinct('documentation_unit')
-        status_array = []
         for unit in all_units:
             first_mapped_id = MappingUnitToUser.objects.get(pk=unit.id)
             all_other_mapped= MappingUnitToUser.objects.exclude(user=first_mapped_id.user)\
@@ -34,19 +33,134 @@ class Command(BaseCommand):
                                                         documentation_unit=second_mapped_id.documentation_unit)\
                                                         .values('id', 'char_range','knowledge_type')
             if len(first_markings)==len(second_markings)==0:
-                # TODO: save a empty unit to the endresult (and count them maybe?)
+                Command.map_unit(self,unit.documentation_unit)
                 continue
             if len(first_markings)==0 or len(second_markings)==0:
-                #TODO save that with markings or without? Save without and count them additional?
+                Command.map_unit(self,unit.documentation_unit)
                 continue
 
             first_results = merge_markings(first_markings)
             second_results = merge_markings(second_markings)
+            Command.is_confusion(self,first_results,second_results,first_mapped_id.user.id,second_mapped_id.user.id)
+            Command.map_unit(self,unit.documentation_unit)
 
 
-            #Markierungen vergleichen
-                #Bei Konfusion: Pluspunkt vergeben
-                #Bei Gleichheit: Gutachter mit mehr Pluspunkten bevorzugen (Markierung übernehmen) (ODER auf "besseren" Gutachter zurückgreifen (Markierung übernehmen))
-                #Weder Konfusion noch Gleichheit: Erst Pluspunkte, dann bessere Gutachter
 
 
+
+    def is_confusion(self,first,second,first_user_id,second_user_id):
+        ranking_list = [15,16,7,4,9,5,8,6,3]
+        winner=0 #1 for my and 2 for opposite
+        points=[0,0,0]
+
+        #Markierungen vergleichen
+        #Bei Konfusion: Pluspunkt vergeben
+        #Bei Gleichheit: Gutachter mit mehr Pluspunkten bevorzugen (Markierung übernehmen)
+            # (ODER auf "besseren" Gutachter zurückgreifen (Markierung übernehmen))
+        #Weder Konfusion noch Gleichheit: Erst Pluspunkte, dann bessere Gutachter
+
+        for my in first:
+            for opposite in second:
+                if (my[1]>=opposite[1] and my[2]<=opposite[2]) or \
+                   (my[1]<=my[2]>=opposite[1] and (my[2]-opposite[1])>=((my[2]-my[1])/2)):
+                        is_compatible = Command.confusion_results(self,my[3],opposite[3])
+                        if is_compatible >0:
+                            points[is_compatible] = points[is_compatible]+1
+                            winner=is_compatible
+                        elif is_compatible==0:
+                            if points[1]==points[2]:
+                                if ranking_list.index(first_user_id)>ranking_list.index(second_user_id):
+                                    winner = 1
+                                else:
+                                    winner = 2
+                            else:
+                                winner=points.index(max(points[1],points[2]))
+                        elif is_compatible==-1:
+                            #is not compatible and so nothing will happen as winner is still zero
+                            pass
+                if winner==1:
+                    copy_to_dummy(my[0])
+                elif winner==2:
+                    copy_to_dummy(opposite[0])
+
+        return winner
+
+
+
+    def copy_to_dummy(self,pk_of_markedunit):
+        dummy= User.objects.get(pk=18)
+        MarkedObject = MarkedUnit.objects.get(pk=pk_of_markedunit)
+        MarkedObject.pk = None     #creates a copy of that object
+        MarkedObject.user=dummy
+        MarkedObject.save()
+        return True
+
+
+    def map_unit(self, unit):
+        new_user= User.objects.get(pk=18)
+        MappingUnitToUser.objects.create(
+            user=new_user,
+            documentation_unit = unit,
+            already_marked = True,
+            last_change =  "1900-01-01 00:00:00",
+            unmarked_chars = 888,
+            unmarked_percent = 100
+        )
+
+    def confusion_results(self,type1,type2):
+        who_was_it = -1
+        if type1==type2:
+            who_was_it = 0
+            return who_was_it  #they are the same, no point
+        elif (type1==1 and type2==4) or (type1==4 and type2==1):
+            #confusion_number = 2
+            confusion_result = 1
+        elif (type1==1 and type2==2) or (type1==2 and type2==1):
+            #confusion_number = 3
+            confusion_result = 2
+        elif (type1==1 and type2==12) or (type1==12 and type2==1):
+            #confusion_number = 5
+            confusion_result = 1
+        elif (type1==1 and type2==10) or (type1==10 and type2==1):
+            #confusion_number = 7
+            confusion_result = 1
+        elif (type1==2 and type2==7) or (type1==7 and type2==2):
+            #confusion_number = 8
+            confusion_result = 7
+        elif (type1==1 and type2==8) or (type1==8 and type2==1):
+            #confusion_number = 10
+            confusion_result = 8
+        elif (type1==8 and type2==9) or (type1==9 and type2==8):
+            #confusion_number = 11
+            confusion_result = 9
+        elif (type1==1 and type2==6) or (type1==6 and type2==1):
+            #confusion_number = 12
+            confusion_result = 6
+        elif (type1==2 and type2==4) or (type1==4 and type2==2):
+            #confusion_number = 13
+            confusion_result = 2
+        elif (type1==7 and type2==8) or (type1==8 and type2==7):
+            #confusion_number = 14
+            confusion_result = 8
+        elif (type1==8 and type2==4) or (type1==4 and type2==8):
+            #confusion_number = 15
+            confusion_result = 4
+        elif (type1==5 and type2==7) or (type1==7 and type2==5):
+            #confusion_number = 16
+            confusion_result = 5
+        elif (type1==2 and type2==5) or (type1==5 and type2==2):
+            #confusion_number = 17
+            confusion_result = 2
+        else:
+            who_was_it = -1
+            return who_was_it #no confusion found
+
+       # check who gets the point and which marking is used
+        if type1==confusion_result:
+            who_was_it=1
+        elif type2==confusion_result:
+            who_was_it=2
+        else:
+            who_was_it=-1
+
+        return who_was_it

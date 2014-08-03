@@ -100,6 +100,7 @@ class Command(BaseCommand):
             MarkedObject = MarkedUnit.objects.get(pk=pk1)
         except MarkedUnit.DoesNotExist:
             self.stdout.write("could not get unit: "+str(pk1))
+            return False
         try:
             old_unit = MarkedUnit.objects.exclude(pk=pk1).get(user=dummy,char_range=MarkedObject.char_range,
                                                                            timestamp=MarkedObject.timestamp)

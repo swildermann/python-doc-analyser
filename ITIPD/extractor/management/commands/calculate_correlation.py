@@ -11,7 +11,6 @@ class Command(BaseCommand):
 
         for knowledge in range(1,13):
             results = [0,0,0,0,0,0,0,0,0,0,0,0]
-            self.stdout.write("current: "+str(knowledge))
             all_units_with_this_marking = MarkedUnit.objects.filter(user__username="results",knowledge_type=knowledge)\
                 .distinct('documentation_unit__id')\
                 .values_list('documentation_unit__id',flat=True)

@@ -11,23 +11,25 @@ class Command(BaseCommand):
 
         all_types = DocumentationUnit.objects.all().distinct("type").values_list("type",flat=True)
         total = [0,0]
-        methods = [0,0]
-        fields = [0,0]
-        modules = [0,0]
-        classes = [0,0]
-        describe = [0,0]
-        self.stdout.write("*************")
+
+
         for knowledge in range(1,13):
+            self.stdout.write("knowledge-type:"+str(knowledge))
+            self.stdout.write("*************")
+            methods = [0,0]
+            fields = [0,0]
+            modules = [0,0]
+            classes = [0,0]
+            describe = [0,0]
             for type in all_types:
-                self.stdout.write("knowledge-type:"+str(knowledge))
                 count_markings = MarkedUnit.objects.filter(user__groups__name="Students",documentation_unit__type=type,
                                           knowledge_type=knowledge).distinct('documentation_unit').count()
                 count_units = MappingUnitToUser.objects.filter(user__groups__name="Students",
                                                                documentation_unit__type=type)\
                     .distinct('documentation_unit').count()
-                self.stdout.write("markings: "+str(count_markings))
-                self.stdout.write("units: "+str(count_units))
-                self.stdout.write("in percent: "+str(Command.divide(self,count_markings,count_units)))
+                #self.stdout.write("markings: "+str(count_markings))
+                #self.stdout.write("units: "+str(count_units))
+                #self.stdout.write("in percent: "+str(Command.divide(self,count_markings,count_units)))
                 if type=="method" or type=="classmethod" or type=="staticmethod" or type=="function":
                     methods[0]+=count_markings
                     methods[1]+=count_units
@@ -46,11 +48,11 @@ class Command(BaseCommand):
                 total[0]+=count_markings
                 total[1]+=count_units
 
-        self.stdout.write("methods: "+str(Command.divide(self,methods[0],methods[1])))
-        self.stdout.write("fields: "+str(Command.divide(self,fields[0],fields[1])))
-        self.stdout.write("modules: "+str(Command.divide(self,modules[0],modules[1])))
-        self.stdout.write("classes: "+str(Command.divide(self,classes[0],classes[1])))
-        self.stdout.write("describe: "+str(Command.divide(self,describe[0],describe[1])))
+            self.stdout.write("methods: "+str(Command.divide(self,methods[0],methods[1])))
+            self.stdout.write("fields: "+str(Command.divide(self,fields[0],fields[1])))
+            self.stdout.write("modules: "+str(Command.divide(self,modules[0],modules[1])))
+            self.stdout.write("classes: "+str(Command.divide(self,classes[0],classes[1])))
+            self.stdout.write("describe: "+str(Command.divide(self,describe[0],describe[1])))
 
 
         self.stdout.write("in total: "+str(total[0]/total[1]))

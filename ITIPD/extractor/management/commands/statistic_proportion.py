@@ -10,10 +10,9 @@ class Command(BaseCommand):
         self.stdout.write("***START***")
 
         all_types = DocumentationUnit.objects.all().distinct("type").values_list("type",flat=True)
-        total = [0,0]
-
 
         for knowledge in range(1,13):
+            total = [0,0]
             self.stdout.write("knowledge-type:"+str(knowledge))
             self.stdout.write("*************")
             methods = [0,0]
@@ -53,9 +52,7 @@ class Command(BaseCommand):
             self.stdout.write("modules: "+str(Command.divide(self,modules[0],modules[1])))
             self.stdout.write("classes: "+str(Command.divide(self,classes[0],classes[1])))
             self.stdout.write("describe: "+str(Command.divide(self,describe[0],describe[1])))
-
-
-        self.stdout.write("in total: "+str(total[0]/total[1]))
+            self.stdout.write("in total: "+str(total[0]/total[1]))
 
     def divide(self,a,b):
         if a==b==0:

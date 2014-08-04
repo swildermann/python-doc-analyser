@@ -10,7 +10,7 @@ class Command(BaseCommand):
         self.stdout.write("***START***")
 
         all_types = DocumentationUnit.objects.all().distinct("type").values_list("type",flat=True)
-        total = (0,0)
+        total = [0,0]
         for type in all_types:
             self.stdout.write("*************")
             methods = [0,0]

@@ -22,7 +22,7 @@ class Command(BaseCommand):
             describe = [0,0]
             for type in all_types:
                 count_markings = MarkedUnit.objects.filter(user__groups__name="Students",documentation_unit__type=type,
-                                          knowledge_type=knowledge).distinct('documentation_unit').count()
+                                          knowledge_type=knowledge).distinct('documentation_unit',"knowledge_type").count()
                 count_units = MappingUnitToUser.objects.filter(user__groups__name="Students",
                                                                documentation_unit__type=type)\
                     .distinct('documentation_unit').count()

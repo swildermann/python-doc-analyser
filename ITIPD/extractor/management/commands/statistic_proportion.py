@@ -27,7 +27,7 @@ class Command(BaseCommand):
                     .distinct('documentation_unit').count()
                 self.stdout.write("markings: "+str(count_markings))
                 self.stdout.write("units: "+str(count_units))
-                self.stdout.write("in percent: "+str(count_markings/count_units))
+                self.stdout.write("in percent: "+str(Command.divide(self,count_markings,count_units)))
                 if type=="method" or type=="classmethod" or type=="staticmethod" or type=="function":
                     methods[0]+=count_markings
                     methods[1]+=count_units

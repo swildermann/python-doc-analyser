@@ -46,14 +46,18 @@ class Command(BaseCommand):
                 total[0]+=count_markings
                 total[1]+=count_units
 
-            self.stdout.write("methods: "+str(methods[0]/methods[1]))
-            self.stdout.write("fields: "+str(fields[0]/fields[1]))
-            self.stdout.write("modules: "+str(modules[0]/modules[1]))
-            self.stdout.write("classes: "+str(classes[0]/classes[1]))
-            self.stdout.write("describe: "+str(describe[0]/describe[1]))
+            self.stdout.write("methods: "+str(Command.divide(self,methods[0],methods[1])))
+            self.stdout.write("fields: "+str(Command.divide(self,fields[0],fields[1])))
+            self.stdout.write("modules: "+str(Command.divide(self,modules[0],modules[1])))
+            self.stdout.write("classes: "+str(Command.divide(self,classes[0],classes[1])))
+            self.stdout.write("describe: "+str(Command.divide(self,describe[0],describe[1])))
 
 
         self.stdout.write("in total: "+str(total[0]/total[1]))
 
-
+    def divide(self,a,b):
+        if a==b==0:
+            return b
+        else:
+            return a/b
 

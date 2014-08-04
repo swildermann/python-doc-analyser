@@ -13,11 +13,11 @@ class Command(BaseCommand):
         total = (0,0)
         for type in all_types:
             self.stdout.write("*************")
-            methods = (0,0)
-            fields = (0,0)
-            modules = (0,0)
-            classes = (0,0)
-            describe = (0,0)
+            methods = [0,0]
+            fields = [0,0]
+            modules = [0,0]
+            classes = [0,0]
+            describe = [0,0]
             for knowledge in range(1,13):
                 self.stdout.write("knowledge-type:"+str(knowledge))
                 count_markings = MarkedUnit.objects.filter(user__groups__name="Students",documentation_unit__type=type,

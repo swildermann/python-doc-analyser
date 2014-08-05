@@ -44,20 +44,24 @@ class Command(BaseCommand):
             elif type=="describe":
                 describe[how_many_different_markings].append(words)
 
+        self.stdout.write("methods")
         for each in methods:
-            self.stdout.write("methods")
             self.stdout.write(str(Command.calculate_all(self,each)))
+
+        self.stdout.write("fields")
         for each in fields:
-            self.stdout.write("fields")
             self.stdout.write(str(Command.calculate_all(self,each)))
+
+        self.stdout.write("modules")
         for each in modules:
-            self.stdout.write("modules")
             self.stdout.write(str(Command.calculate_all(self,each)))
+
+        self.stdout.write("classes")
         for each in classes:
-            self.stdout.write("classes")
             self.stdout.write(str(Command.calculate_all(self,each)))
+
+        self.stdout.write("describe")
         for each in describe:
-            self.stdout.write("describe")
             self.stdout.write(str(Command.calculate_all(self,each)))
 
 

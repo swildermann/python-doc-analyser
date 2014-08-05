@@ -40,6 +40,6 @@ class Command(BaseCommand):
         self.stdout.write("fields: "+str(sum(fields)/len(methods)))
         self.stdout.write("modules: "+str(sum(modules)/len(methods)))
         self.stdout.write("classes: "+str(sum(classes)/len(methods)))
-        self.stdout.write("describe: "+str(sum(describe))/len(methods))
+        self.stdout.write("describe: "+str(sum(describe)/len(methods)))
         self.stdout.write("Length of all units together: "+str(sum(all_length)/len(methods)))
         self.stdout.write("Length of all units together: "+str(sum(all_length)))

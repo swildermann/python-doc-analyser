@@ -29,7 +29,11 @@ class Command(BaseCommand):
         describe = []
         for unit in all_units:
             doc_unit = DocumentationUnit.objects.get(pk=unit)
-            words = len((doc_unit.plaintext).split())
+            if options['chars']:
+                words = len(doc_unit.plaintext)
+            else:
+                words = len((doc_unit.plaintext).split())
+
             all_length.append(words)
             type = doc_unit.type
 

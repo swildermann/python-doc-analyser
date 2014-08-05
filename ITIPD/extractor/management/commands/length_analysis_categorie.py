@@ -44,6 +44,7 @@ class Command(BaseCommand):
             elif type=="describe":
                 describe[how_many_different_markings].append(words)
 
+        self.stdout.write("median, lower quartile, higher quartile, min, max")
         self.stdout.write("methods")
         for each in methods:
             self.stdout.write(str(Command.calculate_all(self,each)))

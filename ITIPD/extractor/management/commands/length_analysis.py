@@ -49,6 +49,8 @@ class Command(BaseCommand):
             elif type=="describe":
                 describe.append(words)
 
+        self.stdout.write("Length of all units together: "+str(sum(all_length)))
+
         self.stdout.write("****average***")
         self.stdout.write("methods: "+str(sum(methods)/len(methods)))
         self.stdout.write("fields: "+str(sum(fields)/len(fields)))
@@ -97,7 +99,10 @@ class Command(BaseCommand):
         self.stdout.write("describe: "+str(max(describe)))
         self.stdout.write("all units together: "+str(max(all_length)))
 
+
+
     def median(self,nums):
+        #found at https://blog.dlasley.net/2013/01/medians-and-quartiles-in-python/
         nums.sort() #< Sort the list in ascending order
         try:
             mid_num = ( len( nums ) - 1) / 2
@@ -110,12 +115,14 @@ class Command(BaseCommand):
         return median
 
     def lower_quartile(self,nums):
+        #found at https://blog.dlasley.net/2013/01/medians-and-quartiles-in-python/
         nums.sort() #< Sort the list in ascending order
         low_mid = int( round( ( len(nums) + 1 ) / 4.0 ) - 1 ) #< Thanks @Alex (comments)
         lq = nums[low_mid]
         return lq
 
     def higher_quartile(self,nums):
+        #found at https://blog.dlasley.net/2013/01/medians-and-quartiles-in-python/
         nums.sort() #< Sort the list in ascending order
         try:
             high_mid = ( len( nums ) - 1 ) * 0.75

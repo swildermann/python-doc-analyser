@@ -51,6 +51,8 @@ class Command(BaseCommand):
     def median(self,nums):
         #found at https://blog.dlasley.net/2013/01/medians-and-quartiles-in-python/
         nums.sort() #< Sort the list in ascending order
+        if len(nums)==0:
+            return 0
         try:
             mid_num = ( len( nums ) - 1) / 2
             median = nums[ mid_num ]

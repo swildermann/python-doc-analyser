@@ -81,7 +81,7 @@ class Command(BaseCommand):
         self.stdout.write("describe: "+str(Command.higher_quartile(self,describe)))
         self.stdout.write("all units together: "+str(Command.higher_quartile(self,all_length)))
 
-        self.stdout.write("****higher quartile***")
+        self.stdout.write("****minimum***")
         self.stdout.write("methods: "+str(min(methods)))
         self.stdout.write("fields: "+str(min(fields)))
         self.stdout.write("modules: "+str(min(modules)))
@@ -89,7 +89,7 @@ class Command(BaseCommand):
         self.stdout.write("describe: "+str(min(describe)))
         self.stdout.write("all units together: "+str(min(all_length)))
 
-        self.stdout.write("****higher quartile***")
+        self.stdout.write("****maximum***")
         self.stdout.write("methods: "+str(max(methods)))
         self.stdout.write("fields: "+str(max(fields)))
         self.stdout.write("modules: "+str(max(modules)))

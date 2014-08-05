@@ -57,5 +57,5 @@ class Command(BaseCommand):
         self.stdout.write("Length of all units together: "+str(sum(all_length)/len(all_length)))
         self.stdout.write("Length of all units together: "+str(sum(all_length)))
 
-        self.stdout.write("*****DEBUG INFORMATION")
-        self.stdout.write(str(all_length))
+        #self.stdout.write("*****DEBUG INFORMATION")
+        #self.stdout.write(str(all_length))

@@ -40,4 +40,6 @@ class Command(BaseCommand):
                         results[idx]=0
 
             self.stdout.write(str(results))
+            self.stdout.write(str(how_many))
+            self.stdout.write(str("*****"))
 

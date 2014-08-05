@@ -103,4 +103,4 @@ class Command(BaseCommand):
     def calculate_all(self,nums):
         if len(nums)==0:
             return 0
-        return Command.median(self,nums),Command.lower_quartile(self,nums),Command.higher_quartile(self,nums),min(nums),max(nums)
+        return min(nums),Command.lower_quartile(self,nums),Command.median(self,nums),Command.higher_quartile(self,nums),max(nums)

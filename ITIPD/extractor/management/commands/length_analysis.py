@@ -1,10 +1,19 @@
+from optparse import make_option
+
 from django.core.management.base import BaseCommand
 from extractor.models import *
 
 
-
 class Command(BaseCommand):
     help = 'this is the length analysis'
+
+    option_list = BaseCommand.option_list + (
+        make_option('--chars',
+            action='store_true',
+            dest='chars',
+            default=False,
+            help='calculate chars!'),
+        )
 
     def handle(self, *args, **options):
         self.stdout.write("***START***")
@@ -13,11 +22,11 @@ class Command(BaseCommand):
                                 .values_list('documentation_unit__id',flat=True)
 
         all_length = []
-        methods = [0,0]
-        fields = [0,0]
-        modules = [0,0]
-        classes = [0,0]
-        describe = [0,0]
+        methods = []
+        fields = []
+        modules = []
+        classes = []
+        describe = []
         for unit in all_units:
             doc_unit = DocumentationUnit.objects.get(pk=unit)
             words = len((doc_unit.plaintext).split())
@@ -41,7 +50,7 @@ class Command(BaseCommand):
         self.stdout.write("modules: "+str(sum(modules)/len(methods)))
         self.stdout.write("classes: "+str(sum(classes)/len(methods)))
         self.stdout.write("describe: "+str(sum(describe)/len(methods)))
-        self.stdout.write("Length of all units together: "+str(sum(all_length)/len(methods)))
+        self.stdout.write("Length of all units together: "+str(sum(all_length)/len(all_length)))
         self.stdout.write("Length of all units together: "+str(sum(all_length)))
 
         self.stdout.write("*****DEBUG INFORMATION")

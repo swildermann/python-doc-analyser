@@ -64,8 +64,6 @@ class Command(BaseCommand):
     def median(self,nums):
         #found at https://blog.dlasley.net/2013/01/medians-and-quartiles-in-python/
         nums.sort() #< Sort the list in ascending order
-        if len(nums)==0:
-            return 0
         try:
             mid_num = ( len( nums ) - 1) / 2
             median = nums[ mid_num ]
@@ -78,8 +76,6 @@ class Command(BaseCommand):
 
     def lower_quartile(self,nums):
         #found at https://blog.dlasley.net/2013/01/medians-and-quartiles-in-python/
-        if len(nums)==0:
-            return 0
         nums.sort() #< Sort the list in ascending order
         low_mid = int( round( ( len(nums) + 1 ) / 4.0 ) - 1 ) #< Thanks @Alex (comments)
         lq = nums[low_mid]
@@ -88,8 +84,6 @@ class Command(BaseCommand):
     def higher_quartile(self,nums):
         #found at https://blog.dlasley.net/2013/01/medians-and-quartiles-in-python/
         nums.sort() #< Sort the list in ascending order
-        if len(nums)==0:
-            return 0
         try:
             high_mid = ( len( nums ) - 1 ) * 0.75
             uq = nums[ high_mid ]
@@ -102,4 +96,6 @@ class Command(BaseCommand):
 
 
     def calculate_all(self,nums):
+        if len(nums)==0:
+            return 0
         return Command.median(self,nums),Command.lower_quartile(self,nums),Command.higher_quartile(self,nums),min(nums),max(nums)

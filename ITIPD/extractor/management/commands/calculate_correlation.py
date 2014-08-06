@@ -37,7 +37,7 @@ class Command(BaseCommand):
                     if how_many>0:
                         how_many_second = MarkedUnit.objects.exclude(knowledge_type=knowledge).filter(user__username="results",
                                                                                                      knowledge_type=idx)\
-                            .distinct("'documentation_unit").count()
+                            .distinct("documentation_unit").count()
                         results[idx]=val/(how_many+how_many_second)
                     else:
                         results[idx]=0

@@ -35,7 +35,10 @@ class Command(BaseCommand):
             if options['percent']:
                 for idx, val in enumerate(results):
                     if how_many>0:
-                        results[idx]=val/how_many
+                        how_many_second = MarkedUnit.objects.exclude(knowledge_type=knowledge).filter(user__username="results",
+                                                                                                     knowledge_type=idx)\
+                            .distinct("'documentation_unit").count()
+                        results[idx]=val/(how_many+how_many_second)
                     else:
                         results[idx]=0
 

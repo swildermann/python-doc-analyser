@@ -3,7 +3,7 @@
 ### What is this repository for? ###
 
 * Rating HTML-units of text (usally of a html written programming documenation)
-* Each HTML-unit can contain 12 different knowledge type (paste link to Coding Guide)
+* Each HTML-unit can contain 12 different knowledge type
 
 ### How do I get set up? ###
 

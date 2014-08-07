@@ -9,6 +9,7 @@
 
 * Install a database (postgres is recommended)
 * Install a webserver
+* Install all requirements (using pip) 
 * Include all documenation units (write a script on your own!)
 
 ### Who do I talk to? ###

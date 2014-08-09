@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from extractor.models import *
 from extractor.views import merge_markings
 from django.contrib.auth.models import User
@@ -42,7 +42,7 @@ class Command(BaseCommand):
                                                      user__groups__name="Students")\
                                                      .values_list('user',flat=True)
             if len(coders)!=2:
-                raise CommandError(" This unit is mapped to only so many students: "+str(len(coders)))
+                self.stdout.write(" This unit is mapped to only so many students: "+str(len(coders)))
 
             bits = Command.merge_coders_range(self,coders,gold_unit.documentation_unit)
 

@@ -42,7 +42,7 @@ class Command(BaseCommand):
                                                      user__groups__name="Students")\
                                                      .values_list('user',flat=True)
             if len(MappingUnitToUser.objects.filter(documentation_unit=gold_unit.documentation_unit,
-                                                    user__gorups__name="Students"))!=2:
+                                                    user__groups__name="Students"))!=2:
                 self.stdout.write(" This unit is mapped to only so many students: "+str(len(coders)))
 
             bits = Command.merge_coders_range(self,coders,gold_unit.documentation_unit)
